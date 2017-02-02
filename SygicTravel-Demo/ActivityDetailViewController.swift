@@ -76,16 +76,19 @@ class ActivityDetailViewController : UIViewController {
 	}
 
 	func setUpImageView() {
-		imageView = UIImageView(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
-		imageView.backgroundColor = activity.categoryColor()
+		if imageView == nil {
+			imageView = UIImageView(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
+			imageView.backgroundColor = activity.categoryColor()
+
+			let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(openGallery))
+			imageView.isUserInteractionEnabled = true
+			imageView.addGestureRecognizer(tapGestureRecognizer)
+		}
+		self.scrollView.addSubview(imageView)
+
 		if let safeMedium = MediaManager.default().imageForItem(withID: activity.ID, type:.fullscreen) {
 			imageView.downloadedFrom(url: URL(string: safeMedium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: "400x400"))!)
 		}
-
-		let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(openGallery))
-		imageView.isUserInteractionEnabled = true
-		imageView.addGestureRecognizer(tapGestureRecognizer)
-		self.scrollView.addSubview(imageView)
 	}
 
 	func openGallery() {
@@ -134,5 +137,9 @@ class ActivityDetailViewController : UIViewController {
 extension ActivityDetailViewController : ActivityUpdateOperationDelegate {
 	func activityUpdateOperation(_ operation: ActivityUpdateOperation!, didFinishWith activity: Activity!) {
 		self.activity = activity
+	}
+
+	func activityUpdateOperation(_ operation: ActivityUpdateOperation!, didFinishWithPhotosFor activity: Activity!) {
+		setUpImageView()
 	}
 }
