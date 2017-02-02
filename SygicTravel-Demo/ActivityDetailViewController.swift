@@ -87,7 +87,7 @@ class ActivityDetailViewController : UIViewController {
 		self.scrollView.addSubview(imageView)
 
 		if let safeMedium = MediaManager.default().imageForItem(withID: activity.ID, type:.fullscreen) {
-			imageView.downloadedFrom(url: URL(string: safeMedium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: "400x400"))!)
+			imageView.downloadedFrom(url: URL(string: safeMedium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: "400x400"))!, finished:{})
 		}
 	}
 

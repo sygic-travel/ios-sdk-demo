@@ -52,9 +52,19 @@ class ActivityListViewController: UITableViewController {
 		return activities.count
 	}
 
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 70
+	}
+
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-		cell.textLabel?.text = activities[indexPath.row].name
+		let activity = activities[indexPath.row] as Activity!
+
+		let url = URL(string: "https://media-cdn.sygictraveldata.com/photo/" + (activity?.ID)!)!
+		cell.imageView?.downloadedFrom(url: url, finished: {
+			cell.setNeedsLayout()
+		})
+		cell.textLabel?.text = activity?.name
 		return cell
 	}
 
@@ -81,6 +91,7 @@ class ActivityListViewController: UITableViewController {
 
 		if let safeSearching = activeSearching {
 			query.searchTerm = safeSearching
+			query.limit = 10
 		}
 
 		let lfo = LoadFeaturesOperation(delegate: self)

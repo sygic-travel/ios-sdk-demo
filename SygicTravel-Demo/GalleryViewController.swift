@@ -29,7 +29,7 @@ class GalleryViewController : UIViewController {
 				let imageView = UIImageView(frame:CGRect(x: 0, y: startHeight, width: self.view.frame.size.width, height: self.view.frame.size.width))
 				imageView.backgroundColor = activity.categoryColor()
 
-				imageView.downloadedFrom(url: URL(string: medium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: Medium.sizeString(for: .large)))!)
+				imageView.downloadedFrom(url: URL(string: medium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: Medium.sizeString(for: .large)))!, contentMode: .scaleAspectFit, finished: {})
 				self.scrollView.addSubview(imageView)
 				startHeight += imageView.frame.height + padding
 			}

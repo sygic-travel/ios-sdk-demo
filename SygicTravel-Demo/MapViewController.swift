@@ -136,6 +136,7 @@ extension MapViewController : MKMapViewDelegate {
 			let vc = ActivityDetailViewController()
 			vc.activity = mapPinAnnotation.activity
 			self.navigationController?.pushViewController(vc, animated: true)
+			mapView.deselectAnnotation(view.annotation, animated: false)
 		}
 	}
 }
