@@ -1,0 +1,6 @@
+framework module TravelCore {
+  umbrella header "TravelCore.h"
+
+  export *
+  module * { export * }
+}
