@@ -1,5 +1,5 @@
 //
-//  PoiListViewController.swift
+//  PlacesListViewController.swift
 //  SygicTravel-Demo
 //
 //  Created by Marek Stana on 2/1/17.
@@ -9,7 +9,7 @@
 import UIKit
 import TravelKit
 
-class ActivityListViewController: UITableViewController {
+class PlacesListViewController: UITableViewController {
 
 	var places: [TKPlace] = [TKPlace]()
 
@@ -65,7 +65,7 @@ class ActivityListViewController: UITableViewController {
 
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let vc = ActivityDetailViewController()
+		let vc = PlaceDetailViewController()
 		vc.place = places[indexPath.row]
 		self.navigationController?.pushViewController(vc, animated: true)
 	}
@@ -119,7 +119,7 @@ class ActivityListViewController: UITableViewController {
 
 // MARK: UISearchBarDelegate
 
-extension ActivityListViewController : UISearchBarDelegate {
+extension PlacesListViewController : UISearchBarDelegate {
 
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
 		searchingActive = true;

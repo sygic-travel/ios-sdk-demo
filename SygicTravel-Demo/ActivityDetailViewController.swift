@@ -1,5 +1,5 @@
 //
-//  ActivityDetailViewController.swift
+//  PlaceDetailViewController.swift
 //  SygicTravel-Demo
 //
 //  Created by Marek Stana on 2/1/17.
@@ -9,7 +9,7 @@
 import UIKit
 import TravelKit
 
-class ActivityDetailViewController : UIViewController {
+class PlaceDetailViewController : UIViewController {
 
 	var place: TKPlace! {
 		didSet {
@@ -69,7 +69,7 @@ class ActivityDetailViewController : UIViewController {
 		galleryButton.frame = CGRect(x: 0,y: startHeight, width:self.view.frame.width, height:40)
 		galleryButton.setTitle("Gallery", for: .normal)
 		galleryButton.contentHorizontalAlignment = .center
-		galleryButton.addTarget(self, action: #selector(ActivityDetailViewController.openGallery), for: .touchUpInside)
+		galleryButton.addTarget(self, action: #selector(PlaceDetailViewController.openGallery), for: .touchUpInside)
 		self.scrollView.addSubview(galleryButton)
 		startHeight += galleryButton.frame.height + padding
 

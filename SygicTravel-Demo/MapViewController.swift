@@ -112,7 +112,7 @@ extension MapViewController : MKMapViewDelegate {
 
 	func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 		if let mapPinAnnotation = view.annotation as? MapPin {
-			let vc = ActivityDetailViewController()
+			let vc = PlaceDetailViewController()
 			vc.place = mapPinAnnotation.place
 			self.navigationController?.pushViewController(vc, animated: true)
 			mapView.deselectAnnotation(view.annotation, animated: false)

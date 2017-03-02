@@ -48,12 +48,12 @@ class MainViewController: UITableViewController {
 			vc = MapViewController()
 			break;
 		case 1:
-			let controller = ActivityListViewController()
+			let controller = PlacesListViewController()
 			controller.searchBarHidden = true
 			vc = controller
 			break;
 		case 2:
-			let controller = ActivityListViewController()
+			let controller = PlacesListViewController()
 			controller.searchBarHidden = false
 			vc = controller
 			break;
