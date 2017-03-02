@@ -15,12 +15,11 @@
 		075C64081E41D30500E8B6CA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075C64061E40E54700E8B6CA /* MapKit.framework */; };
 		075C640A1E41D31A00E8B6CA /* ActivityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64091E41D31A00E8B6CA /* ActivityListViewController.swift */; };
 		075C64431E41E08B00E8B6CA /* ActivityDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64421E41E08B00E8B6CA /* ActivityDetailViewController.swift */; };
-		07F7650A1E43332B00727090 /* Tripomatic_base.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 07F765091E4332D400727090 /* Tripomatic_base.sqlite */; };
 		07F7650C1E43373B00727090 /* ExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650B1E43373B00727090 /* ExtensionHelper.swift */; };
 		07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650D1E433CFD00727090 /* GalleryViewController.swift */; };
-		07F765121E435E8400727090 /* TravelCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07F765111E435E8400727090 /* TravelCore.framework */; };
-		07F765141E435E8A00727090 /* TravelCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07F765111E435E8400727090 /* TravelCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07F765181E437AE000727090 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 07F765171E437AE000727090 /* logo.png */; };
+		D61800851E66F00B00A7C9E0 /* TravelKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61800841E66F00B00A7C9E0 /* TravelKit.framework */; };
+		D61800871E66F01200A7C9E0 /* TravelKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D61800841E66F00B00A7C9E0 /* TravelKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,7 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				07F765141E435E8A00727090 /* TravelCore.framework in Embed Frameworks */,
+				D61800871E66F01200A7C9E0 /* TravelKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -48,11 +47,10 @@
 		075C64061E40E54700E8B6CA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		075C64091E41D31A00E8B6CA /* ActivityListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityListViewController.swift; sourceTree = "<group>"; };
 		075C64421E41E08B00E8B6CA /* ActivityDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityDetailViewController.swift; sourceTree = "<group>"; };
-		07F765091E4332D400727090 /* Tripomatic_base.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tripomatic_base.sqlite; sourceTree = "<group>"; };
 		07F7650B1E43373B00727090 /* ExtensionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionHelper.swift; sourceTree = "<group>"; };
 		07F7650D1E433CFD00727090 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
-		07F765111E435E8400727090 /* TravelCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TravelCore.framework; sourceTree = "<group>"; };
 		07F765171E437AE000727090 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		D61800841E66F00B00A7C9E0 /* TravelKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TravelKit.framework; path = "SygicTravel-Demo/TravelKit.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				075C64081E41D30500E8B6CA /* MapKit.framework in Frameworks */,
-				07F765121E435E8400727090 /* TravelCore.framework in Frameworks */,
+				D61800851E66F00B00A7C9E0 /* TravelKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +91,6 @@
 				075C63F71E40DF6500E8B6CA /* Assets.xcassets */,
 				075C63F91E40DF6500E8B6CA /* LaunchScreen.storyboard */,
 				075C63FC1E40DF6500E8B6CA /* Info.plist */,
-				07F765091E4332D400727090 /* Tripomatic_base.sqlite */,
 				07F765171E437AE000727090 /* logo.png */,
 				07F7650B1E43373B00727090 /* ExtensionHelper.swift */,
 			);
@@ -115,7 +112,7 @@
 		075C64051E40E54700E8B6CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				07F765111E435E8400727090 /* TravelCore.framework */,
+				D61800841E66F00B00A7C9E0 /* TravelKit.framework */,
 				075C64061E40E54700E8B6CA /* MapKit.framework */,
 			);
 			name = Frameworks;
@@ -186,7 +183,6 @@
 				07F765181E437AE000727090 /* logo.png in Resources */,
 				075C63FB1E40DF6500E8B6CA /* LaunchScreen.storyboard in Resources */,
 				075C63F81E40DF6500E8B6CA /* Assets.xcassets in Resources */,
-				07F7650A1E43332B00727090 /* Tripomatic_base.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,11 +318,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SygicTravel-Demo",
 				);
 				INFOPLIST_FILE = "SygicTravel-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sygictravel.SygicTravel-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sygictravel.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -343,11 +340,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SygicTravel-Demo",
 				);
 				INFOPLIST_FILE = "SygicTravel-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sygictravel.SygicTravel-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sygictravel.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

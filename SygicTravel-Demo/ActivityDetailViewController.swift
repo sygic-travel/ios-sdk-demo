@@ -7,17 +7,16 @@
 //
 
 import UIKit
-import TravelCore
+import TravelKit
 
 class ActivityDetailViewController : UIViewController {
 
-	var activity:Activity! {
+	var place: TKPlace! {
 		didSet {
-			activity = ActivityManager.default().activity(withID: self.activity.ID)
 			refreshData()
 		}
 	}
-	
+
 	let scrollView = UIScrollView(frame: UIScreen.main.bounds)
 
 	var imageView:UIImageView!
@@ -26,11 +25,13 @@ class ActivityDetailViewController : UIViewController {
 
 		self.view = self.scrollView
 		self.view.backgroundColor = .white
-		self.title = activity.name
+		self.title = place.name
 
-		let operation = ActivityUpdateOperation(activity: activity)
-		operation?.delegate = self
-		operation?.start()
+		// Fetch detailed information of the place
+
+		TravelKit.detailedPlace(withID: place.ID) { (place, error) in
+			if (place != nil) { self.place = place }
+		}
 	}
 
 	func refreshData() {
@@ -44,10 +45,10 @@ class ActivityDetailViewController : UIViewController {
 		let padding = CGFloat(8)
 		var startHeight = CGFloat(padding + imageView.frame.origin.y + imageView.frame.size.height)
 
-		for pair in self.pairInformationForActivity(forActivity: activity) {
-			if let safeSecondPair = pair.1 as String!{
+		for pair in self.pairInformation(forPlace: place) {
+			if let safeSecondPair = pair.1 as String! {
 				let titleLabel = UILabel(frame: CGRect(x: padding, y: startHeight, width: self.view.frame.size.width - 2*padding, height: 60))
-				titleLabel.text = pair.0;
+				titleLabel.text = pair.0
 				titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
 				titleLabel.numberOfLines = 3
 				titleLabel.sizeToFit()
@@ -78,7 +79,7 @@ class ActivityDetailViewController : UIViewController {
 	func setUpImageView() {
 		if imageView == nil {
 			imageView = UIImageView(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
-			imageView.backgroundColor = activity.categoryColor()
+			imageView.backgroundColor = place.primaryColor
 
 			let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(openGallery))
 			imageView.isUserInteractionEnabled = true
@@ -86,38 +87,57 @@ class ActivityDetailViewController : UIViewController {
 		}
 		self.scrollView.addSubview(imageView)
 
-		if let safeMedium = MediaManager.default().imageForItem(withID: activity.ID, type:.fullscreen) {
-			imageView.downloadedFrom(url: URL(string: safeMedium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: "400x400"))!, finished:{})
+		TravelKit.mediaForPlace(withID: place.ID) { (media, error) in
+
+			if let medium = media?.first {
+
+				if let url = medium.previewURL(forSize: CGSize(width: 640, height: 640)) {
+					self.imageView.downloadedFrom(url: url, finished: {})
+				}
+			}
 		}
 	}
 
 	func openGallery() {
 		let vc = GalleryViewController()
-		vc.activity = self.activity
+		vc.place = place
 		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
-	func pairInformationForActivity(forActivity:Activity) -> [(String, String?)]{
+	func pairInformation(forPlace place:TKPlace) -> [(String, String?)]{
 		var pairs = [(String,String?)]()
-		pairs.append(("Name",forActivity.name))
-		pairs.append(("Sufix",forActivity.suffix))
-		pairs.append(("Subtitle",forActivity.subtitle))
-		pairs.append(("Text Description",forActivity.textDescription))
-		pairs.append(("Duration",self.timeFormatted(totalSeconds: forActivity.duration as Int? ?? 0 as Int)))
-		pairs.append(("Rating",forActivity.rating.description))
-		pairs.append(("Tags",forActivity.tags.description))
-		pairs.append(("Categories",forActivity.categories.description))
+		pairs.append(("Name", place.name))
+		pairs.append(("Suffix", place.suffix))
+		pairs.append(("Perex", place.perex))
 
-		var referencesString = ""
-		for reference in ActivityManager.default().referencesForActivity(withID: forActivity.ID) {
-			if let safePrice = reference.price {
-				referencesString += reference.title + " , price: " + safePrice.description + "\n\n"
-			} else {
-				referencesString += reference.title
-			}
+		if let duration = place.duration {
+			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration as Int)))
+		}
+		if let rating = place.rating {
+			pairs.append(("Rating", rating.description))
+		}
+		if place.categories?.count ?? 0 > 0 {
+			pairs.append(("Categories", place.categories!.joined(separator: " • ")))
+		}
+		if place.tags?.count ?? 0 > 0 {
+			pairs.append(("Tags", place.tags!.joined(separator: " • ")))
 		}
 
-		pairs.append(("References",referencesString))
+		var referencesString = ""
+
+		for reference in place.references ?? [ ] {
+
+			var pieces = [String]()
+
+			if let title = reference.title { pieces.append(title) }
+			if let url = reference.onlineURL { pieces.append(url.absoluteString) }
+			if let price = reference.price { pieces.append("$" + price.description) }
+
+			referencesString += pieces.joined(separator: "\n")
+			referencesString += "\n\n"
+		}
+
+		pairs.append(("References", referencesString))
 
 		return pairs
 	}
@@ -129,17 +149,4 @@ class ActivityDetailViewController : UIViewController {
 		return String(format: "%02d hours %02d minutes %02d seconds", hours, minutes, seconds)
 	}
 
-}
-
-
-//MARK: BatchActivityUpdateOperationDelegate
-
-extension ActivityDetailViewController : ActivityUpdateOperationDelegate {
-	func activityUpdateOperation(_ operation: ActivityUpdateOperation!, didFinishWith activity: Activity!) {
-		self.activity = activity
-	}
-
-	func activityUpdateOperation(_ operation: ActivityUpdateOperation!, didFinishWithPhotosFor activity: Activity!) {
-		setUpImageView()
-	}
 }

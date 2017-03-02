@@ -8,26 +8,22 @@
 
 import UIKit
 import MapKit
-import TravelCore
+import TravelKit
 
 
 class MapViewController: UIViewController {
 
 	var mapView:MKMapView!
 
-	var activities:[Activity] = [Activity]()
-	var currentTagFilters:[String]?
+	var places: [TKPlace] = [TKPlace]()
 
-	var activeCategoryFilter:ActivityFilter?
-	var activeTagFilters:[String]?
-	
+	var activeCategoryFilter: String?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		let categoryButton = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
-		let tagButton = UIBarButtonItem(title: "Tag", style: .plain, target: self, action: #selector(MapViewController.showtagFilter))
-		navigationItem.rightBarButtonItems = [categoryButton, tagButton]
+		navigationItem.rightBarButtonItems = [categoryButton]
 
 		mapView = MKMapView(frame: self.view.frame)
 		mapView.delegate = self
@@ -47,66 +43,49 @@ class MapViewController: UIViewController {
 	}
 
 	func reloadData() {
-		mapView.removeAnnotations(mapView.annotations)
 
-		for activity in activities {
-			mapView.addAnnotation(MapPin(activity: activity))
+		var annotations = [MapPin]()
+
+		for place in places {
+			annotations.append(MapPin(place: place))
 		}
+
+		mapView.removeAnnotations(mapView.annotations)
+		mapView.addAnnotations(annotations)
 	}
 
 	func fetchData() {
-		let query = ActivityQuery()
-		query.parentID = "city:1"
-		if let safeCategoryFilter = activeCategoryFilter {
-			query.filter = safeCategoryFilter
-		}
-		if let safeTagsFilter = activeTagFilters {
-			query.tags = safeTagsFilter
-		}
 
-		let lfo = LoadFeaturesOperation(delegate: self)
-		lfo?.query = query
-		lfo?.start()
+		let query = TKPlacesQuery()
+		query.type = .POI
+		query.region = TKMapRegion(coordinateRegion: mapView.region)
+		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
+
+		TravelKit.places(for: query) { (places, error) in
+			self.places = places ?? [ ]
+			self.reloadData()
+		}
 	}
 
 	func showCategoryFilter() {
 
 		let actionSheet = UIAlertController(title: "Choose Category", message: nil, preferredStyle: .actionSheet)
-		let categoryArray:[ActivityFilter] = [.sightseeing, .shopping, .eating, .discovering, .playing, .travelling, .goingOut, .hiking, .sports, .relaxing]
 
-		for category in categoryArray {
-			actionSheet.addAction(UIAlertAction(title: Activity.title(for: category), style: .default, handler: { (action:UIAlertAction!) -> Void in
-				self.activeCategoryFilter = category
-				self.fetchData()
-			}))
-		}
+		let categoryArray = ["sightseeing", "shopping", "eating", "discovering", "playing", "traveling", "going_out", "hiking", "sports", "relaxing"]
 
-		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive, handler: { (action:UIAlertAction!) -> Void in
+		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,
+		  handler: { (action:UIAlertAction!) -> Void in
 			self.activeCategoryFilter = nil
 			self.fetchData()
 		}))
 
-		actionSheet.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
-
-		self.present(actionSheet, animated: true, completion: nil)
-	}
-
-	func showtagFilter() {
-		let actionSheet = UIAlertController(title: "Choose Tag", message: nil, preferredStyle: .actionSheet)
-
-		if let saveArray = currentTagFilters {
-			for tag in saveArray {
-				actionSheet.addAction(UIAlertAction(title: tag, style: .default, handler: { (action:UIAlertAction!) -> Void in
-					self.activeTagFilters = [tag]
-					self.fetchData()
-				}))
-			}
+		for category in categoryArray {
+			actionSheet.addAction(UIAlertAction(title: category, style: .default,
+			  handler: { (action:UIAlertAction!) -> Void in
+				self.activeCategoryFilter = category
+				self.fetchData()
+			}))
 		}
-
-		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive, handler: { (action:UIAlertAction!) -> Void in
-			self.activeTagFilters = nil
-			self.fetchData()
-		}))
 
 		actionSheet.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
 
@@ -116,7 +95,7 @@ class MapViewController: UIViewController {
 
 
 
-//MARK: MKMapViewDelegate
+// MARK: MKMapViewDelegate
 
 extension MapViewController : MKMapViewDelegate {
 
@@ -126,7 +105,7 @@ extension MapViewController : MKMapViewDelegate {
 		annotationView.backgroundColor = .lightGray
 		annotationView.layer.cornerRadius = 10
 		if let mapPinAnnotation = annotation as? MapPin {
-			annotationView.backgroundColor = mapPinAnnotation.activity.categoryColor()
+			annotationView.backgroundColor = mapPinAnnotation.place.primaryColor
 		}
 		return annotationView
 	}
@@ -134,47 +113,33 @@ extension MapViewController : MKMapViewDelegate {
 	func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 		if let mapPinAnnotation = view.annotation as? MapPin {
 			let vc = ActivityDetailViewController()
-			vc.activity = mapPinAnnotation.activity
+			vc.place = mapPinAnnotation.place
 			self.navigationController?.pushViewController(vc, animated: true)
 			mapView.deselectAnnotation(view.annotation, animated: false)
 		}
 	}
-}
 
-
-//MARK: LoadFeaturesOperationDelegate
-
-extension MapViewController : LoadFeaturesOperationDelegate {
-
-	func loadFeaturesOperation(_ operation: LoadFeaturesOperation!, didFinishWith resultSet: FeatureResultSet!) {
-		activities = resultSet.features
-		self.currentTagFilters = [String]()
-		for tag in  resultSet.tagStats[0 ... 10] {
-			self.currentTagFilters?.append(tag.name)
-		}
-		reloadData()
-	}
-
-	func loadFeaturesOperationDidCancel(_ operation: LoadFeaturesOperation!) {
-		NSLog("Operation Canceled!")
+	func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+		fetchData()
 	}
 }
 
-//MARK: MapPin Annotation
+
+// MARK: MapPin Annotation
 
 class MapPin : NSObject, MKAnnotation {
-	var coordinate: CLLocationCoordinate2D
+	var place: TKPlace!
 	var title: String?
-	var activity: Activity!
+	var coordinate: CLLocationCoordinate2D
 
 	init(coordinate: CLLocationCoordinate2D, title: String) {
 		self.coordinate = coordinate
 		self.title = title
 	}
 
-	init(activity:Activity) {
-		self.coordinate = activity.location.coordinate
-		self.title = activity.name
-		self.activity = activity
+	init(place: TKPlace) {
+		self.place = place
+		self.title = place.name
+		self.coordinate = place.location?.coordinate ?? kCLLocationCoordinate2DInvalid
 	}
 }

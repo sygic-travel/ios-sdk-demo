@@ -1,0 +1,6 @@
+framework module TravelKit {
+  umbrella header "TravelKit.h"
+
+  export *
+  module * { export * }
+}

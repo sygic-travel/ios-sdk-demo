@@ -7,29 +7,33 @@
 //
 
 import UIKit
-import TravelCore
-
+import TravelKit
 
 class GalleryViewController : UIViewController {
 
 	let scrollView = UIScrollView(frame: UIScreen.main.bounds)
-	var activity:Activity!
-	var media:[Medium] = [Medium]()
+	var place: TKPlace!
+	var media:[TKMedium] = [TKMedium]()
 
 	override func loadView() {
 		self.view = self.scrollView
 		self.view.backgroundColor = .white
-		self.title = activity.name
+		self.title = place.name
 
 		let padding = CGFloat(0)
 		var startHeight = CGFloat(padding)
-		if let save = MediaManager.default().mediaForItem(withID: activity.ID) {
-			for medium in  save {
+
+		TravelKit.mediaForPlace(withID: place.ID) { (media, error) in
+
+			for medium in media ?? [ ] {
 
 				let imageView = UIImageView(frame:CGRect(x: 0, y: startHeight, width: self.view.frame.size.width, height: self.view.frame.size.width))
-				imageView.backgroundColor = activity.categoryColor()
+				imageView.backgroundColor = self.place.primaryColor
 
-				imageView.downloadedFrom(url: URL(string: medium.url.absoluteString.replacingOccurrences(of: "__SIZE__", with: Medium.sizeString(for: .large)))!, contentMode: .scaleAspectFit, finished: {})
+				if let url = medium.previewURL(forSize: CGSize(width: 400, height: 400)) {
+					imageView.downloadedFrom(url: url, finished: {})
+				}
+
 				self.scrollView.addSubview(imageView)
 				startHeight += imageView.frame.height + padding
 			}
