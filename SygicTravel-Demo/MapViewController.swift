@@ -57,11 +57,11 @@ class MapViewController: UIViewController {
 	func fetchData() {
 
 		let query = TKPlacesQuery()
-		query.type = .POI
+		query.level = .POI
 		query.region = TKMapRegion(coordinateRegion: mapView.region)
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 
-		TravelKit.places(for: query) { (places, error) in
+		TravelKit.shared().places(for: query) { (places, error) in
 			self.places = places ?? [ ]
 			self.reloadData()
 		}

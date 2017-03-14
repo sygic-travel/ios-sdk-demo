@@ -1,0 +1,3 @@
+[submodule "SDK"]
+	path = SDK
+	url = ssh://git@github.com/sygic-travel/TravelKit-darwin

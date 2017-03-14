@@ -18,9 +18,40 @@
 		07F7650C1E43373B00727090 /* ExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650B1E43373B00727090 /* ExtensionHelper.swift */; };
 		07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650D1E433CFD00727090 /* GalleryViewController.swift */; };
 		07F765181E437AE000727090 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 07F765171E437AE000727090 /* logo.png */; };
-		D61800851E66F00B00A7C9E0 /* TravelKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61800841E66F00B00A7C9E0 /* TravelKit.framework */; };
-		D61800871E66F01200A7C9E0 /* TravelKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D61800841E66F00B00A7C9E0 /* TravelKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D608D0D41E77FF8000A1CA41 /* TravelKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; };
+		D608D0D51E77FF8000A1CA41 /* TravelKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D608D0CE1E77FF6800A1CA41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D6B2A1541E530F60005509E8;
+			remoteInfo = "TravelKit-macOS";
+		};
+		D608D0D01E77FF6800A1CA41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D6C3D04C1E4DD36200EBB54F;
+			remoteInfo = "TravelKit-iOS";
+		};
+		D608D0D21E77FF6800A1CA41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D6B2A1291E530AFD005509E8;
+			remoteInfo = "TravelKit-tvOS";
+		};
+		D608D0D61E77FF8000A1CA41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D6C3D04B1E4DD36200EBB54F;
+			remoteInfo = "TravelKit-iOS";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		0761B7F71E421046008A851B /* Embed Frameworks */ = {
@@ -29,7 +60,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D61800871E66F01200A7C9E0 /* TravelKit.framework in Embed Frameworks */,
+				D608D0D51E77FF8000A1CA41 /* TravelKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,7 +81,7 @@
 		07F7650B1E43373B00727090 /* ExtensionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionHelper.swift; sourceTree = "<group>"; };
 		07F7650D1E433CFD00727090 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		07F765171E437AE000727090 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		D61800841E66F00B00A7C9E0 /* TravelKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TravelKit.framework; path = "SygicTravel-Demo/TravelKit.framework"; sourceTree = "<group>"; };
+		D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TravelKit.xcodeproj; path = SDK/TravelKit.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +90,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				075C64081E41D30500E8B6CA /* MapKit.framework in Frameworks */,
-				D61800851E66F00B00A7C9E0 /* TravelKit.framework in Frameworks */,
+				D608D0D41E77FF8000A1CA41 /* TravelKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +100,7 @@
 		075C63E41E40DF6500E8B6CA = {
 			isa = PBXGroup;
 			children = (
+				D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */,
 				075C63EF1E40DF6500E8B6CA /* SygicTravel-Demo */,
 				075C63EE1E40DF6500E8B6CA /* Products */,
 				075C64051E40E54700E8B6CA /* Frameworks */,
@@ -112,10 +144,19 @@
 		075C64051E40E54700E8B6CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D61800841E66F00B00A7C9E0 /* TravelKit.framework */,
 				075C64061E40E54700E8B6CA /* MapKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D608D0C91E77FF6800A1CA41 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D608D0CF1E77FF6800A1CA41 /* TravelKit.framework */,
+				D608D0D11E77FF6800A1CA41 /* TravelKit.framework */,
+				D608D0D31E77FF6800A1CA41 /* TravelKit.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,6 +174,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D608D0D71E77FF8000A1CA41 /* PBXTargetDependency */,
 			);
 			name = "SygicTravel-Demo";
 			productName = "SygicTravel-Demo";
@@ -168,12 +210,42 @@
 			mainGroup = 075C63E41E40DF6500E8B6CA;
 			productRefGroup = 075C63EE1E40DF6500E8B6CA /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D608D0C91E77FF6800A1CA41 /* Products */;
+					ProjectRef = D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				075C63EC1E40DF6500E8B6CA /* SygicTravel-Demo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D608D0CF1E77FF6800A1CA41 /* TravelKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TravelKit.framework;
+			remoteRef = D608D0CE1E77FF6800A1CA41 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D608D0D11E77FF6800A1CA41 /* TravelKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TravelKit.framework;
+			remoteRef = D608D0D01E77FF6800A1CA41 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D608D0D31E77FF6800A1CA41 /* TravelKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TravelKit.framework;
+			remoteRef = D608D0D21E77FF6800A1CA41 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		075C63EB1E40DF6500E8B6CA /* Resources */ = {
@@ -204,6 +276,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D608D0D71E77FF8000A1CA41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "TravelKit-iOS";
+			targetProxy = D608D0D61E77FF8000A1CA41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		075C63F91E40DF6500E8B6CA /* LaunchScreen.storyboard */ = {

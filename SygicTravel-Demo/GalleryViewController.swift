@@ -23,7 +23,7 @@ class GalleryViewController : UIViewController {
 		let padding = CGFloat(0)
 		var startHeight = CGFloat(padding)
 
-		TravelKit.mediaForPlace(withID: place.ID) { (media, error) in
+		TravelKit.shared().mediaForPlace(withID: place.ID) { (media, error) in
 
 			for medium in media ?? [ ] {
 

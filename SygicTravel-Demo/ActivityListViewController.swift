@@ -73,7 +73,7 @@ class PlacesListViewController: UITableViewController {
 	func fetchData() {
 
 		let query = TKPlacesQuery()
-		query.type = .POI
+		query.level = .POI
 		query.parentID = "city:1"
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 		query.tags = activeTagFilters
@@ -83,7 +83,7 @@ class PlacesListViewController: UITableViewController {
 			query.limit = 10
 		}
 
-		TravelKit.places(for: query) { (places, error) in
+		TravelKit.shared().places(for: query) { (places, error) in
 
 			self.places = places ?? [ ]
 			self.tableView.reloadData()

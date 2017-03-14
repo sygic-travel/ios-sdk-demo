@@ -13,7 +13,7 @@ class PlaceDetailViewController : UIViewController {
 
 	var place: TKPlace! {
 		didSet {
-			refreshData()
+			OperationQueue.main.addOperation { self.refreshData() }
 		}
 	}
 
@@ -29,7 +29,7 @@ class PlaceDetailViewController : UIViewController {
 
 		// Fetch detailed information of the place
 
-		TravelKit.detailedPlace(withID: place.ID) { (place, error) in
+		TravelKit.shared().detailedPlace(withID: place.ID) { (place, error) in
 			if (place != nil) { self.place = place }
 		}
 	}
@@ -87,7 +87,7 @@ class PlaceDetailViewController : UIViewController {
 		}
 		self.scrollView.addSubview(imageView)
 
-		TravelKit.mediaForPlace(withID: place.ID) { (media, error) in
+		TravelKit.shared().mediaForPlace(withID: place.ID) { (media, error) in
 
 			if let medium = media?.first {
 
@@ -120,7 +120,10 @@ class PlaceDetailViewController : UIViewController {
 			pairs.append(("Categories", place.categories!.joined(separator: " • ")))
 		}
 		if place.tags?.count ?? 0 > 0 {
-			pairs.append(("Tags", place.tags!.joined(separator: " • ")))
+			let tags = place.tags!.map({ (placeTag) -> String in
+				return placeTag.name ?? placeTag.key
+			})
+			pairs.append(("Tags", tags.joined(separator: " • ")))
 		}
 
 		var referencesString = ""
