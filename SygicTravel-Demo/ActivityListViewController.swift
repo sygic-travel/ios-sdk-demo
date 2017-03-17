@@ -22,8 +22,12 @@ class PlacesListViewController: UITableViewController {
 	var searchingActive: Bool = false
 	var searchBar: UISearchBar!
 
+	var devSwitch: UISwitch?
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
+
+		self.navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
 
 		let categoryButton = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
 		navigationItem.rightBarButtonItem = categoryButton
@@ -31,6 +35,10 @@ class PlacesListViewController: UITableViewController {
 		self.title = "Activities List"
 		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		self.tableView.tableFooterView = UIView()
+
+		devSwitch = UISwitch()
+		devSwitch?.isOn = true
+		self.navigationItem.titleView = devSwitch!
 
 		if !searchBarHidden {
 			searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40))
@@ -65,9 +73,17 @@ class PlacesListViewController: UITableViewController {
 
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let vc = PlaceDetailViewController()
-		vc.place = places[indexPath.row]
-		self.navigationController?.pushViewController(vc, animated: true)
+
+		let place = places[indexPath.row]
+
+		if (devSwitch?.isOn == true) {
+			let vc = PlaceDetailViewController()
+			vc.place = place
+			self.navigationController?.pushViewController(vc, animated: true)
+		} else {
+			let vc = TKPlaceDetailViewController(place: place)
+			self.navigationController?.pushViewController(vc, animated: true)
+		}
 	}
 
 	func fetchData() {

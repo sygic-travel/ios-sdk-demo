@@ -104,11 +104,15 @@ class PlaceDetailViewController : UIViewController {
 		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
-	func pairInformation(forPlace place:TKPlace) -> [(String, String?)]{
+	func pairInformation(forPlace place:TKPlace) -> [(String, String?)] {
 		var pairs = [(String,String?)]()
 		pairs.append(("Name", place.name))
 		pairs.append(("Suffix", place.suffix))
 		pairs.append(("Perex", place.perex))
+
+		if place.detail?.fullDescription?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
+			pairs.append(("Description", place.detail!.fullDescription!))
+		}
 
 		if let duration = place.duration {
 			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration as Int)))
@@ -119,16 +123,24 @@ class PlaceDetailViewController : UIViewController {
 		if place.categories?.count ?? 0 > 0 {
 			pairs.append(("Categories", place.categories!.joined(separator: " • ")))
 		}
-		if place.tags?.count ?? 0 > 0 {
-			let tags = place.tags!.map({ (placeTag) -> String in
+		if place.detail?.tags?.count ?? 0 > 0 {
+			let tags = place.detail!.tags!.map({ (placeTag) -> String in
 				return placeTag.name ?? placeTag.key
 			})
 			pairs.append(("Tags", tags.joined(separator: " • ")))
 		}
 
+		if place.detail?.address?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
+			pairs.append(("Address", place.detail!.address!))
+		}
+
+		if place.detail?.openingHours?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
+			pairs.append(("Opening hours", place.detail!.openingHours!))
+		}
+
 		var referencesString = ""
 
-		for reference in place.references ?? [ ] {
+		for reference in place.detail?.references ?? [ ] {
 
 			var pieces = [String]()
 

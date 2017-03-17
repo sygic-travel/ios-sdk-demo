@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,9 @@
 		07F765181E437AE000727090 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 07F765171E437AE000727090 /* logo.png */; };
 		D608D0D41E77FF8000A1CA41 /* TravelKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; };
 		D608D0D51E77FF8000A1CA41 /* TravelKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */; };
+		D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */; };
+		D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +85,13 @@
 		07F7650D1E433CFD00727090 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		07F765171E437AE000727090 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TravelKit.xcodeproj; path = SDK/TravelKit.xcodeproj; sourceTree = "<group>"; };
+		D608D0D81E7819CE00A1CA41 /* SygicTravel-Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SygicTravel-Demo-Bridging-Header.h"; sourceTree = "<group>"; };
+		D608D0D91E7819CE00A1CA41 /* TKPlaceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailViewController.h; sourceTree = "<group>"; };
+		D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceDetailViewController.m; sourceTree = "<group>"; };
+		D608D0DD1E78266700A1CA41 /* UIKit+TravelKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKit+TravelKit.h"; sourceTree = "<group>"; };
+		D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIKit+TravelKit.m"; sourceTree = "<group>"; };
+		D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailCells.h; sourceTree = "<group>"; };
+		D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceDetailCells.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +128,7 @@
 		075C63EF1E40DF6500E8B6CA /* SygicTravel-Demo */ = {
 			isa = PBXGroup;
 			children = (
-				075C64041E40E4B400E8B6CA /* Controllers */,
+				075C64041E40E4B400E8B6CA /* Sources */,
 				075C63F01E40DF6500E8B6CA /* AppDelegate.swift */,
 				075C63F71E40DF6500E8B6CA /* Assets.xcassets */,
 				075C63F91E40DF6500E8B6CA /* LaunchScreen.storyboard */,
@@ -129,7 +139,7 @@
 			path = "SygicTravel-Demo";
 			sourceTree = "<group>";
 		};
-		075C64041E40E4B400E8B6CA /* Controllers */ = {
+		075C64041E40E4B400E8B6CA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				075C63F21E40DF6500E8B6CA /* MainViewController.swift */,
@@ -137,8 +147,15 @@
 				075C64091E41D31A00E8B6CA /* ActivityListViewController.swift */,
 				075C64421E41E08B00E8B6CA /* ActivityDetailViewController.swift */,
 				07F7650D1E433CFD00727090 /* GalleryViewController.swift */,
+				D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */,
+				D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */,
+				D608D0D91E7819CE00A1CA41 /* TKPlaceDetailViewController.h */,
+				D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */,
+				D608D0DD1E78266700A1CA41 /* UIKit+TravelKit.h */,
+				D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */,
+				D608D0D81E7819CE00A1CA41 /* SygicTravel-Demo-Bridging-Header.h */,
 			);
-			name = Controllers;
+			name = Sources;
 			sourceTree = "<group>";
 		};
 		075C64051E40E54700E8B6CA /* Frameworks */ = {
@@ -189,7 +206,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = "Marek Stana";
+				ORGANIZATIONNAME = Tripomatic;
 				TargetAttributes = {
 					075C63EC1E40DF6500E8B6CA = {
 						CreatedOnToolsVersion = 8.2;
@@ -200,7 +217,7 @@
 				};
 			};
 			buildConfigurationList = 075C63E81E40DF6500E8B6CA /* Build configuration list for PBXProject "SygicTravel-Demo" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -265,11 +282,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */,
 				075C63F31E40DF6500E8B6CA /* MainViewController.swift in Sources */,
 				07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */,
 				075C640A1E41D31A00E8B6CA /* ActivityListViewController.swift in Sources */,
 				075C64431E41E08B00E8B6CA /* ActivityDetailViewController.swift in Sources */,
 				075C64031E40E49300E8B6CA /* MapViewController.swift in Sources */,
+				D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */,
+				D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */,
 				075C63F11E40DF6500E8B6CA /* AppDelegate.swift in Sources */,
 				07F7650C1E43373B00727090 /* ExtensionHelper.swift in Sources */,
 			);
@@ -405,6 +425,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sygictravel.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SygicTravel-Demo/SygicTravel-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -427,6 +448,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sygictravel.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SygicTravel-Demo/SygicTravel-Demo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
