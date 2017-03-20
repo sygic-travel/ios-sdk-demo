@@ -8,6 +8,8 @@
 
 #import "TKPlaceDetailViewController.h"
 #import "TKPlaceDetailCells.h"
+#import "Foundation+TravelKit.h"
+#import "UIKit+TravelKit.h"
 
 
 typedef NS_ENUM(NSInteger, PlaceDetailSection) {
@@ -46,6 +48,7 @@ typedef NS_ENUM(NSInteger, PlaceDetailSection) {
 };
 
 const CGFloat kImageHeight = 256.0;
+const CGFloat kDefaultLinksHeight = 54.0;
 
 #define kContactsRowPadding  10.0
 #define kSectionPadding  12.0
@@ -58,6 +61,50 @@ const CGFloat kImageHeight = 256.0;
 #define kTableCellActionButtonSize 36.0
 
 
+# /////////////////////
+# /////////////////////
+#pragma mark - Place Detail Table view -
+# /////////////////////
+# /////////////////////
+
+
+@interface TKPlaceDetailTableView : UITableView
+@end
+
+@implementation TKPlaceDetailTableView
+
+- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
+{
+	self = [super initWithFrame:frame style:style];
+
+	static dispatch_once_t once;
+	dispatch_once(&once, ^{
+
+		@try {
+			SEL badOne = NSSelectorFromString([@"allowsHeader" stringByAppendingString:@"ViewsToFloat"]);
+			[self swizzleSelector:@selector(allowFloatingHeaders) withSelector:badOne];
+		}
+		@catch (NSException *exception) {}
+
+	});
+
+	return self;
+}
+
+- (BOOL)allowFloatingHeaders
+{
+	return NO;
+}
+
+@end
+
+
+# /////////////////////
+# /////////////////////
+#pragma mark - Place Detail controller -
+# /////////////////////
+# /////////////////////
+
 
 @interface TKPlaceDetailViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -68,16 +115,21 @@ const CGFloat kImageHeight = 256.0;
 @property (nonatomic, copy) NSArray<TKReference *> *passes;
 @property (nonatomic, copy) NSArray<TKReference *> *otherProducts;
 @property (nonatomic, copy) NSArray<TKReference *> *basicLinks;
-@property (nonatomic, copy) NSArray/* <TKPlaceContact *> */ *contacts;
+@property (nonatomic, copy) NSArray<TKPlaceDetailLink *> *contacts;
 
 @property (nonatomic, strong) TKMedium *imageMedium;
 
-@property (nonatomic, strong) NSCache<NSNumber *, UITableViewCell *> *cellsCache;
+@property (nonatomic, strong) NSCache<NSString *, UITableViewCell *> *cellsCache;
 
 @end
 
 
 @implementation TKPlaceDetailViewController
+
+
+#pragma mark -
+#pragma mark View lifecycle
+
 
 - (instancetype)initWithPlace:(TKPlace *)place
 {
@@ -103,7 +155,7 @@ const CGFloat kImageHeight = 256.0;
 	_cellsCache = [NSCache new];
 
 	// Content grid
-	_contentTable = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+	_contentTable = [[TKPlaceDetailTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
 	_contentTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_contentTable.backgroundColor = [UIColor colorWithWhite:.94 alpha:1];
 	_contentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -138,6 +190,11 @@ const CGFloat kImageHeight = 256.0;
 	[self refreshView];
 }
 
+
+#pragma mark -
+#pragma mark Setters
+
+
 - (void)setPlace:(TKPlace *)place
 {
 	_place = place;
@@ -146,14 +203,16 @@ const CGFloat kImageHeight = 256.0;
 	NSMutableArray<TKReference *> *basicLinks = [NSMutableArray arrayWithCapacity:6];
 	NSMutableArray<TKReference *> *passes = [NSMutableArray arrayWithCapacity:6];
 	NSMutableArray<TKReference *> *otherProducts = [NSMutableArray arrayWithCapacity:6];
-	NSMutableArray *contacts = [NSMutableArray arrayWithCapacity:6];
+	NSMutableArray<TKPlaceDetailLink *> *contacts = [NSMutableArray arrayWithCapacity:6];
 
 	for (TKReference *ref in _place.detail.references)
 	{
 		if ([ref.type hasPrefix:@"guide"] || [ref.type hasPrefix:@"link:official"])
 			[basicLinks addObject:ref];
-//		else if ([ref.type hasPrefix:@"link"])
-//			[contacts addObject:[ActivityLinkItem itemWithType:ActivityContactLinkTypeURL value:ref]];
+		else if ([ref.type hasPrefix:@"link"]) {
+			TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypeReference value:ref];
+			[contacts addObject:link];
+		}
 		else if (!wiki && [ref.type hasPrefix:@"wiki"])
 			wiki = ref;
 
@@ -176,6 +235,16 @@ const CGFloat kImageHeight = 256.0;
 			[otherProducts addObject:ref];
 	}
 
+	if (_place.detail.phone) {
+		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypePhone value:_place.detail.phone];
+		[contacts addObject:link];
+	}
+
+	if (_place.detail.email) {
+		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypeEmail value:_place.detail.email];
+		[contacts addObject:link];
+	}
+
 	if (wiki) [basicLinks insertObject:wiki atIndex:0];
 	_wiki = wiki;
 
@@ -187,6 +256,11 @@ const CGFloat kImageHeight = 256.0;
 //	@property (nonatomic, strong) TKMedium *imageMedium;
 }
 
+
+#pragma mark -
+#pragma mark Refreshing
+
+
 - (void)refreshView
 {
 	[_cellsCache removeAllObjects];
@@ -194,7 +268,25 @@ const CGFloat kImageHeight = 256.0;
 }
 
 
-#pragma mark - Table view delegates
+#pragma mark -
+#pragma mark Actions
+
+
+- (void)openURL:(NSURL *)URL
+{
+	if (!URL) return;
+
+	BOOL needsBrowser = [URL.scheme containsString:@"http"];
+
+	if (needsBrowser && _urlOpeningBlock)
+		_urlOpeningBlock(URL);
+
+	else [[UIApplication sharedApplication] openURL:URL];
+}
+
+
+#pragma mark -
+#pragma mark Table view delegates
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -215,7 +307,7 @@ const CGFloat kImageHeight = 256.0;
 			        _place.detail.fullDescription.length) ? 1:0;
 
 		case PlaceDetailSectionTags:
-			return (_place.detail.tags.count) ? 1:0;
+			return (_place.categories.count || _place.detail.tags.count) ? 1:0;
 
 		case PlaceDetailSectionOtherProductsSeparator:
 		case PlaceDetailSectionOtherProducts:
@@ -223,7 +315,7 @@ const CGFloat kImageHeight = 256.0;
 
 		case PlaceDetailSectionPassesSeparator:
 		case PlaceDetailSectionPasses:
-			return (_passes) ? 1:0;
+			return (_passes.count) ? 1:0;
 
 		case PlaceDetailSectionBasicLinksSeparator:
 			return (_basicLinks.count) ? 1:0;
@@ -240,7 +332,7 @@ const CGFloat kImageHeight = 256.0;
 
 		case PlaceDetailSectionAddressSeparator:
 		case PlaceDetailSectionAddress:
-			return _place.detail.address.length ? 1:0;
+			return (_place.location || _place.detail.address.length) ? 1:0;
 
 		case PlaceDetailSectionContactsSeparator:
 			return (_contacts.count) ? 1:0;
@@ -269,7 +361,9 @@ const CGFloat kImageHeight = 256.0;
 {
 	NSInteger section = indexPath.section;
 
-	UITableViewCell *cell = [_cellsCache objectForKey:@(indexPath.section)];
+	NSString *cacheKey = [NSString stringWithFormat:@"%zd_%zd", indexPath.section, indexPath.row];
+
+	UITableViewCell *cell = [_cellsCache objectForKey:cacheKey];
 
 	if (cell) return CGRectGetHeight(cell.frame);
 
@@ -292,6 +386,10 @@ const CGFloat kImageHeight = 256.0;
 		case PlaceDetailSectionFootingSeparator:
 			return kTableSeparatorsHeight;
 
+		case PlaceDetailSectionBasicLinks:
+		case PlaceDetailSectionContacts:
+			return kDefaultLinksHeight;
+
 	}
 
 	cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -303,22 +401,24 @@ const CGFloat kImageHeight = 256.0;
 {
 	if (section == PlaceDetailSectionOpeningHours)
 		return (_place.detail.openingHours.length) ?
-			NSLocalizedString(@"Opening hours", @"TravelKit Place Detail header") : nil;
+			NSLocalizedString(@"Opening hours", @"TravelKit UI Place Detail header") : nil;
 
 	if (section == PlaceDetailSectionAdmission)
 		return (_place.detail.admission.length) ?
-			NSLocalizedString(@"Admission", @"TravelKit Place Detail header") : nil;
+			NSLocalizedString(@"Admission", @"TravelKit UI Place Detail header") : nil;
 
 	if (section == PlaceDetailSectionAddress)
 		return (_place.detail.address.length) ?
-			NSLocalizedString(@"Address", @"TravelKit Place Detail header") : nil;
+			NSLocalizedString(@"Address", @"TravelKit UI Place Detail header") :
+		(_place.location) ? NSLocalizedString(@"Location", @"TravelKit UI Place Detail header") : nil;
 
 	return nil;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-	NSString *header = [self tableView:tableView titleForHeaderInSection:section];
+	NSString *header = [self tableView:tableView titleForHeaderInSection:section] ?: @"";
+	header = [header uppercaseString];
 
 	UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 32)];
 	v.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -329,26 +429,31 @@ const CGFloat kImageHeight = 256.0;
 	f.origin.x = kTKPlaceDetailCellsSidePadding;
 
 	UILabel *label = [[UILabel alloc] initWithFrame:f];
-	label.font = [UIFont systemFontOfSize:14];
-	label.textColor = [UIColor colorWithWhite:.4 alpha:1];
+	label.font = [UIFont lightSystemFontOfSize:13];
+	label.textColor = [UIColor blackColor];
 	label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	label.text = [header uppercaseString];
 	label.transform = CGAffineTransformMakeTranslation(0, 5);
 	[v addSubview:label];
+
+	label.attributedText = [[NSAttributedString alloc] initWithString:header attributes:@{
+		NSFontAttributeName: label.font,
+		NSForegroundColorAttributeName: label.textColor,
+		NSKernAttributeName: @1,
+	}];
 
 	return v;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell = [_cellsCache objectForKey:@(indexPath.section)];
+	NSString *cacheKey = [NSString stringWithFormat:@"PlaceDetail_%zd_%zd", indexPath.section, indexPath.row];
+
+	UITableViewCell *cell = [_cellsCache objectForKey:cacheKey];
 
 	if (cell) return cell;
 
 	CGRect basicRect = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 64);
 	NSInteger section = indexPath.section;
-
-
 
 	if (section == PlaceDetailSectionRatingSeparator ||
 		section == PlaceDetailSectionOtherProductsSeparator ||
@@ -370,14 +475,10 @@ const CGFloat kImageHeight = 256.0;
 		if (section == PlaceDetailSectionFootingSeparator)
 			cell.hasBottomSeparator = NO;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
-
-
-
-
 
 	if (section == PlaceDetailSectionHeader)
 	{
@@ -386,7 +487,7 @@ const CGFloat kImageHeight = 256.0;
 		TKPlaceDetailHeaderCell *cell = [[TKPlaceDetailHeaderCell alloc] initWithFrame:basicRect];
 		cell.place = _place;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -397,7 +498,7 @@ const CGFloat kImageHeight = 256.0;
 		TKPlaceDetailNameCell *cell = [[TKPlaceDetailNameCell alloc] initWithFrame:basicRect];
 		cell.displayName = _place.name;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -408,7 +509,7 @@ const CGFloat kImageHeight = 256.0;
 		cell.headingDetectionEnabled = YES;
 		cell.displayedText = _place.detail.fullDescription ?: _place.perex;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -416,9 +517,11 @@ const CGFloat kImageHeight = 256.0;
 	if (section == PlaceDetailSectionTags)
 	{
 		TKPlaceDetailTagsCell *cell = [[TKPlaceDetailTagsCell alloc] initWithFrame:basicRect];
+		cell.overridingTopPadding = (_place.perex) ? -5 : 0;
+		cell.categories = _place.displayableCategories;
 		cell.tags = _place.detail.tags;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -429,7 +532,7 @@ const CGFloat kImageHeight = 256.0;
 		cell.headingDetectionEnabled = YES;
 		cell.displayedText = _place.detail.admission;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -440,7 +543,7 @@ const CGFloat kImageHeight = 256.0;
 		cell.headingDetectionEnabled = YES;
 		cell.displayedText = _place.detail.openingHours;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
@@ -448,41 +551,105 @@ const CGFloat kImageHeight = 256.0;
 	if (section == PlaceDetailSectionAddress)
 	{
 		TKPlaceDetailSingleLabelCell *cell = [[TKPlaceDetailSingleLabelCell alloc] initWithFrame:basicRect];
-		cell.displayedText = _place.detail.address;
 
-		[_cellsCache setObject:cell forKey:@(section)];
+		NSString *location = [NSString stringWithFormat:@"%.3f, %.3f",
+			_place.location.coordinate.latitude, _place.location.coordinate.longitude];
+
+		NSString *address = _place.detail.address;
+
+		NSMutableArray *comps = [NSMutableArray arrayWithCapacity:2];
+		if (address) [comps addObject:address];
+		if (location) [comps addObject:location];
+
+		NSString *addrString = [comps componentsJoinedByString:@"\n"];
+
+		NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:addrString attributes:@{
+			NSForegroundColorAttributeName: cell.textLabel.textColor,
+			NSFontAttributeName: cell.textLabel.font,
+		}];
+
+		NSRange r = [addrString rangeOfString:location];
+
+		if (address && r.location != NSNotFound) {
+			[str addAttributes:@{
+				NSForegroundColorAttributeName: [UIColor colorWithWhite:.84 alpha:1],
+			} range:r];
+		}
+
+		cell.textLabel.attributedText = str;
+
+		[cell layoutSubviews];
+
+		[_cellsCache setObject:cell forKey:cacheKey];
 
 		return cell;
 	}
 
+	if (section == PlaceDetailSectionBasicLinks)
+	{
+		TKReference *ref = [_basicLinks safeObjectAtIndex:indexPath.row];
 
+		TKPlaceDetailLinkCell *cell = [[TKPlaceDetailLinkCell alloc] initWithFrame:basicRect];
+		cell.link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypeReference value:ref];
 
+		if (indexPath.row) [cell addSeparatingLineToTop:YES toBottom:NO];
 
+		[_cellsCache setObject:cell forKey:cacheKey];
+
+		return cell;
+	}
+
+	if (section == PlaceDetailSectionContacts)
+	{
+		TKPlaceDetailLinkCell *cell = [[TKPlaceDetailLinkCell alloc] initWithFrame:basicRect];
+		cell.link = [_contacts safeObjectAtIndex:indexPath.row];
+
+		if (indexPath.row) [cell addSeparatingLineToTop:YES toBottom:NO];
+
+		[_cellsCache setObject:cell forKey:cacheKey];
+
+		return cell;
+	}
+
+	if (section == PlaceDetailSectionOtherProducts)
+	{
+		TKPlaceDetailProductsCell *cell = [[TKPlaceDetailProductsCell alloc] initWithFrame:basicRect];
+		cell.products = _otherProducts;
+
+		__weak typeof(self) wf = self;
+		cell.productTappingBlock = ^(TKReference *ref) {
+			if (ref.onlineURL) [wf openURL:ref.onlineURL];
+		};
+
+		[_cellsCache setObject:cell forKey:cacheKey];
+
+		return cell;
+	}
+
+	if (section == PlaceDetailSectionPasses)
+	{
+		TKPlaceDetailProductsCell *cell = [[TKPlaceDetailProductsCell alloc] initWithFrame:basicRect];
+		cell.products = _passes;
+
+		__weak typeof(self) wf = self;
+		cell.productTappingBlock = ^(TKReference *ref) {
+			if (ref.onlineURL) [wf openURL:ref.onlineURL];
+		};
+
+		[_cellsCache setObject:cell forKey:cacheKey];
+
+		return cell;
+	}
+
+// TODO:
 //	PlaceDetailSectionDescriptionAttribution,
 //	PlaceDetailSectionDescriptionTranslation,
 //	PlaceDetailSectionRating,
-//	PlaceDetailSectionOtherProducts,
-//	PlaceDetailSectionPasses,
-//	PlaceDetailSectionBasicLinks,
-//	PlaceDetailSectionAdmission,
-//	PlaceDetailSectionOpeningHours,
+
 //	PlaceDetailSectionTime,
-//	PlaceDetailSectionContacts,
 //	PlaceDetailSectionMaps,
 //	PlaceDetailSectionArticles,
 //	PlaceDetailSectionAttribution,
-
-
-
-
-
-
-
-
-
-
-
-
 
 	return [TKPlaceDetailGenericCell new];
 }
@@ -508,6 +675,53 @@ const CGFloat kImageHeight = 256.0;
 	// Deselect
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+	switch (indexPath.section) {
+
+		case PlaceDetailSectionOtherProducts:
+		case PlaceDetailSectionPasses:
+			break;
+
+		case PlaceDetailSectionBasicLinks:
+		{
+			TKReference *ref = [_basicLinks safeObjectAtIndex:indexPath.row];
+			if (ref.onlineURL) [self openURL:ref.onlineURL];
+
+		} break;
+
+		case PlaceDetailSectionMaps:
+		case PlaceDetailSectionArticles:
+			break;
+
+		case PlaceDetailSectionContacts:
+		{
+			TKPlaceDetailLink *link = [_contacts safeObjectAtIndex:indexPath.row];
+
+			if (link.type == TKPlaceDetailLinkTypePhone)
+			{
+				NSString *phone = link.value;
+				NSRegularExpression *exp = [NSRegularExpression regularExpressionWithPattern:@"[^0-9*+#]"
+					options:NSRegularExpressionCaseInsensitive error:nil];
+				phone = [exp stringByReplacingMatchesInString:phone options:0 range:NSMakeRange(0, phone.length) withTemplate:@""];
+				phone = [@"tel:" stringByAppendingString:phone];
+				NSURL *URL = [NSURL URLWithString:phone];
+				if (URL) [self openURL:URL];
+			}
+
+			else if (link.type == TKPlaceDetailLinkTypeEmail)
+			{
+				NSString *email = link.value;
+				email = [@"mailto:" stringByAppendingString:email];
+				NSURL *URL = [NSURL URLWithString:email];
+				if (URL) [self openURL:URL];
+			}
+
+
+
+		} break;
+
+
+
+	}
 
 
 }

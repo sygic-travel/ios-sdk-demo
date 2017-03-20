@@ -12,6 +12,195 @@
 const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 
 
+
+
+
+
+@interface TKPlaceDetailIconicButton : UIButton
+@end
+
+@implementation TKPlaceDetailIconicButton
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+	if (self = [super initWithFrame:frame])
+	{
+		self.userInteractionEnabled = NO;
+		self.adjustsImageWhenHighlighted = NO;
+		self.imageView.contentMode = UIViewContentModeCenter;
+		self.tintColor = [UIColor colorFromRGB:0x0099EB];
+		self.backgroundColor = [UIColor colorWithWhite:.97 alpha:1];
+		self.layer.masksToBounds = YES;
+		self.layer.cornerRadius = self.height/2.0;
+		self.layer.borderWidth = 1;
+		self.layer.borderColor = [UIColor colorFromRGB:0xE2E2E2].CGColor;
+	}
+
+	return self;
+}
+
+- (void)setImage:(UIImage *)image
+{
+	[self setImage:image forState:UIControlStateNormal];
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+	self.tintColor = (highlighted) ?
+		[UIColor colorFromRGB:0x0079DB] : [UIColor colorFromRGB:0x0099EB];
+	self.backgroundColor = (highlighted) ?
+		[UIColor colorWithWhite:.93 alpha:1] : [UIColor colorWithWhite:.97 alpha:1];
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+@interface TKPlaceDetailProductControl : UIControl
+
+@property (nonatomic, strong) TKReference *product;
+
+@property (nonatomic, strong) TKPlaceDetailIconicButton *button;
+@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) UILabel *detailTextLabel;
+
+@end
+
+
+@implementation TKPlaceDetailProductControl
+
+- (instancetype)init
+{
+	return [self initWithFrame:CGRectMake(0, 0, 320, 44)];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+	if (self = [super initWithFrame:frame])
+		[self tk_initialise];
+
+	return self;
+}
+
+- (void)tk_initialise
+{
+	_button = [[TKPlaceDetailIconicButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+	_button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	_button.userInteractionEnabled = NO;
+	[self addCenteredSubview:_button];
+	_button.fromRightEdge = kTKPlaceDetailCellsSidePadding;
+
+	CGRect f = self.bounds;
+	f.size.width -= 3*kTKPlaceDetailCellsSidePadding + _button.width;
+	f.origin.x = kTKPlaceDetailCellsSidePadding;
+	f.origin.y = kTKPlaceDetailCellsSidePadding/2;
+
+	self.textLabel = [[UILabel alloc] initWithFrame:f];
+	self.textLabel.numberOfLines = 0;
+	self.textLabel.textColor = [UIColor blackColor];
+	self.textLabel.font = [UIFont lightSystemFontOfSize:13];
+	self.textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[self addSubview:_textLabel];
+
+	self.detailTextLabel = [[UILabel alloc] initWithFrame:f];
+	self.detailTextLabel.numberOfLines = 0;
+	self.detailTextLabel.textColor = [UIColor lightGrayColor];
+	self.detailTextLabel.font = [UIFont lightSystemFontOfSize:15];
+	self.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[self addSubview:_detailTextLabel];
+}
+
+- (void)setProduct:(TKReference *)product
+{
+	_product = product;
+
+	[self setLinkTitle:product.title];
+
+	NSMutableArray<NSString *> *flags = [NSMutableArray arrayWithCapacity:product.flags.count];
+
+	if (product.price.floatValue)
+		[flags addObject:[NSString stringWithFormat:@"$%.0f", product.price.floatValue+0.3]];
+
+	if ([product.flags containsObject:@"bestseller"])
+		[flags addObject:NSLocalizedString(@"Bestseller", @"TravelKit UI - Reference flag")];
+	if ([product.flags containsObject:@"instant_confirmation"])
+		[flags addObject:NSLocalizedString(@"Instant confirmation", @"TravelKit UI - Reference flag")];
+	if ([product.flags containsObject:@"mobile_voucher"])
+		[flags addObject:NSLocalizedString(@"Mobile voucher", @"TravelKit UI - Reference flag")];
+	if ([product.flags containsObject:@"Private"])
+		[flags addObject:NSLocalizedString(@"Private", @"TravelKit UI - Reference flag")];
+	if ([product.flags containsObject:@"skip_the_line"])
+		[flags addObject:NSLocalizedString(@"Skip the line", @"TravelKit UI - Reference flag")];
+
+	if (flags.count) {
+		NSString *text = [[flags componentsJoinedByString:@" • "] uppercaseString] ?: @"";
+
+		_detailTextLabel.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{
+			NSForegroundColorAttributeName: [UIColor colorFromRGB:0xF84B3D],
+			NSFontAttributeName: [UIFont systemFontOfSize:11],
+			NSKernAttributeName: @1,
+		}];
+	}
+
+//	NSString *imageName = @"";
+
+	[self layoutSubviews];
+}
+
+- (void)setLinkTitle:(NSString *)title
+{
+	title = title ?: @"";
+	title = [title uppercaseString];
+
+	self.textLabel.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{
+		NSFontAttributeName: self.textLabel.font,
+		NSForegroundColorAttributeName: self.textLabel.textColor,
+		NSKernAttributeName: @1,
+	}];
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+	_textLabel.height = [_textLabel expandedSizeOfText].height;
+	_detailTextLabel.height = [_detailTextLabel expandedSizeOfText].height;
+
+	_detailTextLabel.top = _textLabel.bottom + 4;
+
+	self.height = MAX(54, _detailTextLabel.bottom + kTKPlaceDetailCellsSidePadding/2);
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+	self.backgroundColor = (highlighted) ?
+		[UIColor colorWithWhite:.97 alpha:1] : [UIColor whiteColor];
+	_button.highlighted = highlighted;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @interface TKPlaceDetailGenericCell ()
 
 + (UITableViewCellStyle)tk_defaultStyle;
@@ -126,7 +315,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	self.textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.textLabel.numberOfLines = 0;
 	self.textLabel.textAlignment = NSTextAlignmentLeft;
-	self.textLabel.font = [UIFont systemFontOfSize:16];
+	self.textLabel.font = [UIFont lightSystemFontOfSize:16];
 	self.textLabel.textColor = [UIColor colorWithWhite:0.66 alpha:1];
 }
 
@@ -178,7 +367,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 			if ([sub hasPrefix:@" "] || [sub hasPrefix:@" "]) return;
 			[str addAttributes:@{
 				NSForegroundColorAttributeName: headingColor,
-				NSFontAttributeName: [UIFont boldSystemFontOfSize:self.textLabel.font.pointSize],
+				NSFontAttributeName: [UIFont systemFontOfSize:self.textLabel.font.pointSize],
 			} range:match.range];
 		}];
 	}
@@ -317,6 +506,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	[super tk_initialise];
 
+	self.textLabel.font = [UIFont systemFontOfSize:16];
 	self.overridingTopPadding = -3;
 }
 
@@ -334,11 +524,12 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	self.textLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1];
 }
 
-- (void)setTags:(NSArray<TKPlaceTag *> *)tags
+- (void)refreshContent
 {
-	_tags = tags.copy;
+	NSMutableArray<NSString *> *outTags = [NSMutableArray arrayWithCapacity:_categories.count+_tags.count];
 
-	NSMutableArray<NSString *> *outTags = [NSMutableArray arrayWithCapacity:_tags.count];
+	for (NSString *c in _categories)
+		[outTags addObject:c];
 
 	for (TKPlaceTag *t in _tags)
 		[outTags addObject:t.name ?: t.key];
@@ -352,4 +543,214 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	[self layoutSubviews];
 }
 
+- (void)setCategories:(NSArray<NSString *> *)categories
+{
+	_categories = categories.copy;
+	[self refreshContent];
+}
+
+- (void)setTags:(NSArray<TKPlaceTag *> *)tags
+{
+	_tags = tags.copy;
+	[self refreshContent];
+}
+
 @end
+
+
+
+
+
+
+
+
+@implementation TKPlaceDetailLink
+
++ (instancetype)linkWithType:(TKPlaceDetailLinkType)type value:(id)value
+{
+	TKPlaceDetailLink *link = [TKPlaceDetailLink new];
+	link.type = type;
+	link.value = value;
+	return link;
+}
+
+@end
+
+
+
+
+@interface TKPlaceDetailLinkCell ()
+
+@property (nonatomic, strong) TKPlaceDetailIconicButton *button;
+
+@end
+
+
+@implementation TKPlaceDetailLinkCell
+
++ (UITableViewCellStyle)tk_defaultStyle
+{
+	return UITableViewCellStyleSubtitle;
+}
+
+- (void)tk_initialise
+{
+	_button = [[TKPlaceDetailIconicButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+	_button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	_button.userInteractionEnabled = NO;
+	[self addCenteredSubview:_button];
+	_button.fromRightEdge = kTKPlaceDetailCellsSidePadding;
+
+//	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//	self.accessoryView = [UIImageView imageViewWithImageNamed:@"disclosure-gray"];
+	self.textLabel.textColor = [UIColor blackColor];
+	self.textLabel.font = [UIFont lightSystemFontOfSize:13];
+	self.textLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+	self.detailTextLabel.textColor = [UIColor lightGrayColor];
+	self.detailTextLabel.font = [UIFont lightSystemFontOfSize:15];
+	self.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+}
+
+- (void)setLink:(TKPlaceDetailLink *)link
+{
+	_link = link;
+
+	NSString *title = @"Link";
+	NSString *subtitle = nil;
+	NSString *imageName = @"";
+
+	if (link.type == TKPlaceDetailLinkTypePhone) {
+		title = NSLocalizedString(@"Phone number", @"TravelKit UI Detail label");
+		subtitle = link.value;
+	}
+	else if (link.type == TKPlaceDetailLinkTypeEmail) {
+		title = NSLocalizedString(@"Email address", @"TravelKit UI Detail label");
+		subtitle = link.value;
+	}
+	else if (link.type == TKPlaceDetailLinkTypeReference) {
+		TKReference *ref = link.value;
+		title = ref.title;
+		subtitle = ref.onlineURL.absoluteString;
+		subtitle = [subtitle stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+		subtitle = [subtitle stringByReplacingOccurrencesOfString:@"https://" withString:@""];
+	}
+
+	[self setLinkTitle:title];
+	self.detailTextLabel.text = subtitle;
+}
+
+- (void)setLinkTitle:(NSString *)title
+{
+	title = title ?: @"";
+	title = [title uppercaseString];
+
+	self.textLabel.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{
+		NSFontAttributeName: self.textLabel.font,
+		NSForegroundColorAttributeName: self.textLabel.textColor,
+		NSKernAttributeName: @1,
+	}];
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+	if (self.detailTextLabel.text.length) {
+		self.textLabel.top -= 2;
+		self.detailTextLabel.top += 2;
+	}
+//	else self.textLabel.top += 2;
+
+	if (self.textLabel.right > _button.left)
+		self.textLabel.width -= _button.width;
+	if (self.detailTextLabel.right > _button.left)
+		self.detailTextLabel.width -= _button.width;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+	[super setHighlighted:highlighted];
+	_button.highlighted = highlighted;
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+	[super setHighlighted:highlighted animated:animated];
+	_button.highlighted = highlighted;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+@implementation TKPlaceDetailProductsCell
+
+- (void)setProducts:(NSArray<TKReference *> *)products
+{
+	_products = products.copy;
+
+	[self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+	CGFloat maxY = 0;
+
+	for (TKReference *prod in products)
+	{
+		if ([products indexOfObject:prod] > 2) break;
+
+		TKPlaceDetailProductControl *pc = [[TKPlaceDetailProductControl alloc] initWithFrame:self.bounds];
+		pc.product = prod;
+		pc.top = maxY;
+		maxY = pc.bottom;
+		[self.contentView addSubview:pc];
+		[pc addTarget:self action:@selector(productControlTapped:) forControlEvents:UIControlEventTouchUpInside];
+
+		if (pc.top > 0) {
+			UIView *sep = [[UIView alloc] initWithFrame:self.bounds];
+			sep.height = 0.5;
+			sep.backgroundColor = [UIColor colorWithWhite:.74 alpha:1];
+			sep.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+			[pc addSubview:sep];
+		}
+	}
+
+	self.height = maxY;
+}
+
+- (IBAction)productControlTapped:(TKPlaceDetailProductControl *)sender
+{
+	TKReference *product = sender.product;
+
+	if (product)
+		if (_productTappingBlock)
+			_productTappingBlock(product);
+}
+
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

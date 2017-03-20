@@ -9,6 +9,143 @@
 #import "UIKit+TravelKit.h"
 
 
+#pragma mark -
+#pragma mark UIFont
+#pragma mark -
+
+
+@implementation UIFont (TravelKit)
+
++ (UIFont *)lightSystemFontOfSize:(CGFloat)size
+{
+	return [UIFont systemFontOfSize:size weight:UIFontWeightLight];
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark UIColor
+#pragma mark -
+
+
+@implementation UIColor (Utils)
+
++ (UIColor *)colorFromRGB:(int)rgbValue
+{
+	return [UIColor colorFromRGB:rgbValue alpha:1.0];
+}
+
++ (UIColor *)colorFromRGB:(int)rgbValue alpha:(CGFloat)alpha
+{
+	return [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0
+						   green:((float)((rgbValue & 0xFF00) >> 8))/255.0
+							blue:((float)(rgbValue & 0xFF))/255.0
+						   alpha:alpha];
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark UIView
+#pragma mark -
+
+
+@implementation UIView (TravelKit)
+
+- (CGFloat)width  { return CGRectGetWidth(self.frame); }
+- (CGFloat)height { return CGRectGetHeight(self.frame); }
+
+- (void)setWidth:(CGFloat)width
+{
+	CGRect f = self.frame;
+	f.size.width = width;
+	self.frame = f;
+}
+
+- (void)setHeight:(CGFloat)height
+{
+	CGRect f = self.frame;
+	f.size.height = height;
+	self.frame = f;
+}
+
+- (CGFloat)top    { return CGRectGetMinY(self.frame); }
+- (CGFloat)left   { return CGRectGetMinX(self.frame); }
+- (CGFloat)bottom { return CGRectGetMaxY(self.frame); }
+- (CGFloat)right  { return CGRectGetMaxX(self.frame); }
+
+- (void)setTop:(CGFloat)top
+{
+	CGRect f = self.frame;
+	f.origin.y = top;
+	self.frame = f;
+}
+
+- (void)setLeft:(CGFloat)left
+{
+	CGRect f = self.frame;
+	f.origin.x = left;
+	self.frame = f;
+}
+
+- (void)setBottom:(CGFloat)bottom
+{
+	CGRect f = self.frame;
+	f.origin.y = bottom - self.height;
+	self.frame = f;
+}
+
+- (void)setRight:(CGFloat)right
+{
+	CGRect f = self.frame;
+	f.origin.x = right - self.width;
+	self.frame = f;
+}
+
+- (CGFloat)fromRightEdge
+{
+	return self.superview.width - self.right;
+}
+
+- (CGFloat)fromBottomEdge
+{
+	return self.superview.height - self.bottom;
+}
+
+- (void)setFromRightEdge:(CGFloat)fromRightEdge
+{
+	CGRect f = self.frame;
+	f.origin.x = self.superview.width - fromRightEdge - self.width;
+	self.frame = f;
+}
+
+- (void)setFromBottomEdge:(CGFloat)fromBottomEdge
+{
+	CGRect f = self.frame;
+	f.origin.y = self.superview.height - fromBottomEdge - self.height;
+	self.frame = f;
+}
+
+- (void)addCenteredSubview:(UIView *)view
+{
+	CGRect f = view.frame;
+	f.origin.x = (self.width - view.width) / 2.0;
+	f.origin.y = (self.height - view.height) / 2.0;
+	view.frame = f;
+
+	[self addSubview:view];
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark UILabel
+#pragma mark -
+
+
 @implementation UILabel (TravelKit)
 
 - (CGSize)expandedSizeOfText
@@ -32,6 +169,11 @@
 }
 
 @end
+
+
+#pragma mark -
+#pragma mark UIImageView
+#pragma mark -
 
 
 @implementation UIImageView (TravelKit)
