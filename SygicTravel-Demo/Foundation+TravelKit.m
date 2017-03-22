@@ -9,6 +9,7 @@
 #import <objc/runtime.h>
 #import "Foundation+TravelKit.h"
 
+
 @implementation NSObject (TravelKit)
 
 - (void)swizzleSelector:(SEL)swizzled withSelector:(SEL)original
@@ -26,16 +27,17 @@
 	}
 }
 
-- (void)swizzleSelector:(SEL)swizzled ofClass:(Class)swizzledClass withSelector:(SEL)original ofClass:(Class)originalClass
+- (void)swizzleSelector:(SEL)swizzledSelector ofClass:(Class)swizzledClass
+           withSelector:(SEL)originalSelector ofClass:(Class)originalClass
 {
-	Method oldMethod = class_getInstanceMethod(originalClass, original);
-	Method swizzledMethod = class_getInstanceMethod(swizzledClass, swizzled);
+	Method oldMethod = class_getInstanceMethod(originalClass, originalSelector);
+	Method swizzledMethod = class_getInstanceMethod(swizzledClass, swizzledSelector);
 
-	class_addMethod(originalClass, swizzled,
+	class_addMethod(originalClass, swizzledSelector,
 					method_getImplementation(swizzledMethod),
 					method_getTypeEncoding(swizzledMethod));
 
-	swizzledMethod = class_getInstanceMethod(originalClass, swizzled);
+	swizzledMethod = class_getInstanceMethod(originalClass, swizzledSelector);
 	method_exchangeImplementations(oldMethod, swizzledMethod);
 }
 

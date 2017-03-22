@@ -31,12 +31,12 @@
 
 @implementation UIColor (Utils)
 
-+ (UIColor *)colorFromRGB:(int)rgbValue
++ (UIColor *)colorFromRGB:(NSUInteger)rgbValue
 {
 	return [UIColor colorFromRGB:rgbValue alpha:1.0];
 }
 
-+ (UIColor *)colorFromRGB:(int)rgbValue alpha:(CGFloat)alpha
++ (UIColor *)colorFromRGB:(NSUInteger)rgbValue alpha:(CGFloat)alpha
 {
 	return [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0
 						   green:((float)((rgbValue & 0xFF00) >> 8))/255.0

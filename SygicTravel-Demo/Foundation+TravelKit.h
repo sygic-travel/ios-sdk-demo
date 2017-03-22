@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSObject (TravelKit)
 
 - (void)swizzleSelector:(SEL)swizzled withSelector:(SEL)original;

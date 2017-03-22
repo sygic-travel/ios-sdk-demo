@@ -59,7 +59,7 @@ class PlacesListViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
 		let place = places[indexPath.row] as TKPlace!
 
 		if let thumbnailURL = place?.thumbnailURL {
@@ -68,6 +68,9 @@ class PlacesListViewController: UITableViewController {
 			})
 		}
 		cell.textLabel?.text = place?.name
+		cell.detailTextLabel?.text = place?.perex
+		cell.detailTextLabel?.numberOfLines = 3
+		cell.detailTextLabel?.textColor = UIColor(white: 0.7, alpha: 1)
 		return cell
 	}
 
@@ -93,6 +96,7 @@ class PlacesListViewController: UITableViewController {
 		query.parentID = "city:1"
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 		query.tags = activeTagFilters
+		query.limit = 128
 
 		if activeSearchTerm?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
 			query.searchTerm = activeSearchTerm!

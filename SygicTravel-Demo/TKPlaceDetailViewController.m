@@ -6,10 +6,14 @@
 //  Copyright © 2017 Tripomatic. All rights reserved.
 //
 
-#import "TKPlaceDetailViewController.h"
-#import "TKPlaceDetailCells.h"
 #import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
+
+#import "TKPlaceDetailViewController.h"
+#import "TKBrowserViewController.h"
+#import "TKReferenceListViewController.h"
+
+#import "TKPlaceDetailCells.h"
 
 
 typedef NS_ENUM(NSInteger, PlaceDetailSection) {
@@ -109,6 +113,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 @interface TKPlaceDetailViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *contentTable;
+@property (nonatomic, strong) TKPlaceDetailHeaderCell *cachedHeaderCell;
 
 // View-related structures
 @property (nonatomic, strong) TKReference *wiki;
@@ -152,6 +157,8 @@ const CGFloat kDefaultLinksHeight = 54.0;
 //	self.edgesForExtendedLayout = UIRectEdgeTop;
 //	self.extendedLayoutIncludesOpaqueBars = NO;
 
+	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+
 	_cellsCache = [NSCache new];
 
 	// Content grid
@@ -182,12 +189,31 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (void)viewWillLayoutSubviews
 {
+	[super viewWillLayoutSubviews];
+
 	[_cellsCache removeAllObjects];
 }
 
 - (void)viewDidLayoutSubviews
 {
+	[super viewDidLayoutSubviews];
+
 	[self refreshView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+
+	self.navigationController.navigationBar.tintColor =
+		[UIColor colorFromRGB:_place.displayableHexColor];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+
+	self.navigationController.navigationBar.tintColor = nil;
 }
 
 
@@ -252,8 +278,6 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	_passes = passes;
 	_otherProducts = otherProducts;
 	_contacts = contacts;
-
-//	@property (nonatomic, strong) TKMedium *imageMedium;
 }
 
 
@@ -281,7 +305,18 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	if (needsBrowser && _urlOpeningBlock)
 		_urlOpeningBlock(URL);
 
-	else [[UIApplication sharedApplication] openURL:URL];
+//	else [[UIApplication sharedApplication] openURL:URL];
+
+	else {
+		TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
+		[self.navigationController pushViewController:vc animated:YES];
+	}
+}
+
+- (void)openListingForProducts:(NSArray<TKReference *> *)products
+{
+	TKReferenceListViewController *vc = [[TKReferenceListViewController alloc] initWithReferences:products];
+	[self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -485,7 +520,9 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		basicRect.size.height = kImageHeight;
 
 		TKPlaceDetailHeaderCell *cell = [[TKPlaceDetailHeaderCell alloc] initWithFrame:basicRect];
+		[cell updateWithVerticalOffset:tableView.contentOffset.y inset:tableView.contentInset.top];
 		cell.place = _place;
+		_cachedHeaderCell = cell;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -620,6 +657,9 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		cell.productTappingBlock = ^(TKReference *ref) {
 			if (ref.onlineURL) [wf openURL:ref.onlineURL];
 		};
+		cell.productsListTappingBlock = ^{
+			[wf openListingForProducts:wf.otherProducts];
+		};
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -634,6 +674,9 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		__weak typeof(self) wf = self;
 		cell.productTappingBlock = ^(TKReference *ref) {
 			if (ref.onlineURL) [wf openURL:ref.onlineURL];
+		};
+		cell.productsListTappingBlock = ^{
+			[wf openListingForProducts:wf.passes];
 		};
 
 		[_cellsCache setObject:cell forKey:cacheKey];
@@ -715,21 +758,27 @@ const CGFloat kDefaultLinksHeight = 54.0;
 				if (URL) [self openURL:URL];
 			}
 
+			else if (link.type == TKPlaceDetailLinkTypeURL)
+			{
+				NSURL *URL = link.value;
+				if (URL) [self openURL:URL];
+			}
 
+			else if (link.type == TKPlaceDetailLinkTypeReference)
+			{
+				TKReference *ref = link.value;
+				NSURL *URL = ref.onlineURL;
+				if (URL) [self openURL:URL];
+			}
 
 		} break;
 
-
-
 	}
-
-
 }
 
-
-
-
-
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	[_cachedHeaderCell updateWithVerticalOffset:scrollView.contentOffset.y inset:scrollView.contentInset.top];
+}
 
 @end

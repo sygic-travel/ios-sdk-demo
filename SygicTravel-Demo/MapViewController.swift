@@ -50,8 +50,10 @@ class MapViewController: UIViewController {
 			annotations.append(MapPin(place: place))
 		}
 
-		mapView.removeAnnotations(mapView.annotations)
-		mapView.addAnnotations(annotations)
+		OperationQueue.main.addOperation {
+			self.mapView.removeAnnotations(self.mapView.annotations)
+			self.mapView.addAnnotations(annotations)
+		}
 	}
 
 	func fetchData() {

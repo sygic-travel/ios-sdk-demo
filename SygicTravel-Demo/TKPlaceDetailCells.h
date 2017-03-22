@@ -41,6 +41,12 @@ typedef NS_ENUM(NSUInteger, TKPlaceDetailLinkType) {
 #pragma mark -
 
 
+@interface TKPlaceDetailProductControl : UIControl
+
+@property (nonatomic, strong) TKReference *product;
+
+@end
+
 
 #pragma mark -
 #pragma mark Cells
@@ -81,6 +87,8 @@ typedef NS_ENUM(NSUInteger, TKPlaceDetailLinkType) {
 @interface TKPlaceDetailHeaderCell : TKPlaceDetailEmptyCell
 
 @property (nonatomic, copy) TKPlace *place;
+
+- (void)updateWithVerticalOffset:(CGFloat)verticalOffset inset:(CGFloat)verticalInset;
 
 @end
 

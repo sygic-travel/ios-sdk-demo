@@ -12,12 +12,9 @@
 const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 
 
-
-
-
-
 @interface TKPlaceDetailIconicButton : UIButton
 @end
+
 
 @implementation TKPlaceDetailIconicButton
 
@@ -49,24 +46,13 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 	self.tintColor = (highlighted) ?
 		[UIColor colorFromRGB:0x0079DB] : [UIColor colorFromRGB:0x0099EB];
 	self.backgroundColor = (highlighted) ?
-		[UIColor colorWithWhite:.93 alpha:1] : [UIColor colorWithWhite:.97 alpha:1];
+		[UIColor colorWithWhite:.995 alpha:1] : [UIColor colorWithWhite:.97 alpha:1];
 }
 
 @end
 
 
-
-
-
-
-
-
-
-
-
-@interface TKPlaceDetailProductControl : UIControl
-
-@property (nonatomic, strong) TKReference *product;
+@interface TKPlaceDetailProductControl ()
 
 @property (nonatomic, strong) TKPlaceDetailIconicButton *button;
 @property (nonatomic, strong) UILabel *textLabel;
@@ -92,6 +78,8 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 
 - (void)tk_initialise
 {
+	self.backgroundColor = [UIColor whiteColor];
+
 	_button = [[TKPlaceDetailIconicButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
 	_button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	_button.userInteractionEnabled = NO;
@@ -189,18 +177,6 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 @end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 @interface TKPlaceDetailGenericCell ()
 
 + (UITableViewCellStyle)tk_defaultStyle;
@@ -283,8 +259,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 @end
 
 
-
-
 @implementation TKPlaceDetailEmptyCell
 
 - (void)tk_initialise
@@ -304,8 +278,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 }
 
 @end
-
-
 
 
 @implementation TKPlaceDetailSingleLabelCell
@@ -408,9 +380,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 @end
 
 
-
-
-
 @implementation TKPlaceDetailSeparatorCell
 
 - (void)tk_initialise
@@ -431,10 +400,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 @end
 
 
-
-
-
-
 @interface TKPlaceDetailHeaderCell ()
 
 @property (nonatomic, strong) UIImageView *pictureView;
@@ -446,8 +411,12 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 - (void)tk_initialise
 {
+	self.layer.masksToBounds = NO;
+
 	_pictureView = [[UIImageView alloc] initWithFrame:self.bounds];
 	_pictureView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_pictureView.contentMode = UIViewContentModeScaleAspectFill;
+	_pictureView.layer.masksToBounds = YES;
 	[self addSubview:_pictureView];
 }
 
@@ -455,6 +424,9 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	_place = place;
 
+	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+		_pictureView.backgroundColor = [UIColor colorFromRGB:place.displayableHexColor];
+	}];
 
 	[[TravelKit sharedKit] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
 
@@ -462,19 +434,33 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 		[[NSOperationQueue new] addOperationWithBlock:^{
 
-			[_pictureView setImageWithMediumImage:media.firstObject size:CGSizeMake(640, 640) completion:nil];
+			__weak typeof(_pictureView) wpv = _pictureView;
+
+			[wpv setImageWithMediumImage:media.firstObject size:CGSizeMake(640, 640) completion:^(UIImage *i) {
+
+				CATransition *transition = [CATransition animation];
+				transition.duration = .35f;
+				transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+				transition.type = kCATransitionFade;
+				transition.removedOnCompletion = YES;
+
+				if (wpv.layer.animationKeys.count == 0)
+					[wpv.layer addAnimation:transition forKey:nil];
+			}];
 
 		}];
 	}];
 }
 
+- (void)updateWithVerticalOffset:(CGFloat)verticalOffset inset:(CGFloat)verticalInset
+{
+	CGRect f = self.bounds;
+	f.origin.y = verticalOffset;
+	f.size.height -= verticalOffset;
+	_pictureView.frame = f;
+}
+
 @end
-
-
-
-
-
-
 
 
 @implementation TKPlaceDetailNameCell
@@ -558,12 +544,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 @end
 
 
-
-
-
-
-
-
 @implementation TKPlaceDetailLink
 
 + (instancetype)linkWithType:(TKPlaceDetailLinkType)type value:(id)value
@@ -575,8 +555,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 }
 
 @end
-
-
 
 
 @interface TKPlaceDetailLinkCell ()
@@ -617,7 +595,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 	NSString *title = @"Link";
 	NSString *subtitle = nil;
-	NSString *imageName = @"";
+//	NSString *imageName = @"";
 
 	if (link.type == TKPlaceDetailLinkTypePhone) {
 		title = NSLocalizedString(@"Phone number", @"TravelKit UI Detail label");
@@ -682,14 +660,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 @end
 
 
-
-
-
-
-
-
-
-
 @implementation TKPlaceDetailProductsCell
 
 - (void)setProducts:(NSArray<TKReference *> *)products
@@ -720,6 +690,29 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 		}
 	}
 
+	if (products.count > 3) {
+
+		UILabel *moreLabel = [[UILabel alloc] initWithFrame:self.bounds];
+		moreLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		moreLabel.height = 54;
+		moreLabel.textAlignment = NSTextAlignmentCenter;
+		moreLabel.textColor = [UIColor blackColor];
+		moreLabel.font = [UIFont systemFontOfSize:15];
+		moreLabel.text = [@"More" uppercaseString];
+		moreLabel.top = maxY;
+		[self.contentView addSubview:moreLabel];
+		maxY = moreLabel.bottom;
+
+		UIView *moreSep = [[UIView alloc] initWithFrame:moreLabel.bounds];
+		moreSep.height = 0.5;
+		moreSep.backgroundColor = [UIColor colorFromRGB:0xD9D9D9];
+		moreSep.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		[moreLabel addSubview:moreSep];
+
+		[moreLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(moreTapped)]];
+		moreLabel.userInteractionEnabled = YES;
+	}
+
 	self.height = maxY;
 }
 
@@ -732,25 +725,10 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 			_productTappingBlock(product);
 }
 
+- (IBAction)moreTapped
+{
+	if (_productsListTappingBlock)
+		_productsListTappingBlock();
+}
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
