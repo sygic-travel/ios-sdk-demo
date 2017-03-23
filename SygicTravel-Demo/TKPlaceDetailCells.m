@@ -674,15 +674,18 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	{
 		if ([products indexOfObject:prod] > 2) break;
 
-		TKPlaceDetailProductControl *pc = [[TKPlaceDetailProductControl alloc] initWithFrame:self.bounds];
+		TKPlaceDetailProductControl *pc = [[TKPlaceDetailProductControl alloc]
+										   initWithFrame:self.contentView.bounds];
+		pc.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		pc.product = prod;
 		pc.top = maxY;
 		maxY = pc.bottom;
 		[self.contentView addSubview:pc];
-		[pc addTarget:self action:@selector(productControlTapped:) forControlEvents:UIControlEventTouchUpInside];
+		[pc addTarget:self action:@selector(productControlTapped:)
+			forControlEvents:UIControlEventTouchUpInside];
 
 		if (pc.top > 0) {
-			UIView *sep = [[UIView alloc] initWithFrame:self.bounds];
+			UIView *sep = [[UIView alloc] initWithFrame:pc.bounds];
 			sep.height = 0.5;
 			sep.backgroundColor = [UIColor colorWithWhite:.74 alpha:1];
 			sep.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -692,7 +695,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 	if (products.count > 3) {
 
-		UILabel *moreLabel = [[UILabel alloc] initWithFrame:self.bounds];
+		UILabel *moreLabel = [[UILabel alloc] initWithFrame:self.contentView.bounds];
 		moreLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		moreLabel.height = 54;
 		moreLabel.textAlignment = NSTextAlignmentCenter;

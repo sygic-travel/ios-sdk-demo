@@ -33,6 +33,8 @@
 
 - (void)addCenteredSubview:(UIView *)view;
 
+- (NSArray *)viewsForClass:(Class)className;
+
 @end
 
 

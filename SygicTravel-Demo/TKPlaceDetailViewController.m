@@ -146,12 +146,23 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	return self;
 }
 
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+{
+	return UIStatusBarAnimationFade;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	return ([self isScreenScrolledBelowTheTitle]) ?
+		UIStatusBarStyleDefault : UIStatusBarStyleLightContent;
+}
+
 - (void)loadView
 {
 	[super loadView];
 
 	// Basic attributes
-	self.title = _place.name;
+	self.title = @"";
 
 //	self.automaticallyAdjustsScrollViewInsets = NO;
 //	self.edgesForExtendedLayout = UIRectEdgeTop;
@@ -166,6 +177,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	_contentTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_contentTable.backgroundColor = [UIColor colorWithWhite:.94 alpha:1];
 	_contentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_contentTable.showsVerticalScrollIndicator = NO;
 	[self.view addSubview:_contentTable];
 
 	_contentTable.delegate = self;
@@ -205,15 +217,21 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	[super viewWillAppear:animated];
 
-	self.navigationController.navigationBar.tintColor =
-		[UIColor colorFromRGB:_place.displayableHexColor];
+	[self makeNavigationBarTransparent:![self isScreenScrolledBelowTheTitle] animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+
+	[self makeNavigationBarTransparent:![self isScreenScrolledBelowTheTitle] animated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
 
-	self.navigationController.navigationBar.tintColor = nil;
+	[self makeNavigationBarTransparent:NO animated:YES];
 }
 
 
@@ -293,6 +311,32 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 
 #pragma mark -
+#pragma mark Misc
+
+
+- (BOOL)isScreenScrolledBelowTheTitle
+{
+	return _contentTable.contentOffset.y > kImageHeight-_contentTable.contentInset.top;
+}
+
+- (UIColor *)currentNavbarTintColor
+{
+	BOOL dismissing = [[[NSThread callStackSymbols]
+		componentsJoinedByString:@"|"]
+			tk_containsSubstring:@"viewWillDisappear"];
+
+	dismissing |= !self.view.superview;
+
+	if (dismissing) return nil;
+
+	if ([self isScreenScrolledBelowTheTitle])
+		return [UIColor colorFromRGB:_place.displayableHexColor];
+
+	return [UIColor whiteColor];
+}
+
+
+#pragma mark -
 #pragma mark Actions
 
 
@@ -300,12 +344,13 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	if (!URL) return;
 
-	BOOL needsBrowser = [URL.scheme containsString:@"http"];
+	BOOL isHTTP = [URL.scheme hasPrefix:@"http"];
 
-	if (needsBrowser && _urlOpeningBlock)
+	if (!isHTTP)
+		[[UIApplication sharedApplication] openURL:URL];
+
+	else if (_urlOpeningBlock)
 		_urlOpeningBlock(URL);
-
-//	else [[UIApplication sharedApplication] openURL:URL];
 
 	else {
 		TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
@@ -317,6 +362,43 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	TKReferenceListViewController *vc = [[TKReferenceListViewController alloc] initWithReferences:products];
 	[self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)makeNavigationBarTransparent:(BOOL)transparent animated:(BOOL)animated
+{
+	UINavigationBar *navbar = self.navigationController.navigationBar;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+	SEL selector = NSSelectorFromString([@"_" stringByAppendingString:@"backgroundView"]);
+	UIView *navbarBackground = ([navbar respondsToSelector:selector]) ?
+		[navbar performSelector:selector] : navbar.subviews.firstObject;
+#pragma clang diagnostic pop
+
+	[UIView animateWithDuration:animated?.1:0 animations:^{
+		navbar.tintColor = [self currentNavbarTintColor];
+	}];
+
+	if ((transparent && navbarBackground.alpha != 1) ||
+	    (!transparent && navbarBackground.alpha == 1))
+		return;
+
+	if (transparent)
+	{
+		self.title = @"";
+		navbar.backgroundColor = [UIColor clearColor];
+		[UIView animateWithDuration:animated?.14:0 delay:0 options:0 animations:^{
+			navbarBackground.alpha = 0;
+		} completion:nil];
+	}
+	else
+	{
+		self.title = _place.name;
+		navbar.backgroundColor = [UINavigationBar appearance].backgroundColor;
+		[UIView animateWithDuration:animated?.06:0 delay:0 options:0 animations:^{
+			navbarBackground.alpha = 1;
+		} completion:nil];
+	}
 }
 
 
@@ -389,6 +471,9 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	NSString *header = [self tableView:tableView titleForHeaderInSection:section];
 
+	if (section == PlaceDetailSectionPasses)
+		return (header) ? 34 : 0;
+
 	return (header) ? 26 : 0;
 }
 
@@ -434,6 +519,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+	if (section == PlaceDetailSectionPasses)
+		return (_passes.count) ?
+			NSLocalizedString(@"This place accepts", @"TravelKit UI Place Detail header") : nil;
+
 	if (section == PlaceDetailSectionOpeningHours)
 		return (_place.detail.openingHours.length) ?
 			NSLocalizedString(@"Opening hours", @"TravelKit UI Place Detail header") : nil;
@@ -469,6 +558,12 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	label.transform = CGAffineTransformMakeTranslation(0, 5);
 	[v addSubview:label];
+
+	if (section == PlaceDetailSectionPasses)
+	{
+		label.textColor = [UIColor colorWithWhite:.6 alpha:1];
+		label.textAlignment = NSTextAlignmentCenter;
+	}
 
 	label.attributedText = [[NSAttributedString alloc] initWithString:header attributes:@{
 		NSFontAttributeName: label.font,
@@ -778,7 +873,16 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-	[_cachedHeaderCell updateWithVerticalOffset:scrollView.contentOffset.y inset:scrollView.contentInset.top];
+	BOOL belowTitle = [self isScreenScrolledBelowTheTitle];
+
+	[_cachedHeaderCell updateWithVerticalOffset:
+		scrollView.contentOffset.y inset:scrollView.contentInset.top];
+
+	[self.navigationController setNeedsStatusBarAppearanceUpdate];
+
+	[self makeNavigationBarTransparent:!belowTitle animated:YES];
+
+	_contentTable.showsVerticalScrollIndicator = belowTitle;
 }
 
 @end

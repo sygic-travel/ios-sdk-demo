@@ -138,6 +138,21 @@
 	[self addSubview:view];
 }
 
+- (NSArray *)viewsForClass:(Class)className
+{
+	NSMutableArray *arr = [NSMutableArray array];
+	
+	for (UIView *v in self.subviews)
+	{
+		if ([v isKindOfClass:className])
+			[arr addObject:v];
+
+		[arr addObjectsFromArray:[v viewsForClass:className]];
+	}
+
+	return arr;
+}
+
 @end
 
 

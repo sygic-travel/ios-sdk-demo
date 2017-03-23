@@ -9,8 +9,17 @@
 import UIKit
 import TravelKit
 
-extension UIImageView {
+extension UINavigationController {
 
+	open override var preferredStatusBarStyle: UIStatusBarStyle {
+		if let vc = self.viewControllers.last {
+			return vc.preferredStatusBarStyle
+		}
+		return super.preferredStatusBarStyle
+	}
+}
+
+extension UIImageView {
 
 	func downloadedFrom(url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit, finished: @escaping () -> Void) {
 

@@ -68,8 +68,9 @@
 	[super viewDidLayoutSubviews];
 
 	CGFloat inset = 0;
-	if (self.navigationController) inset += 44;
-	if (self.modalPresentationStyle == UIModalPresentationFullScreen) inset += 20;
+	if (self.navigationController) inset +=
+		self.navigationController.navigationBar.top +
+			self.navigationController.navigationBar.height;
 
 	_webView.scrollView.contentInset =
 		_webView.scrollView.scrollIndicatorInsets =
