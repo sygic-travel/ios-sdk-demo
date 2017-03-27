@@ -22,8 +22,8 @@ class MapViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		let categoryButton = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
-		navigationItem.rightBarButtonItems = [categoryButton]
+		navigationItem.backBarButtonItem = UIBarButtonItem.empty()
+		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
 
 		mapView = MKMapView(frame: self.view.frame)
 		mapView.delegate = self
@@ -96,7 +96,6 @@ class MapViewController: UIViewController {
 }
 
 
-
 // MARK: MKMapViewDelegate
 
 extension MapViewController : MKMapViewDelegate {
@@ -114,8 +113,7 @@ extension MapViewController : MKMapViewDelegate {
 
 	func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 		if let mapPinAnnotation = view.annotation as? MapPin {
-			let vc = PlaceDetailViewController()
-			vc.place = mapPinAnnotation.place
+			let vc = TKPlaceDetailViewController(place: mapPinAnnotation.place)
 			self.navigationController?.pushViewController(vc, animated: true)
 			mapView.deselectAnnotation(view.annotation, animated: false)
 		}

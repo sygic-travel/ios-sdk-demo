@@ -37,7 +37,7 @@ class PlacesListViewController: UITableViewController {
 		self.tableView.tableFooterView = UIView()
 
 		devSwitch = UISwitch()
-		devSwitch?.isOn = true
+		devSwitch?.isOn = false
 		self.navigationItem.titleView = devSwitch!
 
 		if !searchBarHidden {

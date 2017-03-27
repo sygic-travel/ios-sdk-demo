@@ -708,8 +708,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	[self addCenteredSubview:_button];
 	_button.fromRightEdge = kTKPlaceDetailCellsSidePadding;
 
-//	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//	self.accessoryView = [UIImageView imageViewWithImageNamed:@"disclosure-gray"];
 	self.textLabel.textColor = [UIColor blackColor];
 	self.textLabel.font = [UIFont lightSystemFontOfSize:13];
 	self.textLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
@@ -793,6 +791,8 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 - (void)setProducts:(NSArray<TKReference *> *)products
 {
+	[self layoutSubviews];
+
 	_products = products.copy;
 
 	[self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
