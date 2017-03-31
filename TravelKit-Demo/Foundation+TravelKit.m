@@ -27,7 +27,7 @@
 	}
 }
 
-- (void)swizzleSelector:(SEL)swizzledSelector ofClass:(Class)swizzledClass
++ (void)swizzleSelector:(SEL)swizzledSelector ofClass:(Class)swizzledClass
            withSelector:(SEL)originalSelector ofClass:(Class)originalClass
 {
 	Method oldMethod = class_getInstanceMethod(originalClass, originalSelector);

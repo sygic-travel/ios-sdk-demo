@@ -12,7 +12,7 @@
 @interface NSObject (TravelKit)
 
 - (void)swizzleSelector:(SEL)swizzled withSelector:(SEL)original;
-- (void)swizzleSelector:(SEL)swizzled ofClass:(Class)swizzledClass withSelector:(SEL)original ofClass:(Class)originalClass;
++ (void)swizzleSelector:(SEL)swizzled ofClass:(Class)swizzledClass withSelector:(SEL)original ofClass:(Class)originalClass;
 
 @end
 
