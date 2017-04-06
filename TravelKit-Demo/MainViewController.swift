@@ -10,12 +10,14 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-	let options = ["Map", "Activities List", "Full Text Search"]
+	let options = ["Map", "Activities List", "Activities List - Dev", "Full Text Search"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
 		self.title = "TravelKit Demo"
+
+		self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
 		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		self.tableView.tableFooterView = UIView()
@@ -48,11 +50,19 @@ class MainViewController: UITableViewController {
 			vc = MapViewController()
 			break;
 		case 1:
+			let query = TKPlacesQuery()
+			query.parentID = "city:5"
+			query.level = .POI
+			query.limit = 200
+			let controller = TKPlacesListViewController(query: query)
+			vc = controller
+			break;
+		case 2:
 			let controller = PlacesListViewController()
 			controller.searchBarHidden = true
 			vc = controller
 			break;
-		case 2:
+		case 3:
 			let controller = PlacesListViewController()
 			controller.searchBarHidden = false
 			vc = controller

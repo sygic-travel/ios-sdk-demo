@@ -13,13 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TKPlaceDetailViewController : UIViewController
 
-@property (nonatomic, strong, nonnull) TKPlace *place;
+@property (nonatomic, strong, readonly) TKPlace *place;
 @property (nonatomic, copy, nullable) void (^urlOpeningBlock)(NSURL *URL);
 
 + (instancetype)new UNAVAILABLE_ATTRIBUTE;
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
-- (instancetype)initWithPlace:(nonnull TKPlace *)place;
+- (instancetype)initWithPlace:(TKPlace *)place;
 
 @end
 

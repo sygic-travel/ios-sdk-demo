@@ -7,6 +7,7 @@
 //
 
 #import "TKPlaceDetailCells.h"
+#import "TKPlaceImageView.h"
 #import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
 
@@ -468,8 +469,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 
 @interface TKPlaceDetailHeaderCell ()
 
-@property (nonatomic, strong) UILabel *categoryLabel;
-@property (nonatomic, strong) UIImageView *pictureView;
+@property (nonatomic, strong) TKPlaceImageView *pictureView;
 
 @end
 
@@ -480,18 +480,18 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	self.layer.masksToBounds = NO;
 
-	_pictureView = [[UIImageView alloc] initWithFrame:self.bounds];
+	_pictureView = [[TKPlaceImageView alloc] initWithFrame:self.bounds];
 	_pictureView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_pictureView.contentMode = UIViewContentModeScaleAspectFill;
 	_pictureView.layer.masksToBounds = YES;
 	[self addSubview:_pictureView];
 
-	_categoryLabel = [[UILabel alloc] initWithFrame:self.bounds];
-	_categoryLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_categoryLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
-	_categoryLabel.textAlignment = NSTextAlignmentCenter;
-	_categoryLabel.font = [UIFont fontWithName:@"MapMarkers" size:192];
-	[self addSubview:_categoryLabel];
+//	_categoryLabel = [[UILabel alloc] initWithFrame:self.bounds];
+//	_categoryLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//	_categoryLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
+//	_categoryLabel.textAlignment = NSTextAlignmentCenter;
+//	_categoryLabel.font = [UIFont fontWithName:@"MapMarkers" size:192];
+//	[self addSubview:_categoryLabel];
 }
 
 - (NSString *)iconFontCode
@@ -545,40 +545,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	_place = place;
 
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-		_categoryLabel.text = [self iconFontCode];
-		_categoryLabel.transform = CGAffineTransformIdentity;
-		_categoryLabel.alpha = 1.0;
-		_pictureView.backgroundColor = [UIColor colorFromRGB:place.displayableHexColor];
-	}];
-
-	[[TravelKit sharedKit] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
-
-		if (!media.count) return;
-
-		[[NSOperationQueue new] addOperationWithBlock:^{
-
-			__weak typeof(_pictureView) wpv = _pictureView;
-
-			[wpv setImageWithMediumImage:media.firstObject size:CGSizeMake(640, 640) completion:^(UIImage *i) {
-
-				[UIView animateWithDuration:.1 animations:^{
-					_categoryLabel.transform = CGAffineTransformMakeTranslation(0, 16);
-					_categoryLabel.alpha = (i) ? 0.0 : 1.0;
-				}];
-
-				CATransition *transition = [CATransition animation];
-				transition.duration = .35f;
-				transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-				transition.type = kCATransitionFade;
-				transition.removedOnCompletion = YES;
-
-				if (wpv.layer.animationKeys.count == 0)
-					[wpv.layer addAnimation:transition forKey:nil];
-			}];
-
-		}];
-	}];
+	[_pictureView setImageForPlace:place withSize:CGSizeMake(640, 640)];
 }
 
 - (void)updateWithVerticalOffset:(CGFloat)verticalOffset inset:(CGFloat)verticalInset
@@ -861,6 +828,82 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	if (_productsListTappingBlock)
 		_productsListTappingBlock();
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+@interface TKPlacesListCell ()
+
+@property (nonatomic, strong) TKPlaceImageView *placeImageView;
+
+@end
+
+
+
+@implementation TKPlacesListCell
+
++ (UITableViewCellStyle)tk_defaultStyle
+{
+	return UITableViewCellStyleSubtitle;
+}
+
+- (void)tk_initialise
+{
+	self.imageView.image = [UIImage blankImageWithSize:CGSizeMake(54, 54)];
+
+	_placeImageView = [[TKPlaceImageView alloc] initWithFrame:CGRectMake(0, 0, 62, 62)];
+	_placeImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+	_placeImageView.layer.masksToBounds = YES;
+	_placeImageView.layer.cornerRadius = 64/2;
+	_placeImageView.layer.borderWidth = 0.5;
+	_placeImageView.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.2].CGColor;
+	[self.imageView addCenteredSubview:_placeImageView];
+
+	self.textLabel.numberOfLines = 1;
+	self.textLabel.textAlignment = NSTextAlignmentLeft;
+
+	self.detailTextLabel.numberOfLines = 2;
+	self.detailTextLabel.textColor = [UIColor colorWithWhite:0.66 alpha:1];
+	self.detailTextLabel.font = [UIFont lightSystemFontOfSize:15];
+
+	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+}
+
+- (void)setPlace:(TKPlace *)place
+{
+	self.textLabel.text = place.name;
+	self.detailTextLabel.text = place.perex;
+
+	[_placeImageView setImageForPlace:place withSize:CGSizeMake(150, 150)];
+}
+
+- (void)layoutSubviews
+{
+	[super layoutSubviews];
+
+//	CGFloat descHeight = [self.detailTextLabel expandedSizeOfText].height;
+//	CGFloat
+//
+//	CGRect f = self.textLabel.frame;
+//	f.size.height = [self.textLabel expandedSizeOfText].height;
+//	f.origin.y = kTKPlaceDetailCellsSidePadding/2 + self.overridingTopPadding;
+//	self.textLabel.frame = f;
+//
+//	f = self.frame;
+//	f.size.height = CGRectGetMaxY(self.textLabel.frame) + kTKPlaceDetailCellsSidePadding/2 + self.overridingBottomPadding;
+//	self.frame = f;
 }
 
 @end

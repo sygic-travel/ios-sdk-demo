@@ -22,8 +22,6 @@ class PlacesListViewController: UITableViewController {
 	var searchingActive: Bool = false
 	var searchBar: UISearchBar!
 
-	var devSwitch: UISwitch?
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -35,10 +33,6 @@ class PlacesListViewController: UITableViewController {
 		self.title = "Activities List"
 		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		self.tableView.tableFooterView = UIView()
-
-		devSwitch = UISwitch()
-		devSwitch?.isOn = false
-		self.navigationItem.titleView = devSwitch!
 
 		if !searchBarHidden {
 			searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40))
@@ -79,14 +73,9 @@ class PlacesListViewController: UITableViewController {
 
 		let place = places[indexPath.row]
 
-		if (devSwitch?.isOn == true) {
-			let vc = PlaceDetailViewController()
-			vc.place = place
-			self.navigationController?.pushViewController(vc, animated: true)
-		} else {
-			let vc = TKPlaceDetailViewController(place: place)
-			self.navigationController?.pushViewController(vc, animated: true)
-		}
+		let vc = PlaceDetailViewController()
+		vc.place = place
+		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
 	func fetchData() {

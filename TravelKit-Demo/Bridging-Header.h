@@ -4,4 +4,5 @@
 
 #import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
+#import "TKPlacesListViewController.h"
 #import "TKPlaceDetailViewController.h"

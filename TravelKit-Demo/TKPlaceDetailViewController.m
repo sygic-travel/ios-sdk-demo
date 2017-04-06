@@ -615,6 +615,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		basicRect.size.height = kTableSeparatorsHeight;
 
 		TKPlaceDetailSeparatorCell *cell = [[TKPlaceDetailSeparatorCell alloc] initWithFrame:basicRect];
+		cell.isAccessibilityElement = NO;
 
 		if (section == PlaceDetailSectionFootingSeparator)
 			cell.hasBottomSeparator = NO;
@@ -631,9 +632,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		basicRect.size.height = kImageHeight;
 
 		TKPlaceDetailHeaderCell *cell = [[TKPlaceDetailHeaderCell alloc] initWithFrame:basicRect];
-		[cell updateWithVerticalOffset:tableView.contentOffset.y inset:tableView.contentInset.top];
 		cell.place = _place;
 		_cachedHeaderCell = cell;
+
+		[cell updateWithVerticalOffset:tableView.contentOffset.y inset:tableView.contentInset.top];
 
 		return cell;
 	}

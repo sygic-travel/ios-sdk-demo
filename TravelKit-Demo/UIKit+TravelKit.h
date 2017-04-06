@@ -36,6 +36,7 @@
 @interface UIImage (TravelKit)
 
 + (UIImage *)templateImageNamed:(NSString *)imageName;
++ (UIImage *)blankImageWithSize:(CGSize)size;
 
 @end
 
@@ -72,6 +73,7 @@
 
 @interface UIImageView (TravelKit)
 
+- (void)setImageWithURL:(NSURL *)URL completion:(void (^)(UIImage *))completion;
 - (void)setImageWithMediumImage:(TKMedium *)medium size:(CGSize)size completion:(void (^)(UIImage *))completion;
 
 @end

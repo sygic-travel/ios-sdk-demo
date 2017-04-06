@@ -102,6 +102,14 @@
 	        imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
++ (UIImage *)blankImageWithSize:(CGSize)size
+{
+	UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	return image;
+}
+
 @end
 
 
@@ -300,9 +308,9 @@
 	return session;
 }
 
-- (void)setImageWithMediumImage:(TKMedium *)medium size:(CGSize)size completion:(void (^)(UIImage *))completion
+- (void)setImageWithURL:(NSURL *)URL completion:(void (^)(UIImage *))completion
 {
-	NSString *operationID = [NSString stringWithFormat:@"TKMedium_%@_%.0f_%.0f", medium.ID, size.width, size.height];
+	NSString *operationID = [NSString stringWithFormat:@"TKImage_%tu", URL.hash];
 
 	// Cancel previous operation
 
@@ -317,14 +325,7 @@
 	op.name = operationID;
 	[op addExecutionBlock:^{
 
-		NSString *sizeString = [NSString stringWithFormat:@"%.0fx%.0f", size.width, size.height];
-
-		NSString *urlString = [medium.previewURL absoluteString];
-		urlString = [urlString stringByReplacingOccurrencesOfString:@TKMEDIUM_SIZE_PLACEHOLDER withString:sizeString];
-
-		NSURL *url = [NSURL URLWithString:urlString];
-
-		NSURLSessionDataTask *task = [[self tk_mediaFetchingSession] dataTaskWithURL:url
+		NSURLSessionDataTask *task = [[self tk_mediaFetchingSession] dataTaskWithURL:URL
 		completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 
 			if ([wop isCancelled]) return;
@@ -345,6 +346,18 @@
 	}];
 
 	[[self tk_mediaFetchingQueue] addOperation:op];
+}
+
+- (void)setImageWithMediumImage:(TKMedium *)medium size:(CGSize)size completion:(void (^)(UIImage *))completion
+{
+	NSString *sizeString = [NSString stringWithFormat:@"%.0fx%.0f", size.width, size.height];
+
+	NSString *urlString = [medium.previewURL absoluteString];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@TKMEDIUM_SIZE_PLACEHOLDER withString:sizeString];
+
+	NSURL *url = [NSURL URLWithString:urlString];
+
+	[self setImageWithURL:url completion:completion];
 }
 
 @end
