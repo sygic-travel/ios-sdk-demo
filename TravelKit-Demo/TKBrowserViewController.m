@@ -47,6 +47,10 @@
 
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
 
+	if (self.navigationController.viewControllers.firstObject == self)
+		self.navigationItem.leftBarButtonItem = [UIBarButtonItem
+			closeBarButtonItemWithTarget:self selector:@selector(closeButtonTapped:)];
+
 	_statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 280, 200)];
 	_statusLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
 	_statusLabel.numberOfLines = 0;
@@ -88,6 +92,11 @@
 
 	_statusLabel.text = NSLocalizedString(@"Failed to load address \"%@\".", @"TravelKit UI - Browser error format");
 	_statusLabel.text = [NSString stringWithFormat:_statusLabel.text, _latestURL.absoluteString];
+}
+
+- (IBAction)closeButtonTapped:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

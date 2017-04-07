@@ -128,18 +128,3 @@ typedef NS_ENUM(NSUInteger, TKPlaceDetailLinkType) {
 @property (nonatomic, copy) void (^productsListTappingBlock)();
 
 @end
-
-
-
-
-
-
-
-
-
-
-@interface TKPlacesListCell : TKPlaceDetailGenericCell
-
-@property (nonatomic, strong) TKPlace *place;
-
-@end

@@ -114,7 +114,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 @interface TKPlaceDetailViewController () <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, strong) UITableView *contentTable;
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) TKPlaceDetailHeaderCell *cachedHeaderCell;
 
 // View-related structures
@@ -173,6 +173,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	self.navigationItem.backBarButtonItem = [UIBarButtonItem emptyBarButtonItem];
 	self.navigationItem.rightBarButtonItem = [UIBarButtonItem emptyBarButtonItem];
 
+	if (self.navigationController.viewControllers.firstObject == self)
+		self.navigationItem.leftBarButtonItem = [UIBarButtonItem
+			closeBarButtonItemWithTarget:self selector:@selector(closeButtonTapped:)];
+
 	// TODO: Close button
 //	if (!self.navigationController)
 //		self.navigationItem.leftBarButtonItem = [UIBarButtonItem emptyBarButtonItem];
@@ -181,15 +185,15 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	_cellsCache = [NSCache new];
 
 	// Content grid
-	_contentTable = [[TKPlaceDetailTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-	_contentTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_contentTable.backgroundColor = [UIColor colorWithWhite:.94 alpha:1];
-	_contentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_contentTable.showsVerticalScrollIndicator = NO;
-	[self.view addSubview:_contentTable];
+	_tableView = [[TKPlaceDetailTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+	_tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_tableView.backgroundColor = [UIColor colorWithWhite:.94 alpha:1];
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.showsVerticalScrollIndicator = NO;
+	[self.view addSubview:_tableView];
 
-	_contentTable.delegate = self;
-	_contentTable.dataSource = self;
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
 
 	// Force-refresh
 	[self refreshView];
@@ -314,7 +318,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 - (void)refreshView
 {
 	[_cellsCache removeAllObjects];
-	[_contentTable reloadData];
+	[_tableView reloadData];
 }
 
 
@@ -324,7 +328,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (BOOL)isScreenScrolledBelowTheTitle
 {
-	return _contentTable.contentOffset.y > kImageHeight-_contentTable.contentInset.top;
+	return _tableView.contentOffset.y > kImageHeight-_tableView.contentInset.top;
 }
 
 - (UIColor *)currentNavbarTintColor
@@ -347,6 +351,11 @@ const CGFloat kDefaultLinksHeight = 54.0;
 #pragma mark Actions
 
 
+- (IBAction)closeButtonTapped:(id)sender
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)openURL:(NSURL *)URL
 {
 	if (!URL) return;
@@ -368,7 +377,13 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 	else {
 		TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
-		[self.navigationController pushViewController:vc animated:YES];
+
+		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+			UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+			nc.modalPresentationStyle = UIModalPresentationPageSheet;
+			[self presentViewController:nc animated:YES completion:nil];
+		}
+		else [self.navigationController pushViewController:vc animated:YES];
 	}
 }
 
@@ -485,7 +500,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	NSString *header = [self tableView:tableView titleForHeaderInSection:section];
 
-	if (section == PlaceDetailSectionPasses)
+	if (section == PlaceDetailSectionPasses || section == PlaceDetailSectionOtherProducts)
 		return (header) ? 34 : 0;
 
 	return (header) ? 26 : 0;
@@ -537,6 +552,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		return (_passes.count) ?
 			NSLocalizedString(@"This place accepts", @"TravelKit UI Place Detail header") : nil;
 
+	if (section == PlaceDetailSectionOtherProducts)
+		return (_otherProducts.count) ?
+			NSLocalizedString(@"Tours & Tickets", @"TravelKit UI Place Detail header") : nil;
+
 	if (section == PlaceDetailSectionOpeningHours)
 		return (_place.detail.openingHours.length) ?
 			NSLocalizedString(@"Opening hours", @"TravelKit UI Place Detail header") : nil;
@@ -573,7 +592,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	label.transform = CGAffineTransformMakeTranslation(0, 5);
 	[v addSubview:label];
 
-	if (section == PlaceDetailSectionPasses)
+	if (section == PlaceDetailSectionPasses || section == PlaceDetailSectionOtherProducts)
 	{
 		label.textColor = [UIColor colorWithWhite:.6 alpha:1];
 		label.textAlignment = NSTextAlignmentCenter;
@@ -903,8 +922,8 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	if (!self.view.superview) return;
 
 	BOOL belowTitle = [self isScreenScrolledBelowTheTitle];
-	if (scrollView.contentSize.height < 568+kImageHeight)
-		belowTitle = NO;
+//	if (scrollView.contentSize.height < 568+kImageHeight)
+//		belowTitle = NO;
 
 	[_cachedHeaderCell updateWithVerticalOffset:
 		scrollView.contentOffset.y inset:scrollView.contentInset.top];
@@ -913,7 +932,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 	[self makeNavigationBarTransparent:!belowTitle animated:YES];
 
-	_contentTable.showsVerticalScrollIndicator = belowTitle;
+	_tableView.showsVerticalScrollIndicator = belowTitle;
 }
 
 

@@ -234,6 +234,12 @@
 	return [[self alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
 }
 
++ (instancetype)closeBarButtonItemWithTarget:(id)target selector:(SEL)selector
+{
+	return [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"navbar-close"]
+		style:UIBarButtonItemStylePlain target:target action:selector];
+}
+
 @end
 
 

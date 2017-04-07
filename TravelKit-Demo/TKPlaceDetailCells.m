@@ -226,12 +226,15 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 {
 	[super layoutSubviews];
 
+	static CGFloat spacing = 4.0;
+
 	_textLabel.height = [_textLabel expandedSizeOfText].height;
 	_detailTextLabel.height = [_detailTextLabel expandedSizeOfText].height;
 
-	_detailTextLabel.top = _textLabel.bottom + 4;
+	self.height = MAX(54, kTKPlaceDetailCellsSidePadding/2*2 + spacing + _textLabel.height + _detailTextLabel.height);
 
-	self.height = MAX(54, _detailTextLabel.bottom + kTKPlaceDetailCellsSidePadding/2);
+	_textLabel.top = (self.height - _textLabel.height - _detailTextLabel.height - spacing)/2;
+	_detailTextLabel.top = _textLabel.bottom + spacing;
 }
 
 - (void)setHighlighted:(BOOL)highlighted
@@ -704,6 +707,7 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 		subtitle = ref.onlineURL.absoluteString;
 		subtitle = [subtitle stringByReplacingOccurrencesOfString:@"http://" withString:@""];
 		subtitle = [subtitle stringByReplacingOccurrencesOfString:@"https://" withString:@""];
+		subtitle = [subtitle stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	}
 
 	[self setLinkTitle:title];
@@ -828,82 +832,6 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 {
 	if (_productsListTappingBlock)
 		_productsListTappingBlock();
-}
-
-@end
-
-
-
-
-
-
-
-
-
-
-
-
-
-@interface TKPlacesListCell ()
-
-@property (nonatomic, strong) TKPlaceImageView *placeImageView;
-
-@end
-
-
-
-@implementation TKPlacesListCell
-
-+ (UITableViewCellStyle)tk_defaultStyle
-{
-	return UITableViewCellStyleSubtitle;
-}
-
-- (void)tk_initialise
-{
-	self.imageView.image = [UIImage blankImageWithSize:CGSizeMake(54, 54)];
-
-	_placeImageView = [[TKPlaceImageView alloc] initWithFrame:CGRectMake(0, 0, 62, 62)];
-	_placeImageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-	_placeImageView.layer.masksToBounds = YES;
-	_placeImageView.layer.cornerRadius = 64/2;
-	_placeImageView.layer.borderWidth = 0.5;
-	_placeImageView.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.2].CGColor;
-	[self.imageView addCenteredSubview:_placeImageView];
-
-	self.textLabel.numberOfLines = 1;
-	self.textLabel.textAlignment = NSTextAlignmentLeft;
-
-	self.detailTextLabel.numberOfLines = 2;
-	self.detailTextLabel.textColor = [UIColor colorWithWhite:0.66 alpha:1];
-	self.detailTextLabel.font = [UIFont lightSystemFontOfSize:15];
-
-	self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-}
-
-- (void)setPlace:(TKPlace *)place
-{
-	self.textLabel.text = place.name;
-	self.detailTextLabel.text = place.perex;
-
-	[_placeImageView setImageForPlace:place withSize:CGSizeMake(150, 150)];
-}
-
-- (void)layoutSubviews
-{
-	[super layoutSubviews];
-
-//	CGFloat descHeight = [self.detailTextLabel expandedSizeOfText].height;
-//	CGFloat
-//
-//	CGRect f = self.textLabel.frame;
-//	f.size.height = [self.textLabel expandedSizeOfText].height;
-//	f.origin.y = kTKPlaceDetailCellsSidePadding/2 + self.overridingTopPadding;
-//	self.textLabel.frame = f;
-//
-//	f = self.frame;
-//	f.size.height = CGRectGetMaxY(self.textLabel.frame) + kTKPlaceDetailCellsSidePadding/2 + self.overridingBottomPadding;
-//	self.frame = f;
 }
 
 @end

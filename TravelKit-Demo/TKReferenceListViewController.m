@@ -63,7 +63,12 @@
 	_contentTable.delegate = self;
 	_contentTable.dataSource = self;
 	[self.view addSubview:_contentTable];
+}
 
+- (void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+	[_contentTable reloadData];
 }
 
 - (void)openURL:(NSURL *)URL
@@ -71,7 +76,13 @@
 	if (!URL) return;
 
 	TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
-	[self.navigationController pushViewController:vc animated:YES];
+
+	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+		nc.modalPresentationStyle = UIModalPresentationPageSheet;
+		[self presentViewController:nc animated:YES completion:nil];
+	}
+	else [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -88,13 +99,15 @@
 {
 	TKReferenceListCell *cell = [[TKReferenceListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 
+	cell.width = tableView.width;
+
 	cell.productControl = [[TKPlaceDetailProductControl alloc] initWithFrame:cell.bounds];
 	cell.productControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	cell.productControl.product = [_references safeObjectAtIndex:indexPath.row];
 	cell.productControl.enabled = NO;
 
 	cell.height = cell.productControl.height;
-	[cell.contentView addSubview:cell.productControl];
+	[cell addSubview:cell.productControl];
 
 	return cell;
 }

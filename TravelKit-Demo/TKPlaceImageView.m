@@ -68,20 +68,23 @@
 {
 	if (!place) return;
 
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-		_categoryLabel.text = [self iconFontCodeForPlace:place];
-		_categoryLabel.transform = CGAffineTransformIdentity;
-		_categoryLabel.alpha = 1.0;
-		_imageView.backgroundColor = [UIColor colorFromRGB:place.displayableHexColor];
-	}];
-
 	__weak typeof(self) ws = self;
+
+	[ws.imageView.layer removeAllAnimations];
+
+	_categoryLabel.text = [self iconFontCodeForPlace:place];
+	_categoryLabel.transform = CGAffineTransformIdentity;
+	_categoryLabel.alpha = 1.0;
+	_imageView.image = nil;
+	_imageView.backgroundColor = [UIColor colorFromRGB:place.displayableHexColor];
 
 	void (^completion)(UIImage *) = ^(UIImage *i) {
 
+		if (!i) return;
+
 		[UIView animateWithDuration:.1 animations:^{
 			ws.categoryLabel.transform = CGAffineTransformMakeTranslation(0, 16);
-			ws.categoryLabel.alpha = (i) ? 0.0 : 1.0;
+			ws.categoryLabel.alpha = 0.0;
 		}];
 
 		CATransition *transition = [CATransition animation];
@@ -90,8 +93,7 @@
 		transition.type = kCATransitionFade;
 		transition.removedOnCompletion = YES;
 
-		if (ws.imageView.layer.animationKeys.count == 0)
-			[ws.imageView.layer addAnimation:transition forKey:nil];
+		[ws.imageView.layer addAnimation:transition forKey:@"imageTransition"];
 	};
 
 	if (size.width <= 250 && size.height <= 250) {
@@ -100,9 +102,9 @@
 		NSURL *url = [NSURL URLWithString:urlString];
 
 		[_imageView setImageWithURL:url completion:completion];
-		return;
 	}
 
+	else
 	[[TravelKit sharedKit] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
 
 		if (!media.count) return;
@@ -110,8 +112,6 @@
 		[_imageView setImageWithMediumImage:media.firstObject size:size completion:completion];
 	}];
 }
-
-
 
 - (NSString *)iconFontCodeForPlace:(TKPlace *)place
 {

@@ -20,5 +20,9 @@
 @interface NSArray<ObjectType> (TravelKit)
 
 - (ObjectType)safeObjectAtIndex:(NSUInteger)index;
+- (NSArray *)mappedArrayUsingBlock:(id (^)(ObjectType, NSUInteger))block;
+- (NSArray<ObjectType> *)filteredArrayUsingBlock:(BOOL (^)(id obj, NSUInteger idx))block;
+
+
 
 @end

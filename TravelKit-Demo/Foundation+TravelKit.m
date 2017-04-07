@@ -53,4 +53,28 @@
 	return nil;
 }
 
+- (NSArray *)mappedArrayUsingBlock:(id (^)(id, NSUInteger))block
+{
+	NSMutableArray *results = [NSMutableArray arrayWithCapacity:self.count];
+
+	[self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		id remapped = block(obj, idx);
+		if (remapped) [results addObject:remapped];
+	}];
+
+	return results;
+}
+
+- (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id obj, NSUInteger idx))block
+{
+	NSMutableArray *filtered = [NSMutableArray arrayWithCapacity:self.count];
+
+	[self enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+		BOOL include = block(obj, idx);
+		if (include) [filtered addObject:obj];
+	}];
+
+	return filtered;
+}
+
 @end

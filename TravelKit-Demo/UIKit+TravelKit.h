@@ -57,6 +57,7 @@
 @interface UIBarButtonItem (TravelKit)
 
 + (instancetype)emptyBarButtonItem;
++ (instancetype)closeBarButtonItemWithTarget:(id)target selector:(SEL)selector;
 
 @end
 
