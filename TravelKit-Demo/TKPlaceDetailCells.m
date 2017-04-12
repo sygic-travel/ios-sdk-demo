@@ -24,23 +24,23 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 {
 	NSString *imageName = @"place-header-ticket-small";
 
-	if ([reference.type tk_containsSubstring:@"vehicle:bike"])
+	if ([reference.type containsString:@"vehicle:bike"])
 		imageName = @"place-header-bike-small";
-	else if ([reference.type tk_containsSubstring:@"vehicle:boat"])
+	else if ([reference.type containsString:@"vehicle:boat"])
 		imageName = @"place-header-boat-small";
-	else if ([reference.type tk_containsSubstring:@"vehicle:bus"])
+	else if ([reference.type containsString:@"vehicle:bus"])
 		imageName = @"place-header-transport-small";
-	else if ([reference.type tk_containsSubstring:@"vehicle:air"])
+	else if ([reference.type containsString:@"vehicle:air"])
 		imageName = @"place-header-heli-small";
-	else if ([reference.type tk_containsSubstring:@"vehicle:segway"])
+	else if ([reference.type containsString:@"vehicle:segway"])
 		imageName = @"place-header-segway-small";
-	else if ([reference.type tk_containsSubstring:@"transport"])
+	else if ([reference.type containsString:@"transport"])
 		imageName = @"place-header-car-small";
-	else if ([reference.type tk_containsSubstring:@"rent:car"])
+	else if ([reference.type containsString:@"rent:car"])
 		imageName = @"place-header-car-small";
 	else if ([reference.type hasPrefix:@"pass"])
 		imageName = @"place-header-pass-small";
-	else if ([reference.type tk_containsSubstring:@"table"])
+	else if ([reference.type containsString:@"table"])
 		imageName = @"place-header-restaurant-small";
 	else if ([reference.type hasPrefix:@"tour"])
 		imageName = @"place-header-tour-small";
@@ -72,15 +72,15 @@ const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;
 - (NSString *)imageNameForURL:(NSURL *)URL
 {
 	NSString *host = URL.host;
-	if ([host tk_containsSubstring:@"wikipedia.org"])
+	if ([host containsString:@"wikipedia.org"])
 		return @"place-header-wiki-small";
-	else if ([host tk_containsSubstring:@"facebook.com"])
+	else if ([host containsString:@"facebook.com"])
 		return @"place-header-facebook-small";
-	else if ([host tk_containsSubstring:@"twitter.com"])
+	else if ([host containsString:@"twitter.com"])
 		return @"place-header-twitter-small";
-	else if ([host tk_containsSubstring:@"instagram"])
+	else if ([host containsString:@"instagram"])
 		return @"place-header-instagram-small";
-	else if ([host tk_containsSubstring:@"youtube"])
+	else if ([host containsString:@"youtube"])
 		return @"place-header-youtube-small";
 	return nil;
 }
@@ -489,59 +489,16 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	_pictureView.layer.masksToBounds = YES;
 	[self addSubview:_pictureView];
 
+	_pictureView.userInteractionEnabled = YES;
+	[_pictureView addGestureRecognizer:[[UITapGestureRecognizer alloc]
+		initWithTarget:self action:@selector(pictureViewTapped:)]];
+
 //	_categoryLabel = [[UILabel alloc] initWithFrame:self.bounds];
 //	_categoryLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 //	_categoryLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
 //	_categoryLabel.textAlignment = NSTextAlignmentCenter;
 //	_categoryLabel.font = [UIFont fontWithName:@"MapMarkers" size:192];
 //	[self addSubview:_categoryLabel];
-}
-
-- (NSString *)iconFontCode
-{
-	static NSDictionary *iconDictionary = nil;
-	static dispatch_once_t once;
-	dispatch_once(&once, ^{
-
-		iconDictionary = @{
-			// Categories
-			@"discovering": @"\ue900",
-			@"sightseeing": @"\ue901",
-			@"going_out": @"\ue902",
-			@"eating": @"\ue903",
-			@"hiking": @"\ue904",
-			@"playing": @"\ue905",
-			@"sleeping": @"\ue906",
-			@"sports": @"\ue907",
-			@"other": @"\ue908",
-			@"relaxing": @"\ue909",
-			@"shopping": @"\ue90a",
-			@"traveling": @"\ue90b",
-		};
-
-	});
-
-	if (_place.level & (TKPlaceLevelCity | TKPlaceLevelRegion | TKPlaceLevelCountry))
-		return @"\ue90c";
-
-	NSString *category = _place.categories.firstObject;
-
-//	NSString *marker = _place.marker.copy;
-
-	NSString *iconName = nil;
-
-//	while (true) {
-//		if (!marker.length) break;
-//		iconName = iconDictionary[marker];
-//		if (iconName) break;
-//		NSRange r = [marker rangeOfString:@":" options:NSBackwardsSearch];
-//		if (r.location == NSNotFound) break;
-//		marker = [marker substringToPosition:r.location];
-//	}
-
-	if (!iconName) iconName = iconDictionary[category] ?: @"\ue908";
-
-	return iconName;
 }
 
 - (void)setPlace:(TKPlace *)place
@@ -557,6 +514,11 @@ UITableViewCellStyle st = [[self class] tk_defaultStyle];
 	f.origin.y = verticalOffset;
 	f.size.height -= verticalOffset;
 	_pictureView.frame = f;
+}
+
+- (IBAction)pictureViewTapped:(UITapGestureRecognizer *)gesture
+{
+	if (_imageTapHandler) _imageTapHandler();
 }
 
 @end

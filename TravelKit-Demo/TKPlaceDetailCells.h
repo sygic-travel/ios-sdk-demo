@@ -87,6 +87,7 @@ typedef NS_ENUM(NSUInteger, TKPlaceDetailLinkType) {
 @interface TKPlaceDetailHeaderCell : TKPlaceDetailEmptyCell
 
 @property (nonatomic, copy) TKPlace *place;
+@property (nonatomic, copy) void (^imageTapHandler)();
 
 - (void)updateWithVerticalOffset:(CGFloat)verticalOffset inset:(CGFloat)verticalInset;
 

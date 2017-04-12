@@ -234,14 +234,16 @@
 
 - (void)fetchData
 {
+	__weak typeof(self) wself = self;
+
 	[[TravelKit sharedKit] placesForQuery:_query completion:^(NSArray<TKPlace *> *places, NSError *error) {
 
 		if (error) return;
 
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			_fetchedPlaces = places;
-			[_collectionView scrollRectToVisible:CGRectZero animated:NO];
-			[_collectionView reloadData];
+			wself.fetchedPlaces = places;
+			[wself.collectionView scrollRectToVisible:CGRectZero animated:NO];
+			[wself.collectionView reloadData];
 		}];
 
 	}];

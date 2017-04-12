@@ -198,15 +198,17 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	// Force-refresh
 	[self refreshView];
 
+	__weak typeof(self) wself = self;
+
 	// Fetch full detailed Place
 	[[TravelKit sharedKit] detailedPlaceWithID:_place.ID completion:^(TKPlace *place, NSError *error) {
 
 		if (!place) return;
 
-		self.place = place;
+		wself.place = place;
 
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			[self refreshView];
+			[wself refreshView];
 		}];
 	}];
 }
@@ -354,6 +356,11 @@ const CGFloat kDefaultLinksHeight = 54.0;
 - (IBAction)closeButtonTapped:(id)sender
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)headerImageTapped
+{
+	;
 }
 
 - (void)openURL:(NSURL *)URL
@@ -648,17 +655,21 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		if (_cachedHeaderCell) return _cachedHeaderCell;
 
+		__weak typeof(self) wself = self;
+
 		basicRect.size.height = kImageHeight;
 
 		TKPlaceDetailHeaderCell *cell = [[TKPlaceDetailHeaderCell alloc] initWithFrame:basicRect];
 		cell.place = _place;
+		cell.imageTapHandler = ^{
+			[wself headerImageTapped];
+		};
 		_cachedHeaderCell = cell;
 
 		[cell updateWithVerticalOffset:tableView.contentOffset.y inset:tableView.contentInset.top];
 
 		return cell;
 	}
-
 
 	if (section == PlaceDetailSectionName)
 	{

@@ -60,7 +60,7 @@ class MapViewController: UIViewController {
 
 		let query = TKPlacesQuery()
 		query.level = .POI
-		query.region = TKMapRegion(coordinateRegion: mapView.region)
+		query.bounds = TKMapRegion(coordinateRegion: mapView.region)
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 
 		TravelKit.shared().places(for: query) { (places, error) in

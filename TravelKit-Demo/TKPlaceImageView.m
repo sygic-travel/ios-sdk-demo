@@ -104,12 +104,17 @@
 		[_imageView setImageWithURL:url completion:completion];
 	}
 
+//	else if (place.detail.mainMedia.count)
+//	{
+//		[ws.imageView setImageWithMediumImage:place.detail.mainMedia.firstObject size:size completion:completion];
+//	}
+
 	else
 	[[TravelKit sharedKit] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
 
 		if (!media.count) return;
 
-		[_imageView setImageWithMediumImage:media.firstObject size:size completion:completion];
+		[ws.imageView setImageWithMediumImage:media.firstObject size:size completion:completion];
 	}];
 }
 
@@ -159,8 +164,5 @@
 
 	return iconName;
 }
-
-
-
 
 @end
