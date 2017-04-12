@@ -23,6 +23,11 @@
 - (NSArray *)mappedArrayUsingBlock:(id (^)(ObjectType, NSUInteger))block;
 - (NSArray<ObjectType> *)filteredArrayUsingBlock:(BOOL (^)(id obj, NSUInteger idx))block;
 
+@end
 
+
+@interface NSString (TravelKit)
+
+- (NSString *)trimmedString;
 
 @end

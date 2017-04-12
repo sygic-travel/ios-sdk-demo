@@ -9,6 +9,7 @@
 #import "TKReferenceListViewController.h"
 #import "TKBrowserViewController.h"
 
+#import "TKNavigationController.h"
 #import "TKPlaceDetailCells.h"
 #import "UIKit+TravelKit.h"
 #import "Foundation+TravelKit.h"
@@ -78,7 +79,7 @@
 	TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
 
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+		UINavigationController *nc = [[TKNavigationController alloc] initWithRootViewController:vc];
 		nc.modalPresentationStyle = UIModalPresentationPageSheet;
 		[self presentViewController:nc animated:YES completion:nil];
 	}

@@ -7,6 +7,7 @@
 //
 
 #import <TravelKit/TravelKit.h>
+#import "TKNavigationController.h"
 #import "TKPlacesListViewController.h"
 #import "TKPlaceDetailViewController.h"
 #import "TKPlaceImageView.h"
@@ -322,7 +323,7 @@
 	TKPlaceDetailViewController *vc = [[TKPlaceDetailViewController alloc] initWithPlace:place];
 
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-		UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+		UINavigationController *nc = [[TKNavigationController alloc] initWithRootViewController:vc];
 		nc.modalPresentationStyle = UIModalPresentationFormSheet;
 		nc.preferredContentSize = CGSizeMake(440, 560);
 		[self presentViewController:nc animated:YES completion:nil];

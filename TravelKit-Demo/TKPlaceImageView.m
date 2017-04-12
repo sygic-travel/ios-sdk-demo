@@ -54,6 +54,11 @@
 	[self addSubview:_categoryLabel];
 }
 
+- (UIImage *)image
+{
+	return _imageView.image;
+}
+
 - (void)setFrame:(CGRect)frame
 {
 	super.frame = frame;
@@ -62,6 +67,16 @@
 - (void)setContentMode:(UIViewContentMode)contentMode
 {
 	super.contentMode = _imageView.contentMode = contentMode;
+}
+
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size
+{
+	[_imageView setImageWithMediumImage:medium size:size completion:nil];
+}
+
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)())completion
+{
+	[_imageView setImageWithMediumImage:medium size:size completion:completion];
 }
 
 - (void)setImageForPlace:(TKPlace *)place withSize:(CGSize)size

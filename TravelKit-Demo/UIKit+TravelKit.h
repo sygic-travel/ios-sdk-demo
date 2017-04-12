@@ -46,6 +46,7 @@
 @property (nonatomic) CGFloat width, height;
 @property (nonatomic) CGFloat top, left, bottom, right;
 @property (nonatomic) CGFloat fromRightEdge, fromBottomEdge;
+@property (nonatomic) CGSize size;
 
 - (void)addCenteredSubview:(UIView *)view;
 

@@ -41,11 +41,11 @@
 
 - (BOOL)canComposeEmail
 {
-//#ifdef TARGET_OS_SIMULATOR
-//	return NO;
-//#else
+#ifdef TARGET_OS_SIMULATOR
+	return NO;
+#else
 	return [MFMailComposeViewController canSendMail];
-//#endif
+#endif
 }
 
 @end
@@ -192,6 +192,18 @@
 	CGRect f = self.frame;
 	f.origin.y = self.superview.height - fromBottomEdge - self.height;
 	self.frame = f;
+}
+
+- (CGSize)size
+{
+	return self.bounds.size;
+}
+
+- (void)setSize:(CGSize)size
+{
+	CGRect b = self.bounds;
+	b.size = size;
+	self.bounds = b;
 }
 
 - (void)addCenteredSubview:(UIView *)view

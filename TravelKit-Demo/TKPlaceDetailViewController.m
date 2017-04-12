@@ -11,9 +11,11 @@
 #import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
 
+#import "TKNavigationController.h"
 #import "TKPlaceDetailViewController.h"
 #import "TKBrowserViewController.h"
 #import "TKReferenceListViewController.h"
+#import "TKGalleryCollectionViewController.h"
 
 #import "TKPlaceDetailCells.h"
 
@@ -245,7 +247,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 {
 	[super viewWillDisappear:animated];
 
-	[self makeNavigationBarTransparent:NO animated:YES];
+	// TODO: Check on iPhone with pushing behaviour
+	BOOL willDismiss = self.isBeingDismissed || self.navigationController.isBeingDismissed;
+
+	[self makeNavigationBarTransparent:!willDismiss animated:YES];
 }
 
 
@@ -350,7 +355,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 
 #pragma mark -
-#pragma mark Actions
+#pragma mark Control actions
 
 
 - (IBAction)closeButtonTapped:(id)sender
@@ -360,8 +365,24 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (IBAction)headerImageTapped
 {
-	;
+	[[TravelKit sharedKit] mediaForPlaceWithID:_place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
+
+		if (!media.count) return;
+
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+			TKGalleryCollectionViewController *vc = [[TKGalleryCollectionViewController alloc] initWithPlace:_place media:media];
+			UINavigationController *nc = [[TKNavigationController alloc] initWithRootViewController:vc];
+			nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+			[self presentViewController:nc animated:YES completion:nil];
+		}];
+
+	}];
 }
+
+
+#pragma mark -
+#pragma mark Other actions
+
 
 - (void)openURL:(NSURL *)URL
 {
@@ -386,7 +407,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		TKBrowserViewController *vc = [[TKBrowserViewController alloc] initWithURL:URL];
 
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-			UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+			UINavigationController *nc = [[TKNavigationController alloc] initWithRootViewController:vc];
 			nc.modalPresentationStyle = UIModalPresentationPageSheet;
 			[self presentViewController:nc animated:YES completion:nil];
 		}

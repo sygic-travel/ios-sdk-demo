@@ -78,3 +78,13 @@
 }
 
 @end
+
+
+@implementation NSString (TravelKit)
+
+- (NSString *)trimmedString
+{
+	return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+@end

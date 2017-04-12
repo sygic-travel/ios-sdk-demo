@@ -10,6 +10,11 @@
 
 @interface TKPlaceImageView : UIView
 
+@property (nonatomic, readonly) UIImage *image;
+
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size;
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)())completion;
+
 - (void)setImageForPlace:(TKPlace *)place withSize:(CGSize)size;
 
 @end
