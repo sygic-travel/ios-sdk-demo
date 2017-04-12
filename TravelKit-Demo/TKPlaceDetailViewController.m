@@ -249,6 +249,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 	// TODO: Check on iPhone with pushing behaviour
 	BOOL willDismiss = self.isBeingDismissed || self.navigationController.isBeingDismissed;
+	willDismiss |= UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 
 	[self makeNavigationBarTransparent:!willDismiss animated:YES];
 }
