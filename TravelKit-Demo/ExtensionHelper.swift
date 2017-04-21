@@ -62,7 +62,7 @@ extension TKPlace {
 
 	var primaryColor: UIColor { return UIColor.fromRGB(self.displayableHexColor) }
 
-	var thumbnailURL: URL {
+	var generatedThumbnailURL: URL {
 		return URL(string: "https://media-cdn.sygictraveldata.com/photo/" + ID)!
 	}
 }

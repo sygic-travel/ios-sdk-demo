@@ -114,7 +114,7 @@ class PlaceDetailViewController : UIViewController {
 			pairs.append(("Description", place.detail!.fullDescription!))
 		}
 
-		if let duration = place.duration {
+		if let duration = place.detail?.duration {
 			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration as Int)))
 		}
 		if let rating = place.rating {

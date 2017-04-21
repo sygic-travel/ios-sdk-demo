@@ -47,7 +47,7 @@ class MainViewController: UITableViewController {
 
 		switch indexPath.row {
 		case 0:
-			vc = MapViewController()
+			vc = TKMapViewController()
 			break;
 		case 1:
 			let query = TKPlacesQuery()

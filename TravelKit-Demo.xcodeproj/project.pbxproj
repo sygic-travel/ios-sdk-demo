@@ -32,6 +32,7 @@
 		D6C4DF391E82B4AC0076BEDD /* TKReferenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C4DF381E82B4AC0076BEDD /* TKReferenceListViewController.m */; };
 		D6C991421E9E7797003D863F /* TKNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C991411E9E7797003D863F /* TKNavigationController.m */; };
 		D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */; };
+		D6E71DD11EA75A5D000080FF /* TKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6E71DD01EA75A5D000080FF /* TKMapViewController.m */; };
 		D6E8E6781E8539F000E8A8F3 /* MapMarkers.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +125,8 @@
 		D6C991411E9E7797003D863F /* TKNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKNavigationController.m; sourceTree = "<group>"; };
 		D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailCells.h; sourceTree = "<group>"; };
 		D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceDetailCells.m; sourceTree = "<group>"; };
+		D6E71DCF1EA75A5D000080FF /* TKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKMapViewController.h; sourceTree = "<group>"; };
+		D6E71DD01EA75A5D000080FF /* TKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKMapViewController.m; sourceTree = "<group>"; };
 		D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MapMarkers.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,6 +197,8 @@
 				D61B62C21E9E40530040594D /* TKGalleryTransitions.m */,
 				D61B62C31E9E40530040594D /* TKGalleryViewController.h */,
 				D61B62C41E9E40530040594D /* TKGalleryViewController.m */,
+				D6E71DCF1EA75A5D000080FF /* TKMapViewController.h */,
+				D6E71DD01EA75A5D000080FF /* TKMapViewController.m */,
 				D6C991401E9E7797003D863F /* TKNavigationController.h */,
 				D6C991411E9E7797003D863F /* TKNavigationController.m */,
 				D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */,
@@ -346,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6C991421E9E7797003D863F /* TKNavigationController.m in Sources */,
+				D6E71DD11EA75A5D000080FF /* TKMapViewController.m in Sources */,
 				D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */,
 				075C63F31E40DF6500E8B6CA /* MainViewController.swift in Sources */,
 				07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */,

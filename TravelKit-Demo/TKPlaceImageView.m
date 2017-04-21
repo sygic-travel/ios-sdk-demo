@@ -40,7 +40,12 @@
 - (void)tk_initialise
 {
 	CGFloat size = MIN(self.width, self.height);
-	CGFloat fontSize = (size >= 300) ? 192 : (size >= 200) ? 96 : (size >= 100) ? 48 : 36;
+	CGFloat fontSize =
+		(size >= 300) ? 192 :
+		(size >= 200) ? 96 :
+		(size >= 100) ? 48 :
+		(size >= 50) ? 36 :
+		(size >= 30) ? 18 : 10;
 
 	_imageView = [[UIImageView alloc] initWithFrame:self.bounds];
 	_imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
