@@ -17,59 +17,8 @@
 
 #import "TKPlaceImageView.h"
 
-#import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
-
-
-@interface TKMapAnnotation : NSObject <MKAnnotation>
-
-@property (nonatomic, strong) TKPlace *place;
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, strong) CLLocation *location;
-@property (nonatomic) CLLocationCoordinate2D coordinate;
-@property (atomic) double pixelSize;
-
-@end
-
-
-@implementation TKMapAnnotation
-
-- (instancetype)initWithCoordinate:(CLLocationCoordinate2D)coordinate title:(NSString *)title
-{
-	if (self = [super init])
-	{
-		_title = title;
-		self.coordinate = coordinate;
-	}
-
-	return self;
-}
-
-- (instancetype)initWithPlace:(TKPlace *)place
-{
-	if (self = [super init])
-	{
-		_place = place;
-		_title = place.name;
-		self.location = place.location;
-	}
-
-	return self;
-}
-
-- (void)setLocation:(CLLocation *)location
-{
-	_location = location;
-	_coordinate = location.coordinate;
-}
-
-- (void)setCoordinate:(CLLocationCoordinate2D)coordinate
-{
-	_coordinate = coordinate;
-	_location = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
-}
-
-@end
+#import "TKPlace+TravelKit.h"
 
 
 @interface TKMapViewController () <MKMapViewDelegate>
@@ -127,7 +76,7 @@
 
 	for (NSString *slug in categoryArray)
 	{
-		NSString *title = [TKPlace displayNameForCategorySlug:slug];
+		NSString *title = [TKPlace localisedNameForCategorySlug:slug];
 		if (!title) continue;
 		[sheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault
 		  handler:^(UIAlertAction * _Nonnull action) {
@@ -155,91 +104,20 @@
 
 	[lock lock];
 
-	NSMutableArray<TKPlace *> *places = [_placesToDisplay mutableCopy];
+	NSArray *annotations = [[TravelKit sharedKit]
+		spreadedAnnotationsForPlaces:_placesToDisplay
+			mapRegion:_mapView.region mapViewSize:_mapView.bounds.size];
 
-	// Minimal distance between annotations with basic size of 64 pixels
-	CGFloat minDistance = _mapView.region.span.latitudeDelta / (_mapView.height / 64) * 111000;
+	NSMutableArray *toAdd = [NSMutableArray array];
+	NSMutableArray *toKeep = [NSMutableArray array];
+	NSMutableArray *toRemove = [NSMutableArray array];
 
-	NSMutableArray<TKMapAnnotation *> *annotations = [NSMutableArray arrayWithCapacity:_placesToDisplay.count];
-
-	NSMutableArray<TKPlace *> *firstClass   = [NSMutableArray arrayWithCapacity:_placesToDisplay.count / 4];
-	NSMutableArray<TKPlace *> *secondClass  = [NSMutableArray arrayWithCapacity:_placesToDisplay.count / 2];
-	NSMutableArray<TKPlace *> *thirdClass   = [NSMutableArray arrayWithCapacity:_placesToDisplay.count / 2];
-
-	for (TKPlace *p in places)
-	{
-		if (p.rating.floatValue < 6.0 || !p.thumbnailURL) continue;
-
-		BOOL conflict = NO;
-		for (TKPlace *i in firstClass)
-			if ([i.location distanceFromLocation:p.location] < minDistance)
-			{ conflict = YES; break; }
-		if (!conflict) [firstClass addObject:p];
-	}
-
-	[places removeObjectsInArray:firstClass];
-
-	for (TKPlace *p in places)
-	{
-		if (!p.thumbnailURL) continue;
-
-		BOOL conflict = NO;
-		for (TKPlace *i in firstClass)
-			if ([i.location distanceFromLocation:p.location] < 0.95*minDistance)
-			{ conflict = YES; break; }
-		for (TKPlace *i in secondClass)
-			if ([i.location distanceFromLocation:p.location] < 0.85*minDistance)
-			{ conflict = YES; break; }
-		if (!conflict) [secondClass addObject:p];
-	}
-
-	[places removeObjectsInArray:secondClass];
-
-	for (TKPlace *p in places)
-	{
-		BOOL conflict = NO;
-		for (TKPlace *i in firstClass)
-			if ([i.location distanceFromLocation:p.location] < 0.7*minDistance)
-			{ conflict = YES; break; }
-		for (TKPlace *i in secondClass)
-			if ([i.location distanceFromLocation:p.location] < 0.6*minDistance)
-			{ conflict = YES; break; }
-		for (TKPlace *i in thirdClass)
-			if ([i.location distanceFromLocation:p.location] < 0.5*minDistance)
-			{ conflict = YES; break; }
-		if (!conflict) [thirdClass addObject:p];
-	}
-
-	NSArray<TKMapAnnotation *> *classAnnotations = [firstClass
-	  mappedArrayUsingBlock:^id(TKPlace *place, NSUInteger idx) {
-		TKMapAnnotation *anno = [[TKMapAnnotation alloc] initWithPlace:place];
-		anno.pixelSize = 56;
-		return anno;
-	}];
-
-	[annotations addObjectsFromArray:classAnnotations];
-
-	classAnnotations = [secondClass
-	  mappedArrayUsingBlock:^id(TKPlace *place, NSUInteger idx) {
-		TKMapAnnotation *anno = [[TKMapAnnotation alloc] initWithPlace:place];
-		anno.pixelSize = 40;
-		return anno;
-	}];
-
-	[annotations addObjectsFromArray:classAnnotations];
-
-	classAnnotations = [thirdClass
-	  mappedArrayUsingBlock:^id(TKPlace *place, NSUInteger idx) {
-		TKMapAnnotation *anno = [[TKMapAnnotation alloc] initWithPlace:place];
-		anno.pixelSize = 18;
-		return anno;
-	}];
-
-	[annotations addObjectsFromArray:classAnnotations];
+	[[TravelKit sharedKit] interpolateNewAnnotations:annotations oldAnnotations:
+		_mapView.annotations toAdd:toAdd toKeep:toKeep toRemove:toRemove];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[_mapView removeAnnotations:_mapView.annotations];
-		[_mapView addAnnotations:annotations];
+		[_mapView removeAnnotations:toRemove];
+		[_mapView addAnnotations:toAdd];
 	});
 
 	[lock unlock];
@@ -255,16 +133,16 @@
 	double zoom = [self zoomLevel];
 
 	TKPlacesQuery *query = [TKPlacesQuery new];
-	query.level = TKPlaceLevelPOI;
+	query.levels = TKPlaceLevelPOI;
 	query.bounds = [[TKMapRegion alloc] initWithCoordinateRegion:_mapView.region];
-	query.limit = 512;
+	query.limit = @512;
 
 	if (_filterCategory)
 		query.categories = @[ _filterCategory ];
 
 	if (zoom < 7.0)
 	{
-		query.level = TKPlaceLevelCity | TKPlaceLevelTown;
+		query.levels = TKPlaceLevelCity | TKPlaceLevelTown;
 		query.categories = nil;
 		query.tags = nil;
 		query.searchTerm = nil;
@@ -304,7 +182,10 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
-	TKMapAnnotation *anno = annotation;
+	TKMapPlaceAnnotation *anno = annotation;
+
+	if (![anno isKindOfClass:[TKMapPlaceAnnotation class]] || !anno.place) return nil;
+
 	TKPlace *place = anno.place;
 	CGFloat size = anno.pixelSize;
 
@@ -330,9 +211,9 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
-	TKMapAnnotation *anno = view.annotation;
+	TKMapPlaceAnnotation *anno = view.annotation;
 
-	if (![anno isKindOfClass:[TKMapAnnotation class]] || !anno.place) return;
+	if (![anno isKindOfClass:[TKMapPlaceAnnotation class]] || !anno.place) return;
 
 	TKPlaceDetailViewController *vc = [[TKPlaceDetailViewController alloc] initWithPlace:anno.place];
 

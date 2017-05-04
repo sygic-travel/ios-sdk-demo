@@ -8,8 +8,8 @@
 
 #import <MessageUI/MessageUI.h>
 
-#import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
+#import "TKPlace+TravelKit.h"
 
 #import "TKNavigationController.h"
 #import "TKPlaceDetailViewController.h"
@@ -718,7 +718,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		TKPlaceDetailTagsCell *cell = [[TKPlaceDetailTagsCell alloc] initWithFrame:basicRect];
 		cell.overridingTopPadding = (_place.perex) ? -5 : 0;
-		cell.categories = _place.displayableCategories;
+		cell.categories = _place.localisedCategories;
 		cell.tags = _place.detail.tags;
 
 		[_cellsCache setObject:cell forKey:cacheKey];

@@ -66,21 +66,3 @@ extension TKPlace {
 		return URL(string: "https://media-cdn.sygictraveldata.com/photo/" + ID)!
 	}
 }
-
-extension TKMedium {
-
-	func previewURL(forSize size: CGSize) -> URL? {
-
-		if let previewURL = previewURL {
-
-			let sizeString = String(format: "%dx%d", Int(size.width), Int(size.height))
-
-			var s = previewURL.absoluteString
-			s = s.replacingOccurrences(of: "__SIZE__", with: sizeString)
-
-			return URL(string: s)
-		}
-
-		return nil
-	}
-}

@@ -15,7 +15,6 @@
 
 #import "TKGalleryMediumView.h"
 
-#import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
 
 //#import "TripomaticImageView.h"

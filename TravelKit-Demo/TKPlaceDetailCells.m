@@ -8,7 +8,6 @@
 
 #import "TKPlaceDetailCells.h"
 #import "TKPlaceImageView.h"
-#import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
 
 const CGFloat kTKPlaceDetailCellsSidePadding = 15.0;

@@ -91,7 +91,7 @@ class PlaceDetailViewController : UIViewController {
 
 			if let medium = media?.first {
 
-				if let url = medium.previewURL(forSize: CGSize(width: 640, height: 640)) {
+				if let url = medium.displayableImageURL(for: CGSize(width: 640, height: 640)) {
 					self.imageView.downloadedFrom(url: url, finished: {})
 				}
 			}

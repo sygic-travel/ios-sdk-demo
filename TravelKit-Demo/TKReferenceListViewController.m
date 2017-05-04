@@ -12,7 +12,6 @@
 #import "TKNavigationController.h"
 #import "TKPlaceDetailCells.h"
 #import "UIKit+TravelKit.h"
-#import "Foundation+TravelKit.h"
 
 
 @interface TKReferenceListCell : TKPlaceDetailEmptyCell

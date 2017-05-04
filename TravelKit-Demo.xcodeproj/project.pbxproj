@@ -21,10 +21,10 @@
 		D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */; };
 		D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */; };
 		D61B62C51E9E40530040594D /* TKGalleryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62BE1E9E40530040594D /* TKGalleryCollectionViewController.m */; };
-		D65086CE1E7FDE2F001DF298 /* Foundation+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D65086CD1E7FDE2F001DF298 /* Foundation+TravelKit.m */; };
 		D65086D71E811C34001DF298 /* TKBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65086D61E811C34001DF298 /* TKBrowserViewController.m */; };
 		D66172721E9619C70088CEEE /* TKPlacesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172711E9619C70088CEEE /* TKPlacesListViewController.m */; };
 		D66172771E9644C30088CEEE /* TKPlaceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172761E9644C30088CEEE /* TKPlaceImageView.m */; };
+		D689DBF91EBB0A3F00708599 /* TKPlace+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */; };
 		D6B6DB1C1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */; };
 		D6B6DB1F1E9E4D5E00104C8C /* TKGalleryTransitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62C21E9E40530040594D /* TKGalleryTransitions.m */; };
 		D6B6DB201E9E4E6A00104C8C /* TKGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62C41E9E40530040594D /* TKGalleryViewController.m */; };
@@ -109,14 +109,14 @@
 		D61B62C41E9E40530040594D /* TKGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKGalleryViewController.m; sourceTree = "<group>"; };
 		D61B62CB1E9E414A0040594D /* TKVR360VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKVR360VideoController.h; sourceTree = "<group>"; };
 		D61B62CC1E9E414A0040594D /* TKVR360VideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKVR360VideoController.m; sourceTree = "<group>"; };
-		D65086CC1E7FDE2F001DF298 /* Foundation+TravelKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Foundation+TravelKit.h"; sourceTree = "<group>"; };
-		D65086CD1E7FDE2F001DF298 /* Foundation+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Foundation+TravelKit.m"; sourceTree = "<group>"; };
 		D65086D51E811C34001DF298 /* TKBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKBrowserViewController.h; sourceTree = "<group>"; };
 		D65086D61E811C34001DF298 /* TKBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKBrowserViewController.m; sourceTree = "<group>"; };
 		D66172701E9619C70088CEEE /* TKPlacesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlacesListViewController.h; sourceTree = "<group>"; };
 		D66172711E9619C70088CEEE /* TKPlacesListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlacesListViewController.m; sourceTree = "<group>"; };
 		D66172751E9644C30088CEEE /* TKPlaceImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceImageView.h; sourceTree = "<group>"; };
 		D66172761E9644C30088CEEE /* TKPlaceImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceImageView.m; sourceTree = "<group>"; };
+		D689DBF71EBB0A3F00708599 /* TKPlace+TravelKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TKPlace+TravelKit.h"; sourceTree = "<group>"; };
+		D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TKPlace+TravelKit.m"; sourceTree = "<group>"; };
 		D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHUIImageViewContentViewAnimation.h; sourceTree = "<group>"; };
 		D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHUIImageViewContentViewAnimation.m; sourceTree = "<group>"; };
 		D6C4DF371E82B4AC0076BEDD /* TKReferenceListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKReferenceListViewController.h; sourceTree = "<group>"; };
@@ -178,8 +178,6 @@
 			isa = PBXGroup;
 			children = (
 				D608D0D81E7819CE00A1CA41 /* Bridging-Header.h */,
-				D65086CC1E7FDE2F001DF298 /* Foundation+TravelKit.h */,
-				D65086CD1E7FDE2F001DF298 /* Foundation+TravelKit.m */,
 				07F7650D1E433CFD00727090 /* GalleryViewController.swift */,
 				075C63F21E40DF6500E8B6CA /* MainViewController.swift */,
 				075C64021E40E49300E8B6CA /* MapViewController.swift */,
@@ -215,6 +213,8 @@
 				D61B62CC1E9E414A0040594D /* TKVR360VideoController.m */,
 				D608D0DD1E78266700A1CA41 /* UIKit+TravelKit.h */,
 				D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */,
+				D689DBF71EBB0A3F00708599 /* TKPlace+TravelKit.h */,
+				D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@
 				D6C4DF391E82B4AC0076BEDD /* TKReferenceListViewController.m in Sources */,
 				D65086D71E811C34001DF298 /* TKBrowserViewController.m in Sources */,
 				D66172771E9644C30088CEEE /* TKPlaceImageView.m in Sources */,
-				D65086CE1E7FDE2F001DF298 /* Foundation+TravelKit.m in Sources */,
+				D689DBF91EBB0A3F00708599 /* TKPlace+TravelKit.m in Sources */,
 				D6B6DB211E9E517900104C8C /* TKGalleryMediumView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

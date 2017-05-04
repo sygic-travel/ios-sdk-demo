@@ -44,10 +44,10 @@ class MapViewController: UIViewController {
 
 	func reloadData() {
 
-		var annotations = [MapPin]()
+		var annotations = [TKMapPlaceAnnotation]()
 
 		for place in places {
-			annotations.append(MapPin(place: place))
+			annotations.append(TKMapPlaceAnnotation(place: place))
 		}
 
 		OperationQueue.main.addOperation {
@@ -59,7 +59,7 @@ class MapViewController: UIViewController {
 	func fetchData() {
 
 		let query = TKPlacesQuery()
-		query.level = .POI
+		query.levels = .POI
 		query.bounds = TKMapRegion(coordinateRegion: mapView.region)
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 
@@ -105,15 +105,15 @@ extension MapViewController : MKMapViewDelegate {
 		annotationView.isUserInteractionEnabled = true
 		annotationView.backgroundColor = .lightGray
 		annotationView.layer.cornerRadius = 10
-		if let mapPinAnnotation = annotation as? MapPin {
-			annotationView.backgroundColor = mapPinAnnotation.place.primaryColor
+		if let annotation = annotation as? TKMapPlaceAnnotation {
+			annotationView.backgroundColor = annotation.place.primaryColor
 		}
 		return annotationView
 	}
 
 	func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-		if let mapPinAnnotation = view.annotation as? MapPin {
-			let vc = TKPlaceDetailViewController(place: mapPinAnnotation.place)
+		if let annotation = view.annotation as? TKMapPlaceAnnotation {
+			let vc = TKPlaceDetailViewController(place: annotation.place)
 			self.navigationController?.pushViewController(vc, animated: true)
 			mapView.deselectAnnotation(view.annotation, animated: false)
 		}
@@ -121,25 +121,5 @@ extension MapViewController : MKMapViewDelegate {
 
 	func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
 		fetchData()
-	}
-}
-
-
-// MARK: MapPin Annotation
-
-class MapPin : NSObject, MKAnnotation {
-	var place: TKPlace!
-	var title: String?
-	var coordinate: CLLocationCoordinate2D
-
-	init(coordinate: CLLocationCoordinate2D, title: String) {
-		self.coordinate = coordinate
-		self.title = title
-	}
-
-	init(place: TKPlace) {
-		self.place = place
-		self.title = place.name
-		self.coordinate = place.location?.coordinate ?? kCLLocationCoordinate2DInvalid
 	}
 }

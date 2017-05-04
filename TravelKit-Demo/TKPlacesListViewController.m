@@ -11,8 +11,8 @@
 #import "TKPlacesListViewController.h"
 #import "TKPlaceDetailViewController.h"
 #import "TKPlaceImageView.h"
-#import "Foundation+TravelKit.h"
 #import "UIKit+TravelKit.h"
+#import "TKPlace+TravelKit.h"
 
 
 ///////////////////////
@@ -93,7 +93,7 @@
 	_place = place;
 
 	NSString *detail = [place.perex parsedString];
-	if (!detail) detail = [[place displayableCategories] componentsJoinedByString:@" • "];
+	if (!detail) detail = [[place localisedCategories] componentsJoinedByString:@" • "];
 
 	self.textLabel.text = [place.name parsedString];
 	self.detailTextLabel.text = detail;

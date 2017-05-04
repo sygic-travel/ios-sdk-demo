@@ -30,7 +30,7 @@ class GalleryViewController : UIViewController {
 				let imageView = UIImageView(frame:CGRect(x: 0, y: startHeight, width: self.view.frame.size.width, height: self.view.frame.size.width))
 				imageView.backgroundColor = self.place.primaryColor
 
-				if let url = medium.previewURL(forSize: CGSize(width: 400, height: 400)) {
+				if let url = medium.displayableImageURL(for: CGSize(width: 400, height: 400)) {
 					imageView.downloadedFrom(url: url, finished: {})
 				}
 
