@@ -53,7 +53,8 @@
 
 	_categoryLabel = [[UILabel alloc] initWithFrame:self.bounds];
 	_categoryLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_categoryLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
+	CGFloat alpha = (size > 100) ? 0.2 : 1.0;
+	_categoryLabel.textColor = [[UIColor whiteColor] colorWithAlphaComponent:alpha];
 	_categoryLabel.textAlignment = NSTextAlignmentCenter;
 	_categoryLabel.font = [UIFont fontWithName:@"MapMarkers" size:fontSize];
 	[self addSubview:_categoryLabel];

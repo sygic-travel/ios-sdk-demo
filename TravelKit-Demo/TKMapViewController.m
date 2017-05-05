@@ -116,7 +116,18 @@
 		_mapView.annotations toAdd:toAdd toKeep:toKeep toRemove:toRemove];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[_mapView removeAnnotations:toRemove];
+		for (TKMapPlaceAnnotation *a in toRemove)
+		{
+			UIView *v = [_mapView viewForAnnotation:a];
+			[UIView animateWithDuration:0.2 animations:^{
+				v.transform = CGAffineTransformMakeScale(0.01, 0.01);
+			} completion:^(BOOL finished) {
+				[_mapView removeAnnotation:a];
+			}];
+		}
+	});
+
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[_mapView addAnnotations:toAdd];
 	});
 
@@ -134,8 +145,10 @@
 
 	TKPlacesQuery *query = [TKPlacesQuery new];
 	query.levels = TKPlaceLevelPOI;
-	query.bounds = [[TKMapRegion alloc] initWithCoordinateRegion:_mapView.region];
-	query.limit = @512;
+//	query.bounds = [[TKMapRegion alloc] initWithCoordinateRegion:_mapView.region];
+	query.quadKeys = [[TravelKit sharedKit] quadKeysForMapRegion:_mapView.region];
+	query.mapSpread = @2;
+	query.limit = @64;
 
 	if (_filterCategory)
 		query.categories = @[ _filterCategory ];
@@ -205,6 +218,14 @@
 		[v addCenteredSubview:img];
 		[img setImageForPlace:place withSize:CGSizeMake(150, 150)];
 	}
+
+	NSTimeInterval duration = (size > 30) ? 0.15 : 0.3;
+	NSTimeInterval delay = (size > 30 ? 0.5 : 1.0) * ((arc4random() % 500) / 1000.0);
+	v.transform = CGAffineTransformMakeScale(0.01, 0.01);
+	[UIView animateWithDuration:duration delay:delay
+	  options:(UIViewAnimationOptions)0 animations:^{
+		v.transform = CGAffineTransformIdentity;
+	} completion:nil];
 
 	return v;
 }
