@@ -252,35 +252,32 @@
 
 - (IBAction)filterButtonTapped:(id)sender
 {
-	NSString *title = NSLocalizedString(@"Select category", @"TravelKit UI - Filers title");
+	UIAlertController *sheet = [UIAlertController alertControllerWithTitle:
+		@"Choose category" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	UIAlertController *prompt = [UIAlertController alertControllerWithTitle:title
-		message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-
-	void (^handler)(UIAlertAction *action) = ^(UIAlertAction *action) {
-
-		if ([action.title isEqualToString:@"Sights"])
-			_query.categories = @[ @"sightseeing" ];
-		else if ([action.title isEqualToString:@"Museums"])
-			_query.categories = @[ @"discovering" ];
-		else if ([action.title isEqualToString:@"Nightlife"])
-			_query.categories = @[ @"going_out" ];
-		else if ([action.title isEqualToString:@"Transport"])
-			_query.categories = @[ @"traveling" ];
-		else _query.categories = nil;
-
+	[sheet addAction:[UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDestructive
+	  handler:^(UIAlertAction * _Nonnull action) {
+		_query.categories = nil;
 		[self fetchData];
-	};
+	}]];
 
-	[prompt addAction:[UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDestructive handler:handler]];
-	[prompt addAction:[UIAlertAction actionWithTitle:@"Sights" style:UIAlertActionStyleDefault handler:handler]];
-	[prompt addAction:[UIAlertAction actionWithTitle:@"Museums" style:UIAlertActionStyleDefault handler:handler]];
-	[prompt addAction:[UIAlertAction actionWithTitle:@"Nightlife" style:UIAlertActionStyleDefault handler:handler]];
-	[prompt addAction:[UIAlertAction actionWithTitle:@"Transport" style:UIAlertActionStyleDefault handler:handler]];
+	for (NSString *slug in [TKPlace supportedCategories])
+	{
+		NSString *title = [TKPlace localisedNameForCategorySlug:slug];
+		if (!title) continue;
+		[sheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault
+		  handler:^(UIAlertAction * _Nonnull action) {
+			_query.categories = @[ slug ];
+			[self fetchData];
+		}]];
+	}
 
-	prompt.popoverPresentationController.barButtonItem = self.navigationItem.rightBarButtonItem;
+	[sheet addAction:[UIAlertAction actionWithTitle:@"Close"
+		style:UIAlertActionStyleCancel handler:nil]];
 
-	[self presentViewController:prompt animated:YES completion:nil];
+	sheet.popoverPresentationController.barButtonItem = sender;
+
+	[self presentViewController:sheet animated:YES completion:nil];
 }
 
 

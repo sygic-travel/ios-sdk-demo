@@ -318,6 +318,7 @@
 		config.requestCachePolicy = NSURLRequestReloadIgnoringCacheData;
 		config.timeoutIntervalForResource = 20;
 		config.allowsCellularAccess = YES;
+		config.URLCache = nil;
 
 		session = [NSURLSession sessionWithConfiguration:config];
 		session.delegateQueue.qualityOfService = NSQualityOfServiceUtility;

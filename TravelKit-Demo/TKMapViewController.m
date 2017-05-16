@@ -29,6 +29,11 @@
 
 @property (nonatomic, copy) NSString *filterCategory;
 
+@property (atomic) BOOL shouldAutoRefresh;
+@property (nonatomic, strong) NSTimer *autoRefreshTimer;
+
+@property (nonatomic, copy) NSArray *displayedQuadKeys;
+
 @end
 
 
@@ -38,11 +43,17 @@
 {
 	[super viewDidLoad];
 
+	_autoRefreshTimer = [NSTimer timerWithTimeInterval:0.2
+		target:self selector:@selector(autoRefreshTimerFire) userInfo:nil repeats:YES];
+
+	[[NSRunLoop mainRunLoop] addTimer:_autoRefreshTimer forMode:NSRunLoopCommonModes];
+
 	self.title = NSLocalizedString(@"Map", @"TravelKit UI - Screen title");
 
 	self.navigationItem.backBarButtonItem = [UIBarButtonItem emptyBarButtonItem];
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Category"
-		style:UIBarButtonItemStylePlain target:self action:@selector(categoryButtonTapped:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:
+		[UIImage templateImageNamed:@"navbar-filter"] style:UIBarButtonItemStylePlain
+			target:self action:@selector(filterButtonTapped:)];
 
 	_mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
 	_mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -57,30 +68,26 @@
 	[self fetchData];
 }
 
-
-
-- (IBAction)categoryButtonTapped:(id)sender
+- (IBAction)filterButtonTapped:(id)sender
 {
 	UIAlertController *sheet = [UIAlertController alertControllerWithTitle:
 		@"Choose category" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-	NSArray<NSString *> *categoryArray = @[ @"sightseeing", @"shopping",
-		@"eating", @"discovering", @"playing", @"traveling", @"going_out",
-		@"hiking", @"sports", @"relaxing" ];
-
 	[sheet addAction:[UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDestructive
 	  handler:^(UIAlertAction * _Nonnull action) {
 		_filterCategory = nil;
+		_displayedQuadKeys = nil;
 		[self fetchData];
 	}]];
 
-	for (NSString *slug in categoryArray)
+	for (NSString *slug in [TKPlace supportedCategories])
 	{
 		NSString *title = [TKPlace localisedNameForCategorySlug:slug];
 		if (!title) continue;
 		[sheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault
 		  handler:^(UIAlertAction * _Nonnull action) {
 			_filterCategory = slug;
+			_displayedQuadKeys = nil;
 			[self fetchData];
 		}]];
 	}
@@ -138,6 +145,13 @@
 {
 	static uint32_t i = 0;
 
+	NSArray *currentQuadKeys = [[TravelKit sharedKit] quadKeysForMapRegion:_mapView.region];
+
+	if ([currentQuadKeys isEqual:_displayedQuadKeys])
+		return;
+
+	_displayedQuadKeys = currentQuadKeys;
+
 	uint32_t current = arc4random();
 	i = current;
 
@@ -146,7 +160,7 @@
 	TKPlacesQuery *query = [TKPlacesQuery new];
 	query.levels = TKPlaceLevelPOI;
 //	query.bounds = [[TKMapRegion alloc] initWithCoordinateRegion:_mapView.region];
-	query.quadKeys = [[TravelKit sharedKit] quadKeysForMapRegion:_mapView.region];
+	query.quadKeys = currentQuadKeys;
 	query.mapSpread = @2;
 	query.limit = @64;
 
@@ -175,6 +189,12 @@
 
 		pthread_mutex_unlock(&mutex);
 	}];
+}
+
+- (void)autoRefreshTimerFire
+{
+	if (_shouldAutoRefresh)
+		[self fetchData];
 }
 
 -(double)zoomLevel
@@ -234,6 +254,8 @@
 {
 	TKMapPlaceAnnotation *anno = view.annotation;
 
+	[mapView deselectAnnotation:anno animated:YES];
+
 	if (![anno isKindOfClass:[TKMapPlaceAnnotation class]] || !anno.place) return;
 
 	TKPlaceDetailViewController *vc = [[TKPlaceDetailViewController alloc] initWithPlace:anno.place];
@@ -247,8 +269,14 @@
 	else [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+	_shouldAutoRefresh = YES;
+}
+
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+	_shouldAutoRefresh = NO;
 	[self fetchData];
 }
 
