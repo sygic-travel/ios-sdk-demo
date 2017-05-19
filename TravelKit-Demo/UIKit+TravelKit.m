@@ -329,6 +329,32 @@
 
 - (void)setImageWithURL:(NSURL *)URL completion:(void (^)(UIImage *))completion
 {
+	NSFileManager *fm = [NSFileManager defaultManager];
+
+	NSString *imagesFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory,  NSUserDomainMask, YES) firstObject];
+	imagesFolder = [imagesFolder stringByAppendingPathComponent:@"TravelKitUI"];
+	imagesFolder = [imagesFolder stringByAppendingPathComponent:@"Images"];
+
+	NSString *imagePath = [imagesFolder stringByAppendingPathComponent:[@(URL.absoluteString.hash) stringValue]];
+
+	if (![fm fileExistsAtPath:imagesFolder isDirectory:NULL])
+		[fm createDirectoryAtPath:imagesFolder withIntermediateDirectories:YES attributes:nil error:nil];
+
+	if ([fm fileExistsAtPath:imagePath]) {
+
+		NSData *data = [NSData dataWithContentsOfFile:imagePath];
+
+		UIImage *image = nil;
+		if (data) image = [UIImage imageWithData:data];
+
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+			self.image = image;
+			if (completion) completion(image);
+		}];
+
+		return;
+	}
+
 	NSString *operationID = [NSString stringWithFormat:@"TKImage_%tu", URL.hash];
 
 	// Cancel previous operation
@@ -352,12 +378,11 @@
 			UIImage *image = nil;
 			if (data) image = [UIImage imageWithData:data];
 
-			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+			if (data) [fm createFileAtPath:imagePath contents:data attributes:nil];
 
+			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				self.image = image;
 				if (completion) completion(image);
-
-
 			}];
 		}];
 

@@ -82,7 +82,7 @@ class PlacesListViewController: UITableViewController {
 
 		let query = TKPlacesQuery()
 		query.levels = .POI
-		query.parentID = "city:5"
+		query.parentIDs = ["city:5"]
 		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
 		query.tags = activeTagFilters
 		query.limit = 128

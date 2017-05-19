@@ -112,7 +112,7 @@
 	[lock lock];
 
 	NSArray *annotations = [[TravelKit sharedKit]
-		spreadedAnnotationsForPlaces:_placesToDisplay
+		spreadAnnotationsForPlaces:_placesToDisplay
 			mapRegion:_mapView.region mapViewSize:_mapView.bounds.size];
 
 	NSMutableArray *toAdd = [NSMutableArray array];

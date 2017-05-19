@@ -51,7 +51,7 @@ class MainViewController: UITableViewController {
 			break;
 		case 1:
 			let query = TKPlacesQuery()
-			query.parentID = "city:1"
+			query.parentIDs = ["city:1"]
 			query.levels = .POI
 			query.limit = 200
 			let controller = TKPlacesListViewController(query: query)
