@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		UIView.appearance().tintColor = UIColor.fromRGB(0xFD7049)
 
-		TravelKit.shared().apiKey = "**REDACTED**"
+		TravelKit.shared().apiKey = "<YOUR_API_KEY_GOES_HERE>"
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.window?.rootViewController = UINavigationController(rootViewController: MainViewController())

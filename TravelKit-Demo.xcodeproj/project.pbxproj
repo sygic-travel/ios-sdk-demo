@@ -117,6 +117,7 @@
 		D66172761E9644C30088CEEE /* TKPlaceImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceImageView.m; sourceTree = "<group>"; };
 		D689DBF71EBB0A3F00708599 /* TKPlace+TravelKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TKPlace+TravelKit.h"; sourceTree = "<group>"; };
 		D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TKPlace+TravelKit.m"; sourceTree = "<group>"; };
+		D698318C1EF3D3C6002776BE /* TravelKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = TravelKit.playground; path = SDK/TravelKit.playground; sourceTree = "<group>"; };
 		D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHUIImageViewContentViewAnimation.h; sourceTree = "<group>"; };
 		D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHUIImageViewContentViewAnimation.m; sourceTree = "<group>"; };
 		D6C4DF371E82B4AC0076BEDD /* TKReferenceListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKReferenceListViewController.h; sourceTree = "<group>"; };
@@ -146,6 +147,7 @@
 		075C63E41E40DF6500E8B6CA = {
 			isa = PBXGroup;
 			children = (
+				D698318C1EF3D3C6002776BE /* TravelKit.playground */,
 				D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */,
 				075C63EF1E40DF6500E8B6CA /* TravelKit-Demo */,
 				075C63EE1E40DF6500E8B6CA /* Products */,
