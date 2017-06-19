@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-	let options = ["Map", "Activities List", "Activities List - Dev", "Full Text Search"]
+	let options = ["Map", "Activities List", "Activities List - Dev", "Tours List - Dev", "Full Text Search"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -58,12 +58,16 @@ class MainViewController: UITableViewController {
 			vc = controller
 			break;
 		case 2:
-			let controller = PlacesListViewController()
+			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = true
 			vc = controller
 			break;
 		case 3:
-			let controller = PlacesListViewController()
+			let controller = DevToursListViewController()
+			vc = controller
+			break;
+		case 4:
+			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = false
 			vc = controller
 			break;

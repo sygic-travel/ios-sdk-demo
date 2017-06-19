@@ -1,5 +1,5 @@
 //
-//  PlaceDetailViewController.swift
+//  DevPlaceDetailViewController.swift
 //  TravelKit Demo
 //
 //  Created by Marek Stana on 2/1/17.
@@ -9,7 +9,7 @@
 import UIKit
 import TravelKit
 
-class PlaceDetailViewController : UIViewController {
+class DevPlaceDetailViewController : UIViewController {
 
 	var place: TKPlace! {
 		didSet {
@@ -69,7 +69,7 @@ class PlaceDetailViewController : UIViewController {
 		galleryButton.frame = CGRect(x: 0,y: startHeight, width:self.view.frame.width, height:40)
 		galleryButton.setTitle("Gallery", for: .normal)
 		galleryButton.contentHorizontalAlignment = .center
-		galleryButton.addTarget(self, action: #selector(PlaceDetailViewController.openGallery), for: .touchUpInside)
+		galleryButton.addTarget(self, action: #selector(DevPlaceDetailViewController.openGallery), for: .touchUpInside)
 		self.scrollView.addSubview(galleryButton)
 		startHeight += galleryButton.frame.height + padding
 
@@ -99,7 +99,7 @@ class PlaceDetailViewController : UIViewController {
 	}
 
 	func openGallery() {
-		let vc = GalleryViewController()
+		let vc = DevGalleryViewController()
 		vc.place = place
 		self.navigationController?.pushViewController(vc, animated: true)
 	}

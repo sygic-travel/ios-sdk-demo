@@ -10,12 +10,12 @@
 		075C63F11E40DF6500E8B6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C63F01E40DF6500E8B6CA /* AppDelegate.swift */; };
 		075C63F31E40DF6500E8B6CA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C63F21E40DF6500E8B6CA /* MainViewController.swift */; };
 		075C63F81E40DF6500E8B6CA /* TravelKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075C63F71E40DF6500E8B6CA /* TravelKit.xcassets */; };
-		075C64031E40E49300E8B6CA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64021E40E49300E8B6CA /* MapViewController.swift */; };
+		075C64031E40E49300E8B6CA /* DevMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64021E40E49300E8B6CA /* DevMapViewController.swift */; };
 		075C64081E41D30500E8B6CA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075C64061E40E54700E8B6CA /* MapKit.framework */; };
-		075C640A1E41D31A00E8B6CA /* PlacesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64091E41D31A00E8B6CA /* PlacesListViewController.swift */; };
-		075C64431E41E08B00E8B6CA /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64421E41E08B00E8B6CA /* PlaceDetailViewController.swift */; };
+		075C640A1E41D31A00E8B6CA /* DevPlacesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64091E41D31A00E8B6CA /* DevPlacesListViewController.swift */; };
+		075C64431E41E08B00E8B6CA /* DevPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075C64421E41E08B00E8B6CA /* DevPlaceDetailViewController.swift */; };
 		07F7650C1E43373B00727090 /* ExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650B1E43373B00727090 /* ExtensionHelper.swift */; };
-		07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650D1E433CFD00727090 /* GalleryViewController.swift */; };
+		07F7650E1E433CFD00727090 /* DevGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F7650D1E433CFD00727090 /* DevGalleryViewController.swift */; };
 		D608D0D41E77FF8000A1CA41 /* TravelKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; };
 		D608D0D51E77FF8000A1CA41 /* TravelKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D608D0D11E77FF6800A1CA41 /* TravelKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */; };
@@ -32,6 +32,7 @@
 		D6C4DF391E82B4AC0076BEDD /* TKReferenceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C4DF381E82B4AC0076BEDD /* TKReferenceListViewController.m */; };
 		D6C991421E9E7797003D863F /* TKNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C991411E9E7797003D863F /* TKNavigationController.m */; };
 		D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */; };
+		D6E3F6581EF7FCFB005578F4 /* DevToursListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E3F6571EF7FCFB005578F4 /* DevToursListViewController.swift */; };
 		D6E71DD11EA75A5D000080FF /* TKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6E71DD01EA75A5D000080FF /* TKMapViewController.m */; };
 		D6E8E6781E8539F000E8A8F3 /* MapMarkers.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */; };
 /* End PBXBuildFile section */
@@ -87,12 +88,12 @@
 		075C63F21E40DF6500E8B6CA /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		075C63F71E40DF6500E8B6CA /* TravelKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TravelKit.xcassets; sourceTree = "<group>"; };
 		075C63FC1E40DF6500E8B6CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		075C64021E40E49300E8B6CA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		075C64021E40E49300E8B6CA /* DevMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevMapViewController.swift; sourceTree = "<group>"; };
 		075C64061E40E54700E8B6CA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		075C64091E41D31A00E8B6CA /* PlacesListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesListViewController.swift; sourceTree = "<group>"; };
-		075C64421E41E08B00E8B6CA /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
+		075C64091E41D31A00E8B6CA /* DevPlacesListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPlacesListViewController.swift; sourceTree = "<group>"; };
+		075C64421E41E08B00E8B6CA /* DevPlaceDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevPlaceDetailViewController.swift; sourceTree = "<group>"; };
 		07F7650B1E43373B00727090 /* ExtensionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionHelper.swift; sourceTree = "<group>"; };
-		07F7650D1E433CFD00727090 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		07F7650D1E433CFD00727090 /* DevGalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevGalleryViewController.swift; sourceTree = "<group>"; };
 		D608D0C81E77FF6800A1CA41 /* TravelKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TravelKit.xcodeproj; path = SDK/TravelKit.xcodeproj; sourceTree = "<group>"; };
 		D608D0D81E7819CE00A1CA41 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		D608D0D91E7819CE00A1CA41 /* TKPlaceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailViewController.h; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 		D6C991411E9E7797003D863F /* TKNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKNavigationController.m; sourceTree = "<group>"; };
 		D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailCells.h; sourceTree = "<group>"; };
 		D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceDetailCells.m; sourceTree = "<group>"; };
+		D6E3F6571EF7FCFB005578F4 /* DevToursListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevToursListViewController.swift; sourceTree = "<group>"; };
 		D6E71DCF1EA75A5D000080FF /* TKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKMapViewController.h; sourceTree = "<group>"; };
 		D6E71DD01EA75A5D000080FF /* TKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKMapViewController.m; sourceTree = "<group>"; };
 		D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MapMarkers.ttf; sourceTree = "<group>"; };
@@ -180,13 +182,14 @@
 			isa = PBXGroup;
 			children = (
 				D608D0D81E7819CE00A1CA41 /* Bridging-Header.h */,
-				07F7650D1E433CFD00727090 /* GalleryViewController.swift */,
+				075C64021E40E49300E8B6CA /* DevMapViewController.swift */,
+				075C64421E41E08B00E8B6CA /* DevPlaceDetailViewController.swift */,
+				075C64091E41D31A00E8B6CA /* DevPlacesListViewController.swift */,
+				D6E3F6571EF7FCFB005578F4 /* DevToursListViewController.swift */,
+				07F7650D1E433CFD00727090 /* DevGalleryViewController.swift */,
 				075C63F21E40DF6500E8B6CA /* MainViewController.swift */,
-				075C64021E40E49300E8B6CA /* MapViewController.swift */,
 				D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */,
 				D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */,
-				075C64421E41E08B00E8B6CA /* PlaceDetailViewController.swift */,
-				075C64091E41D31A00E8B6CA /* PlacesListViewController.swift */,
 				D65086D51E811C34001DF298 /* TKBrowserViewController.h */,
 				D65086D61E811C34001DF298 /* TKBrowserViewController.m */,
 				D61B62BD1E9E40530040594D /* TKGalleryCollectionViewController.h */,
@@ -356,12 +359,13 @@
 				D6E71DD11EA75A5D000080FF /* TKMapViewController.m in Sources */,
 				D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */,
 				075C63F31E40DF6500E8B6CA /* MainViewController.swift in Sources */,
-				07F7650E1E433CFD00727090 /* GalleryViewController.swift in Sources */,
-				075C640A1E41D31A00E8B6CA /* PlacesListViewController.swift in Sources */,
-				075C64431E41E08B00E8B6CA /* PlaceDetailViewController.swift in Sources */,
+				07F7650E1E433CFD00727090 /* DevGalleryViewController.swift in Sources */,
+				075C640A1E41D31A00E8B6CA /* DevPlacesListViewController.swift in Sources */,
+				D6E3F6581EF7FCFB005578F4 /* DevToursListViewController.swift in Sources */,
+				075C64431E41E08B00E8B6CA /* DevPlaceDetailViewController.swift in Sources */,
 				D66172721E9619C70088CEEE /* TKPlacesListViewController.m in Sources */,
 				D6B6DB1C1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m in Sources */,
-				075C64031E40E49300E8B6CA /* MapViewController.swift in Sources */,
+				075C64031E40E49300E8B6CA /* DevMapViewController.swift in Sources */,
 				D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */,
 				D61B62C51E9E40530040594D /* TKGalleryCollectionViewController.m in Sources */,
 				D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */,

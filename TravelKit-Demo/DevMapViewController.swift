@@ -11,7 +11,7 @@ import MapKit
 import TravelKit
 
 
-class MapViewController: UIViewController {
+class DevMapViewController: UIViewController {
 
 	var mapView:MKMapView!
 
@@ -23,7 +23,7 @@ class MapViewController: UIViewController {
 		super.viewDidLoad()
 
 		navigationItem.backBarButtonItem = UIBarButtonItem.empty()
-		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(DevMapViewController.showCategoryFilter))
 
 		mapView = MKMapView(frame: self.view.frame)
 		mapView.delegate = self
@@ -98,7 +98,7 @@ class MapViewController: UIViewController {
 
 // MARK: MKMapViewDelegate
 
-extension MapViewController : MKMapViewDelegate {
+extension DevMapViewController : MKMapViewDelegate {
 
 	func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 		let annotationView = MKAnnotationView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))

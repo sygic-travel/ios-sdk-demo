@@ -23,7 +23,7 @@
 		@"hiking": NSLocalizedString(@"Outdoors", @"TravelKit - Category name"),
 		@"sports": NSLocalizedString(@"Sports", @"TravelKit - Category name"),
 		@"relaxing": NSLocalizedString(@"Relaxation", @"TravelKit - Category name"),
-		@"sleeping": NSLocalizedString(@"Accommodation", @"TravelKit - Category name"),
+//		@"sleeping": NSLocalizedString(@"Accommodation", @"TravelKit - Category name"),
 	};
 
 	return displayNames[categorySlug];

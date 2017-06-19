@@ -1,5 +1,5 @@
 //
-//  GalleryViewController.swift
+//  DevGalleryViewController.swift
 //  TravelKit Demo
 //
 //  Created by Marek Stana on 2/2/17.
@@ -9,7 +9,7 @@
 import UIKit
 import TravelKit
 
-class GalleryViewController : UIViewController {
+class DevGalleryViewController : UIViewController {
 
 	let scrollView = UIScrollView(frame: UIScreen.main.bounds)
 	var place: TKPlace!

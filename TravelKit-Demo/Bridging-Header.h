@@ -6,3 +6,4 @@
 #import "TKMapViewController.h"
 #import "TKPlacesListViewController.h"
 #import "TKPlaceDetailViewController.h"
+#import "TKBrowserViewController.h"

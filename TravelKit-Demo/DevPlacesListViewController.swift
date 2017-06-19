@@ -1,5 +1,5 @@
 //
-//  PlacesListViewController.swift
+//  DevPlacesListViewController.swift
 //  TravelKit Demo
 //
 //  Created by Marek Stana on 2/1/17.
@@ -9,7 +9,7 @@
 import UIKit
 import TravelKit
 
-class PlacesListViewController: UITableViewController {
+class DevPlacesListViewController: UITableViewController {
 
 	var places: [TKPlace] = [TKPlace]()
 
@@ -27,7 +27,7 @@ class PlacesListViewController: UITableViewController {
 
 		self.navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
 
-		let categoryButton = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(MapViewController.showCategoryFilter))
+		let categoryButton = UIBarButtonItem(title: "Category", style: .plain, target: self, action: #selector(DevPlacesListViewController.showCategoryFilter))
 		navigationItem.rightBarButtonItem = categoryButton
 
 		self.title = "Activities List"
@@ -42,40 +42,6 @@ class PlacesListViewController: UITableViewController {
 		}
 
 		fetchData()
-	}
-
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return places.count
-	}
-
-	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 70
-	}
-
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-		let place = places[indexPath.row] as TKPlace!
-
-		if let thumbnailURL = place?.thumbnailURL {
-			cell.imageView?.downloadedFrom(url: thumbnailURL, finished: {
-				cell.setNeedsLayout()
-			})
-		}
-		cell.textLabel?.text = place?.name
-		cell.detailTextLabel?.text = place?.perex
-		cell.detailTextLabel?.numberOfLines = 3
-		cell.detailTextLabel?.textColor = UIColor(white: 0.7, alpha: 1)
-		return cell
-	}
-
-
-	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-		let place = places[indexPath.row]
-
-		let vc = PlaceDetailViewController()
-		vc.place = place
-		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
 	func fetchData() {
@@ -126,10 +92,47 @@ class PlacesListViewController: UITableViewController {
 	}
 }
 
+extension DevPlacesListViewController /* UITableViewController delegates */ {
+
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return places.count
+	}
+
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return 70
+	}
+
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+		let place = places[indexPath.row] as TKPlace!
+
+		if let thumbnailURL = place?.thumbnailURL {
+			cell.imageView?.downloadedFrom(url: thumbnailURL, finished: {
+				cell.setNeedsLayout()
+			})
+		}
+		cell.textLabel?.text = place?.name
+		cell.detailTextLabel?.text = place?.perex
+		cell.detailTextLabel?.numberOfLines = 3
+		cell.detailTextLabel?.textColor = UIColor(white: 0.7, alpha: 1)
+		return cell
+	}
+
+
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+		let place = places[indexPath.row]
+
+		let vc = DevPlaceDetailViewController()
+		vc.place = place
+		self.navigationController?.pushViewController(vc, animated: true)
+	}
+}
+
 
 // MARK: UISearchBarDelegate
 
-extension PlacesListViewController : UISearchBarDelegate {
+extension DevPlacesListViewController : UISearchBarDelegate {
 
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
 		searchingActive = true;
