@@ -482,7 +482,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 			        _place.detail.fullDescription.length) ? 1:0;
 
 		case PlaceDetailSectionTags:
-			return (_place.categories.count || _place.detail.tags.count) ? 1:0;
+			return (_place.categories || _place.detail.tags.count) ? 1:0;
 
 		case PlaceDetailSectionOtherProductsSeparator:
 		case PlaceDetailSectionOtherProducts:
@@ -763,7 +763,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 		NSMutableArray *comps = [NSMutableArray arrayWithCapacity:2];
 		if (address) [comps addObject:address];
-		if (location) [comps addObject:location];
+		[comps addObject:location];
 
 		NSString *addrString = [comps componentsJoinedByString:@"\n"];
 

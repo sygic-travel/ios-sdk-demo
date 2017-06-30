@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-	let options = ["Map", "Activities List", "Activities List - Dev", "Tours List - Dev", "Full Text Search"]
+	let options = ["Map", "Places List", "Tours List", "Places List - Dev", "Tours List - Dev", "Full Text Search"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -43,12 +43,13 @@ class MainViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		var vc:UIViewController!
+
+		var vc: UIViewController!
 
 		switch indexPath.row {
 		case 0:
 			vc = TKMapViewController()
-			break;
+			break
 		case 1:
 			let query = TKPlacesQuery()
 			query.parentIDs = ["city:1"]
@@ -56,21 +57,24 @@ class MainViewController: UITableViewController {
 			query.limit = 200
 			let controller = TKPlacesListViewController(query: query)
 			vc = controller
-			break;
+			break
 		case 2:
+			vc = TKToursListViewController()
+			break
+		case 3:
 			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = true
 			vc = controller
-			break;
-		case 3:
+			break
+		case 4:
 			let controller = DevToursListViewController()
 			vc = controller
-			break;
-		case 4:
+			break
+		case 5:
 			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = false
 			vc = controller
-			break;
+			break
 		default:
 			return
 		}

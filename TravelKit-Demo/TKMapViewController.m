@@ -27,7 +27,7 @@
 
 @property (nonatomic, strong) NSArray<TKPlace *> *placesToDisplay;
 
-@property (nonatomic, copy) NSString *filterCategory;
+@property (atomic) TKPlaceCategory filterCategory;
 
 @property (atomic) BOOL shouldAutoRefresh;
 @property (nonatomic, strong) NSTimer *autoRefreshTimer;
@@ -75,18 +75,18 @@
 
 	[sheet addAction:[UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDestructive
 	  handler:^(UIAlertAction * _Nonnull action) {
-		_filterCategory = nil;
+		_filterCategory = TKPlaceCategoryNone;
 		_displayedQuadKeys = nil;
 		[self fetchData];
 	}]];
 
-	for (NSString *slug in [TKPlace supportedCategories])
+	for (TKPlaceCategory c = TKPlaceCategorySightseeing; c <= TKPlaceCategorySleeping; c <<= 1)
 	{
-		NSString *title = [TKPlace localisedNameForCategorySlug:slug];
+		NSString *title = [TKPlace localisedNameForCategory:c];
 		if (!title) continue;
 		[sheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault
 		  handler:^(UIAlertAction * _Nonnull action) {
-			_filterCategory = slug;
+			_filterCategory = c;
 			_displayedQuadKeys = nil;
 			[self fetchData];
 		}]];
@@ -165,12 +165,12 @@
 	query.limit = @64;
 
 	if (_filterCategory)
-		query.categories = @[ _filterCategory ];
+		query.categories = _filterCategory;
 
 	if (zoom < 7.0)
 	{
 		query.levels = TKPlaceLevelCity | TKPlaceLevelTown;
-		query.categories = nil;
+		query.categories = TKPlaceCategoryNone;
 		query.tags = nil;
 		query.searchTerm = nil;
 	}

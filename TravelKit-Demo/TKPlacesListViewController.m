@@ -257,17 +257,17 @@
 
 	[sheet addAction:[UIAlertAction actionWithTitle:@"All" style:UIAlertActionStyleDestructive
 	  handler:^(UIAlertAction * _Nonnull action) {
-		_query.categories = nil;
+		_query.categories = TKPlaceCategoryNone;
 		[self fetchData];
 	}]];
 
-	for (NSString *slug in [TKPlace supportedCategories])
+	for (TKPlaceCategory c = TKPlaceCategorySightseeing; c <= TKPlaceCategorySleeping; c <<= 1)
 	{
-		NSString *title = [TKPlace localisedNameForCategorySlug:slug];
+		NSString *title = [TKPlace localisedNameForCategory:c];
 		if (!title) continue;
 		[sheet addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault
 		  handler:^(UIAlertAction * _Nonnull action) {
-			_query.categories = @[ slug ];
+			_query.categories = c;
 			[self fetchData];
 		}]];
 	}

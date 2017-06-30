@@ -17,7 +17,7 @@ class DevMapViewController: UIViewController {
 
 	var places: [TKPlace] = [TKPlace]()
 
-	var activeCategoryFilter: String?
+	var activeCategoryFilter: TKPlaceCategory = [ ]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -61,7 +61,7 @@ class DevMapViewController: UIViewController {
 		let query = TKPlacesQuery()
 		query.levels = .POI
 		query.bounds = TKMapRegion(coordinateRegion: mapView.region)
-		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
+		query.categories = activeCategoryFilter
 
 		TravelKit.shared().places(for: query) { (places, error) in
 			self.places = places ?? [ ]
@@ -73,20 +73,25 @@ class DevMapViewController: UIViewController {
 
 		let actionSheet = UIAlertController(title: "Choose Category", message: nil, preferredStyle: .actionSheet)
 
-		let categoryArray = ["sightseeing", "shopping", "eating", "discovering", "playing", "traveling", "going_out", "hiking", "sports", "relaxing"]
+		let categoryArray: [TKPlaceCategory] = [
+			.sightseeing, .shopping, .eating, .discovering, .playing,
+			.travelling, .goingOut, .hiking, .sports, .relaxing, .sleeping
+		]
 
 		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,
 		  handler: { (action:UIAlertAction!) -> Void in
-			self.activeCategoryFilter = nil
+			self.activeCategoryFilter = [ ]
 			self.fetchData()
 		}))
 
 		for category in categoryArray {
-			actionSheet.addAction(UIAlertAction(title: category, style: .default,
-			  handler: { (action:UIAlertAction!) -> Void in
-				self.activeCategoryFilter = category
-				self.fetchData()
-			}))
+			if let title = TKPlace.localisedName(for: category) {
+				actionSheet.addAction(UIAlertAction(title: title, style: .default,
+				  handler: { (action:UIAlertAction!) -> Void in
+					self.activeCategoryFilter = category
+					self.fetchData()
+				}))
+			}
 		}
 
 		actionSheet.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))

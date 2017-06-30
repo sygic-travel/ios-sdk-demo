@@ -10,33 +10,38 @@
 
 @implementation TKPlace (TravelKit)
 
-+ (NSString *)localisedNameForCategorySlug:(NSString *)categorySlug
++ (NSString *)localisedNameForCategory:(TKPlaceCategory)category
 {
 	NSDictionary *displayNames = @{
-		@"sightseeing": NSLocalizedString(@"Sightseeing", @"TravelKit - Category name"),
-		@"shopping": NSLocalizedString(@"Shopping", @"TravelKit - Category name"),
-		@"eating": NSLocalizedString(@"Restaurants", @"TravelKit - Category name"),
-		@"discovering": NSLocalizedString(@"Museums", @"TravelKit - Category name"),
-		@"playing": NSLocalizedString(@"Family", @"TravelKit - Category name"),
-		@"traveling": NSLocalizedString(@"Transport", @"TravelKit - Category name"),
-		@"going_out": NSLocalizedString(@"Nightlife", @"TravelKit - Category name"),
-		@"hiking": NSLocalizedString(@"Outdoors", @"TravelKit - Category name"),
-		@"sports": NSLocalizedString(@"Sports", @"TravelKit - Category name"),
-		@"relaxing": NSLocalizedString(@"Relaxation", @"TravelKit - Category name"),
-//		@"sleeping": NSLocalizedString(@"Accommodation", @"TravelKit - Category name"),
+		@(TKPlaceCategorySightseeing): NSLocalizedString(@"Sightseeing", @"TravelKit - Category name"),
+		@(TKPlaceCategoryShopping): NSLocalizedString(@"Shopping", @"TravelKit - Category name"),
+		@(TKPlaceCategoryEating): NSLocalizedString(@"Restaurants", @"TravelKit - Category name"),
+		@(TKPlaceCategoryDiscovering): NSLocalizedString(@"Museums", @"TravelKit - Category name"),
+		@(TKPlaceCategoryPlaying): NSLocalizedString(@"Family", @"TravelKit - Category name"),
+		@(TKPlaceCategoryTravelling): NSLocalizedString(@"Transport", @"TravelKit - Category name"),
+		@(TKPlaceCategoryGoingOut): NSLocalizedString(@"Nightlife", @"TravelKit - Category name"),
+		@(TKPlaceCategoryHiking): NSLocalizedString(@"Outdoors", @"TravelKit - Category name"),
+		@(TKPlaceCategorySports): NSLocalizedString(@"Sports", @"TravelKit - Category name"),
+		@(TKPlaceCategoryRelaxing): NSLocalizedString(@"Relaxation", @"TravelKit - Category name"),
+		@(TKPlaceCategorySleeping): NSLocalizedString(@"Accommodation", @"TravelKit - Category name"),
 	};
 
-	return displayNames[categorySlug];
+	return displayNames[@(category)];
 }
 
 
 - (NSArray<NSString *> *)localisedCategories
 {
-	NSArray<NSString *> *slugs = self.categories ?: @[ ];
+	NSMutableArray *localised = [NSMutableArray arrayWithCapacity:3];
 
-	return [slugs mappedArrayUsingBlock:^id(NSString *slug, NSUInteger idx) {
-		return [self.class localisedNameForCategorySlug:slug];
-	}];
+	for (TKPlaceCategory c = TKPlaceCategorySightseeing; c <= TKPlaceCategorySleeping; c <<= 1)
+	{
+		if (!(self.categories & c)) continue;
+		NSString *cat = [self.class localisedNameForCategory:c];
+		if (cat) [localised addObject:cat];
+	}
+
+	return localised;
 }
 
 @end

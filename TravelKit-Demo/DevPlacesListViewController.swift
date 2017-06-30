@@ -14,7 +14,7 @@ class DevPlacesListViewController: UITableViewController {
 	var places: [TKPlace] = [TKPlace]()
 
 	var currentTagFilters: [String]?
-	var activeCategoryFilter: String?
+	var activeCategoryFilter: TKPlaceCategory = [ ]
 	var activeTagFilters: [String]?
 	var activeSearchTerm: String?
 
@@ -49,7 +49,7 @@ class DevPlacesListViewController: UITableViewController {
 		let query = TKPlacesQuery()
 		query.levels = .POI
 		query.parentIDs = ["city:5"]
-		query.categories = (activeCategoryFilter != nil) ? [ activeCategoryFilter! ] : nil
+		query.categories = activeCategoryFilter
 		query.tags = activeTagFilters
 		query.limit = 128
 
@@ -70,20 +70,25 @@ class DevPlacesListViewController: UITableViewController {
 
 		let actionSheet = UIAlertController(title: "Choose Category", message: nil, preferredStyle: .actionSheet)
 
-		let categoryArray = ["sightseeing", "shopping", "eating", "discovering", "playing", "traveling", "going_out", "hiking", "sports", "relaxing"]
+		let categoryArray: [TKPlaceCategory] = [
+			.sightseeing, .shopping, .eating, .discovering, .playing,
+			.travelling, .goingOut, .hiking, .sports, .relaxing, .sleeping
+		]
 
 		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,
 		  handler: { (action:UIAlertAction!) -> Void in
-			self.activeCategoryFilter = nil
+			self.activeCategoryFilter = [ ]
 			self.fetchData()
 		}))
 
 		for category in categoryArray {
-			actionSheet.addAction(UIAlertAction(title: category, style: .default,
-			  handler: { (action:UIAlertAction!) -> Void in
-				self.activeCategoryFilter = category
-				self.fetchData()
-			}))
+			if let title = TKPlace.localisedName(for: category) {
+				actionSheet.addAction(UIAlertAction(title: title, style: .default,
+				  handler: { (action:UIAlertAction!) -> Void in
+					self.activeCategoryFilter = category
+					self.fetchData()
+				}))
+			}
 		}
 
 		actionSheet.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))

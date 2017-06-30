@@ -3,7 +3,9 @@
 //
 
 #import "UIKit+TravelKit.h"
+#import "TKPlace+TravelKit.h"
 #import "TKMapViewController.h"
 #import "TKPlacesListViewController.h"
 #import "TKPlaceDetailViewController.h"
+#import "TKToursListViewController.h"
 #import "TKBrowserViewController.h"

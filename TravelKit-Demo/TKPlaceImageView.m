@@ -147,18 +147,18 @@
 
 		iconDictionary = @{
 			// Categories
-			@"discovering": @"\ue900",
-			@"sightseeing": @"\ue901",
-			@"going_out": @"\ue902",
-			@"eating": @"\ue903",
-			@"hiking": @"\ue904",
-			@"playing": @"\ue905",
-			@"sleeping": @"\ue906",
-			@"sports": @"\ue907",
-			@"other": @"\ue908",
-			@"relaxing": @"\ue909",
-			@"shopping": @"\ue90a",
-			@"traveling": @"\ue90b",
+			@(TKPlaceCategoryDiscovering): @"\ue900",
+			@(TKPlaceCategorySightseeing): @"\ue901",
+			@(TKPlaceCategoryGoingOut): @"\ue902",
+			@(TKPlaceCategoryEating): @"\ue903",
+			@(TKPlaceCategoryHiking): @"\ue904",
+			@(TKPlaceCategoryPlaying): @"\ue905",
+			@(TKPlaceCategorySleeping): @"\ue906",
+			@(TKPlaceCategorySports): @"\ue907",
+//			@"other": @"\ue908",
+			@(TKPlaceCategoryRelaxing): @"\ue909",
+			@(TKPlaceCategoryShopping): @"\ue90a",
+			@(TKPlaceCategoryTravelling): @"\ue90b",
 		};
 
 	});
@@ -166,7 +166,10 @@
 	if (place.level & (TKPlaceLevelCity | TKPlaceLevelRegion | TKPlaceLevelCountry))
 		return @"\ue90c";
 
-	NSString *category = place.categories.firstObject;
+	TKPlaceCategory resc = TKPlaceCategoryNone;
+	for (TKPlaceCategory c = TKPlaceCategorySightseeing; c <= TKPlaceCategorySleeping; c <<= 1)
+		if (c & place.categories)
+			resc = c;
 
 //	NSString *marker = place.marker.copy;
 
@@ -181,7 +184,7 @@
 //		marker = [marker substringToPosition:r.location];
 //	}
 
-	if (!iconName) iconName = iconDictionary[category] ?: @"\ue908";
+	if (!iconName) iconName = iconDictionary[@(resc)] ?: @"\ue908";
 
 	return iconName;
 }

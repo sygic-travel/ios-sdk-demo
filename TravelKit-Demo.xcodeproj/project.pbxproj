@@ -25,6 +25,7 @@
 		D66172721E9619C70088CEEE /* TKPlacesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172711E9619C70088CEEE /* TKPlacesListViewController.m */; };
 		D66172771E9644C30088CEEE /* TKPlaceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172761E9644C30088CEEE /* TKPlaceImageView.m */; };
 		D689DBF91EBB0A3F00708599 /* TKPlace+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */; };
+		D68E94701F0144C6009E2C9C /* TKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = D68E946F1F0144C6009E2C9C /* TKGradientView.m */; };
 		D6B6DB1C1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */; };
 		D6B6DB1F1E9E4D5E00104C8C /* TKGalleryTransitions.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62C21E9E40530040594D /* TKGalleryTransitions.m */; };
 		D6B6DB201E9E4E6A00104C8C /* TKGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62C41E9E40530040594D /* TKGalleryViewController.m */; };
@@ -33,6 +34,7 @@
 		D6C991421E9E7797003D863F /* TKNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C991411E9E7797003D863F /* TKNavigationController.m */; };
 		D6CF594C1E79230000C7840B /* TKPlaceDetailCells.m in Sources */ = {isa = PBXBuildFile; fileRef = D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */; };
 		D6E3F6581EF7FCFB005578F4 /* DevToursListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E3F6571EF7FCFB005578F4 /* DevToursListViewController.swift */; };
+		D6E3F6621EFD1D42005578F4 /* TKToursListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6E3F6611EFD1D42005578F4 /* TKToursListViewController.m */; };
 		D6E71DD11EA75A5D000080FF /* TKMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6E71DD01EA75A5D000080FF /* TKMapViewController.m */; };
 		D6E8E6781E8539F000E8A8F3 /* MapMarkers.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */; };
 /* End PBXBuildFile section */
@@ -118,6 +120,8 @@
 		D66172761E9644C30088CEEE /* TKPlaceImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceImageView.m; sourceTree = "<group>"; };
 		D689DBF71EBB0A3F00708599 /* TKPlace+TravelKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TKPlace+TravelKit.h"; sourceTree = "<group>"; };
 		D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TKPlace+TravelKit.m"; sourceTree = "<group>"; };
+		D68E946E1F0144C6009E2C9C /* TKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKGradientView.h; sourceTree = "<group>"; };
+		D68E946F1F0144C6009E2C9C /* TKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKGradientView.m; sourceTree = "<group>"; };
 		D698318C1EF3D3C6002776BE /* TravelKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = TravelKit.playground; path = SDK/TravelKit.playground; sourceTree = "<group>"; };
 		D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHUIImageViewContentViewAnimation.h; sourceTree = "<group>"; };
 		D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHUIImageViewContentViewAnimation.m; sourceTree = "<group>"; };
@@ -128,6 +132,8 @@
 		D6CF594A1E79230000C7840B /* TKPlaceDetailCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlaceDetailCells.h; sourceTree = "<group>"; };
 		D6CF594B1E79230000C7840B /* TKPlaceDetailCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKPlaceDetailCells.m; sourceTree = "<group>"; };
 		D6E3F6571EF7FCFB005578F4 /* DevToursListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevToursListViewController.swift; sourceTree = "<group>"; };
+		D6E3F6601EFD1D42005578F4 /* TKToursListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKToursListViewController.h; sourceTree = "<group>"; };
+		D6E3F6611EFD1D42005578F4 /* TKToursListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKToursListViewController.m; sourceTree = "<group>"; };
 		D6E71DCF1EA75A5D000080FF /* TKMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKMapViewController.h; sourceTree = "<group>"; };
 		D6E71DD01EA75A5D000080FF /* TKMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKMapViewController.m; sourceTree = "<group>"; };
 		D6E8E6771E8539F000E8A8F3 /* MapMarkers.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MapMarkers.ttf; sourceTree = "<group>"; };
@@ -200,6 +206,8 @@
 				D61B62C21E9E40530040594D /* TKGalleryTransitions.m */,
 				D61B62C31E9E40530040594D /* TKGalleryViewController.h */,
 				D61B62C41E9E40530040594D /* TKGalleryViewController.m */,
+				D68E946E1F0144C6009E2C9C /* TKGradientView.h */,
+				D68E946F1F0144C6009E2C9C /* TKGradientView.m */,
 				D6E71DCF1EA75A5D000080FF /* TKMapViewController.h */,
 				D6E71DD01EA75A5D000080FF /* TKMapViewController.m */,
 				D6C991401E9E7797003D863F /* TKNavigationController.h */,
@@ -214,6 +222,8 @@
 				D66172711E9619C70088CEEE /* TKPlacesListViewController.m */,
 				D6C4DF371E82B4AC0076BEDD /* TKReferenceListViewController.h */,
 				D6C4DF381E82B4AC0076BEDD /* TKReferenceListViewController.m */,
+				D6E3F6601EFD1D42005578F4 /* TKToursListViewController.h */,
+				D6E3F6611EFD1D42005578F4 /* TKToursListViewController.m */,
 				D61B62CB1E9E414A0040594D /* TKVR360VideoController.h */,
 				D61B62CC1E9E414A0040594D /* TKVR360VideoController.m */,
 				D608D0DD1E78266700A1CA41 /* UIKit+TravelKit.h */,
@@ -360,6 +370,8 @@
 				D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */,
 				075C63F31E40DF6500E8B6CA /* MainViewController.swift in Sources */,
 				07F7650E1E433CFD00727090 /* DevGalleryViewController.swift in Sources */,
+				D6E3F6621EFD1D42005578F4 /* TKToursListViewController.m in Sources */,
+				D68E94701F0144C6009E2C9C /* TKGradientView.m in Sources */,
 				075C640A1E41D31A00E8B6CA /* DevPlacesListViewController.swift in Sources */,
 				D6E3F6581EF7FCFB005578F4 /* DevToursListViewController.swift in Sources */,
 				075C64431E41E08B00E8B6CA /* DevPlaceDetailViewController.swift in Sources */,

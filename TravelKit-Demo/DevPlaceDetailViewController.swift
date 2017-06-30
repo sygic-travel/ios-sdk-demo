@@ -120,8 +120,9 @@ class DevPlaceDetailViewController : UIViewController {
 		if let rating = place.rating {
 			pairs.append(("Rating", rating.description))
 		}
-		if place.categories?.count ?? 0 > 0 {
-			pairs.append(("Categories", place.categories!.joined(separator: " • ")))
+		let cats = place.localisedCategories()
+		if cats.count > 0 {
+			pairs.append(("Categories", cats.joined(separator: " • ")))
 		}
 		if place.detail?.tags?.count ?? 0 > 0 {
 			let tags = place.detail!.tags!.map({ (placeTag) -> String in
@@ -144,8 +145,8 @@ class DevPlaceDetailViewController : UIViewController {
 
 			var pieces = [String]()
 
-			if let title = reference.title { pieces.append(title) }
-			if let url = reference.onlineURL { pieces.append(url.absoluteString) }
+			pieces.append(reference.title)
+			pieces.append(reference.onlineURL.absoluteString)
 			if let price = reference.price { pieces.append("$" + price.description) }
 
 			referencesString += pieces.joined(separator: "\n")

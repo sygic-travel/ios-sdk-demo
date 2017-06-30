@@ -37,6 +37,7 @@
 
 + (UIImage *)templateImageNamed:(NSString *)imageName;
 + (UIImage *)blankImageWithSize:(CGSize)size;
+- (UIImage *)imageTintedWithColor:(UIColor *)color;
 
 @end
 
@@ -77,5 +78,12 @@
 
 - (void)setImageWithURL:(NSURL *)URL completion:(void (^)(UIImage *))completion;
 - (void)setImageWithMediumImage:(TKMedium *)medium size:(CGSize)size completion:(void (^)(UIImage *))completion;
+
+@end
+
+
+@interface UIViewController (TravelKit)
+
+- (BOOL)isForceTouchAvailable;
 
 @end

@@ -90,7 +90,7 @@
 
 
 #pragma mark -
-#pragma mark UIView
+#pragma mark UIImage
 #pragma mark -
 
 
@@ -108,6 +108,20 @@
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	return image;
+}
+
+- (UIImage *)imageTintedWithColor:(UIColor *)color
+{
+	UIImage *template = [self imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	UIGraphicsBeginImageContextWithOptions(template.size, NO, 0);
+
+	[color set];
+
+	[template drawInRect:CGRectMake(0, 0, template.size.width, template.size.height)];
+	template = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+
+	return template;
 }
 
 @end
@@ -402,6 +416,25 @@
 	NSURL *url = [NSURL URLWithString:urlString];
 
 	[self setImageWithURL:url completion:completion];
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark UIViewController
+#pragma mark -
+
+
+@implementation UIViewController (TravelKit)
+
+- (BOOL)isForceTouchAvailable
+{
+	if ([self respondsToSelector:@selector(traitCollection)])
+		if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)])
+			return self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
+
+	return NO;
 }
 
 @end

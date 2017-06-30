@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TKPlace (TravelKit)
 
-+ (nullable NSString *)localisedNameForCategorySlug:(NSString *)categorySlug;
++ (nullable NSString *)localisedNameForCategory:(TKPlaceCategory)category;
 - (NSArray<NSString *> *)localisedCategories;
 
 @end
