@@ -71,14 +71,14 @@
 {
 	[super viewDidLayoutSubviews];
 
-	CGFloat inset = 0;
-	if (self.navigationController) inset +=
-		self.navigationController.navigationBar.top +
-			self.navigationController.navigationBar.height;
-
-	_webView.scrollView.contentInset =
-		_webView.scrollView.scrollIndicatorInsets =
-			UIEdgeInsetsMake(inset, 0, 0, 0);
+//	CGFloat inset = 0;
+//	if (self.navigationController) inset +=
+//		self.navigationController.navigationBar.top +
+//			self.navigationController.navigationBar.height;
+//
+//	_webView.scrollView.contentInset =
+//		_webView.scrollView.scrollIndicatorInsets =
+//			UIEdgeInsetsMake(inset, 0, 0, 0);
 }
 
 

@@ -80,7 +80,7 @@
 	[_imageView setImageWithMediumImage:medium size:size completion:nil];
 }
 
-- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)())completion
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)(UIImage *))completion
 {
 	[_imageView setImageWithMediumImage:medium size:size completion:completion];
 }
@@ -158,7 +158,7 @@
 //			@"other": @"\ue908",
 			@(TKPlaceCategoryRelaxing): @"\ue909",
 			@(TKPlaceCategoryShopping): @"\ue90a",
-			@(TKPlaceCategoryTravelling): @"\ue90b",
+			@(TKPlaceCategoryTraveling): @"\ue90b",
 		};
 
 	});

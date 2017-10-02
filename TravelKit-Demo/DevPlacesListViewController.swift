@@ -66,13 +66,13 @@ class DevPlacesListViewController: UITableViewController {
 		}
 	}
 
-	func showCategoryFilter() {
+	@objc func showCategoryFilter() {
 
 		let actionSheet = UIAlertController(title: "Choose Category", message: nil, preferredStyle: .actionSheet)
 
 		let categoryArray: [TKPlaceCategory] = [
 			.sightseeing, .shopping, .eating, .discovering, .playing,
-			.travelling, .goingOut, .hiking, .sports, .relaxing, .sleeping
+			.traveling, .goingOut, .hiking, .sports, .relaxing, .sleeping
 		]
 
 		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,

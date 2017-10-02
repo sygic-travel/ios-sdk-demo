@@ -69,7 +69,7 @@ class DevPlaceDetailViewController : UIViewController {
 		galleryButton.frame = CGRect(x: 0,y: startHeight, width:self.view.frame.width, height:40)
 		galleryButton.setTitle("Gallery", for: .normal)
 		galleryButton.contentHorizontalAlignment = .center
-		galleryButton.addTarget(self, action: #selector(DevPlaceDetailViewController.openGallery), for: .touchUpInside)
+		galleryButton.addTarget(self, action: #selector(openGallery), for: .touchUpInside)
 		self.scrollView.addSubview(galleryButton)
 		startHeight += galleryButton.frame.height + padding
 
@@ -98,7 +98,7 @@ class DevPlaceDetailViewController : UIViewController {
 		}
 	}
 
-	func openGallery() {
+	@objc func openGallery() {
 		let vc = DevGalleryViewController()
 		vc.place = place
 		self.navigationController?.pushViewController(vc, animated: true)
@@ -110,12 +110,12 @@ class DevPlaceDetailViewController : UIViewController {
 		pairs.append(("Suffix", place.suffix))
 		pairs.append(("Perex", place.perex))
 
-		if place.detail?.fullDescription?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
-			pairs.append(("Description", place.detail!.fullDescription!))
+		if place.detail?.fullDescription?.text.lengthOfBytes(using: .utf8) ?? 0 > 0 {
+			pairs.append(("Description", place.detail!.fullDescription!.text))
 		}
 
 		if let duration = place.detail?.duration {
-			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration as Int)))
+			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration.intValue)))
 		}
 		if let rating = place.rating {
 			pairs.append(("Rating", rating.description))

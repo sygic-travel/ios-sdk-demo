@@ -13,7 +13,7 @@
 @property (nonatomic, readonly) UIImage *image;
 
 - (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size;
-- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)())completion;
+- (void)setImageForMedium:(TKMedium *)medium withSize:(CGSize)size completion:(void (^)(UIImage *))completion;
 
 - (void)setImageForPlace:(TKPlace *)place withSize:(CGSize)size;
 

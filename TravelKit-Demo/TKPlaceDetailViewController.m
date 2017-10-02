@@ -479,7 +479,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 		case PlaceDetailSectionDescription:
 			return (_place.perex.length ||
-			        _place.detail.fullDescription.length) ? 1:0;
+			        _place.detail.fullDescription.text.length) ? 1:0;
 
 		case PlaceDetailSectionTags:
 			return (_place.categories || _place.detail.tags.count) ? 1:0;
@@ -707,7 +707,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		TKPlaceDetailDescriptionCell *cell = [[TKPlaceDetailDescriptionCell alloc] initWithFrame:basicRect];
 		cell.headingDetectionEnabled = YES;
-		cell.displayedText = _place.detail.fullDescription ?: _place.perex;
+		cell.displayedText = _place.detail.fullDescription.text ?: _place.perex;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 

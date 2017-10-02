@@ -18,7 +18,7 @@
 		@(TKPlaceCategoryEating): NSLocalizedString(@"Restaurants", @"TravelKit - Category name"),
 		@(TKPlaceCategoryDiscovering): NSLocalizedString(@"Museums", @"TravelKit - Category name"),
 		@(TKPlaceCategoryPlaying): NSLocalizedString(@"Family", @"TravelKit - Category name"),
-		@(TKPlaceCategoryTravelling): NSLocalizedString(@"Transport", @"TravelKit - Category name"),
+		@(TKPlaceCategoryTraveling): NSLocalizedString(@"Transport", @"TravelKit - Category name"),
 		@(TKPlaceCategoryGoingOut): NSLocalizedString(@"Nightlife", @"TravelKit - Category name"),
 		@(TKPlaceCategoryHiking): NSLocalizedString(@"Outdoors", @"TravelKit - Category name"),
 		@(TKPlaceCategorySports): NSLocalizedString(@"Sports", @"TravelKit - Category name"),

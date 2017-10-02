@@ -146,7 +146,7 @@
 
 		__weak typeof(self) self_ = self;
 
-		[_fakishLoadingView setImageForMedium:_medium withSize:CGSizeMake(1280, 1280) completion:^{
+		[_fakishLoadingView setImageForMedium:_medium withSize:CGSizeMake(1280, 1280) completion:^(UIImage *i){
 			[self_ fakishImageViewUpdated];
 		}];
 	}
