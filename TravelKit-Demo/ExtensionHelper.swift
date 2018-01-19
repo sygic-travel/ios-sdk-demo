@@ -66,3 +66,9 @@ extension TKPlace {
 		return URL(string: "https://media-cdn.sygictraveldata.com/photo/" + ID)!
 	}
 }
+
+extension Array {
+	subscript (safe index: Int) -> Element? {
+		return Int(index) < count ? self[Int(index)] : nil
+	}
+}

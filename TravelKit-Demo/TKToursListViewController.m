@@ -254,7 +254,7 @@
 //	[_bottomHolder addSubview:_ratingLabel];
 
 	// Set duration
-	NSString *stringDuration = _tour.duration;
+	NSString *stringDuration = _tour.duration ?: NSLocalizedString(@"Unknown", @"View label");
 
 	UIImage *clockImage = [[UIImage imageNamed:@"activity-header-clock-small"]
 		imageTintedWithColor:[UIColor grayColor]];
@@ -311,7 +311,7 @@
 @property (nonatomic, strong) UIImageView *statusImage;
 @property (nonatomic, strong) UIView *statusContainer;
 
-@property (atomic) TKToursQuerySorting sortingChoice;
+@property (atomic) TKToursViatorQuerySorting sortingChoice;
 
 @property (nonatomic, strong) UIAlertController *sortingAlert;
 
@@ -411,7 +411,7 @@
 		dataCache.countLimit = 7;
 	});
 
-	TKToursQuery *query = [TKToursQuery new];
+	TKToursViatorQuery *query = [TKToursViatorQuery new];
 	query.parentID = @"city:1";
 	query.sortingType = _sortingChoice;
 
@@ -429,7 +429,7 @@
 
 	// ...otherwise ask API for the data
 
-	[[TravelKit sharedKit] toursForQuery:query completion:^(NSArray<TKTour *> *tours, NSError *error) {
+	[[TravelKit sharedKit]._tours toursForViatorQuery:query completion:^(NSArray<TKTour *> *tours, NSError *error) {
 
 		if (error || !tours.count)
 		{
@@ -507,23 +507,23 @@
 
 	[_sortingAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rating", @"Filter title")
 	  style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self updateDisplayedResultsWithSortingType:TKToursQuerySortingRating];
+		[self updateDisplayedResultsWithSortingType:TKToursViatorQuerySortingRating];
 	}]];
 
 	[_sortingAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Price", @"Filter title")
 	  style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self updateDisplayedResultsWithSortingType:TKToursQuerySortingPrice];
+		[self updateDisplayedResultsWithSortingType:TKToursViatorQuerySortingPrice];
 	}]];
 
 	[_sortingAlert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Popularity", @"Filter title")
 	  style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		[self updateDisplayedResultsWithSortingType:TKToursQuerySortingTopSellers];
+		[self updateDisplayedResultsWithSortingType:TKToursViatorQuerySortingTopSellers];
 	}]];
 
 	[self presentViewController:_sortingAlert animated:YES completion:nil];
 }
 
-- (void)updateDisplayedResultsWithSortingType:(TKToursQuerySorting)type
+- (void)updateDisplayedResultsWithSortingType:(TKToursViatorQuerySorting)type
 {
 	_sortingChoice = type;
 	[self fetchData];

@@ -29,7 +29,7 @@ class DevPlaceDetailViewController : UIViewController {
 
 		// Fetch detailed information of the place
 
-		TravelKit.shared().detailedPlace(withID: place.ID) { (place, error) in
+		TravelKit.shared.places.detailedPlace(withID: place.ID) { (place, error) in
 			if (place != nil) { self.place = place }
 		}
 	}
@@ -46,7 +46,7 @@ class DevPlaceDetailViewController : UIViewController {
 		var startHeight = CGFloat(padding + imageView.frame.origin.y + imageView.frame.size.height)
 
 		for pair in self.pairInformation(forPlace: place) {
-			if let safeSecondPair = pair.1 as String! {
+			if let safeSecondPair = pair.1 as String? {
 				let titleLabel = UILabel(frame: CGRect(x: padding, y: startHeight, width: self.view.frame.size.width - 2*padding, height: 60))
 				titleLabel.text = pair.0
 				titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
@@ -87,7 +87,7 @@ class DevPlaceDetailViewController : UIViewController {
 		}
 		self.scrollView.addSubview(imageView)
 
-		TravelKit.shared().mediaForPlace(withID: place.ID) { (media, error) in
+		TravelKit.shared.places.mediaForPlace(withID: place.ID) { (media, error) in
 
 			if let medium = media?.first {
 
@@ -110,11 +110,14 @@ class DevPlaceDetailViewController : UIViewController {
 		pairs.append(("Suffix", place.suffix))
 		pairs.append(("Perex", place.perex))
 
-		if place.detail?.fullDescription?.text.lengthOfBytes(using: .utf8) ?? 0 > 0 {
-			pairs.append(("Description", place.detail!.fullDescription!.text))
+		let detailedPlace = place as? TKDetailedPlace
+
+		if let description = detailedPlace?.detail?.fullDescription?.text,
+		  description.lengthOfBytes(using: .utf8) > 0 {
+			pairs.append(("Description", description))
 		}
 
-		if let duration = place.detail?.duration {
+		if let duration = detailedPlace?.detail?.duration {
 			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration.intValue)))
 		}
 		if let rating = place.rating {
@@ -124,24 +127,26 @@ class DevPlaceDetailViewController : UIViewController {
 		if cats.count > 0 {
 			pairs.append(("Categories", cats.joined(separator: " • ")))
 		}
-		if place.detail?.tags?.count ?? 0 > 0 {
-			let tags = place.detail!.tags!.map({ (placeTag) -> String in
+		if let tags = detailedPlace?.detail?.tags, tags.count > 0 {
+			let tags = tags.map({ (placeTag) -> String in
 				return placeTag.name ?? placeTag.key
 			})
 			pairs.append(("Tags", tags.joined(separator: " • ")))
 		}
 
-		if place.detail?.address?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
-			pairs.append(("Address", place.detail!.address!))
+		if let address = detailedPlace?.detail?.address,
+		  address.lengthOfBytes(using: .utf8) > 0 {
+			pairs.append(("Address", address))
 		}
 
-		if place.detail?.openingHours?.lengthOfBytes(using: .utf8) ?? 0 > 0 {
-			pairs.append(("Opening hours", place.detail!.openingHours!))
+		if let hours = detailedPlace?.detail?.openingHours,
+		  hours.lengthOfBytes(using: .utf8) > 0 {
+			pairs.append(("Opening hours", hours))
 		}
 
 		var referencesString = ""
 
-		for reference in place.detail?.references ?? [ ] {
+		for reference in detailedPlace?.detail?.references ?? [ ] {
 
 			var pieces = [String]()
 

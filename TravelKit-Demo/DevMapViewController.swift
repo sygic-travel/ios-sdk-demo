@@ -63,7 +63,7 @@ class DevMapViewController: UIViewController {
 		query.bounds = TKMapRegion(coordinateRegion: mapView.region)
 		query.categories = activeCategoryFilter
 
-		TravelKit.shared().places(for: query) { (places, error) in
+		TravelKit.shared.places.places(for: query) { (places, error) in
 			self.places = places ?? [ ]
 			self.reloadData()
 		}
@@ -75,7 +75,7 @@ class DevMapViewController: UIViewController {
 
 		let categoryArray: [TKPlaceCategory] = [
 			.sightseeing, .shopping, .eating, .discovering, .playing,
-			.traveling, .goingOut, .hiking, .sports, .relaxing, .sleeping
+			.traveling, .goingOut, .hiking, .doingSports, .relaxing, .sleeping
 		]
 
 		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,

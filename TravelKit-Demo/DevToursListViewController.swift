@@ -27,11 +27,11 @@ class DevToursListViewController: UITableViewController {
 
 	func fetchData() {
 
-		let query = TKToursQuery()
+		let query = TKToursViatorQuery()
 		query.parentID = "city:5"
 		query.sortingType = .topSellers
 
-		TravelKit.shared().tours(for: query) { (tours, error) in
+		TravelKit.shared._tours.tours(for: query) { (tours, error) in
 			DispatchQueue.main.async {
 				self.tours = tours ?? [ ]
 				self.tableView.reloadData()
@@ -52,28 +52,28 @@ extension DevToursListViewController /* UITableViewController delegates */ {
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-		let tour = tours[indexPath.row] as TKTour!
+		guard let tour = tours[safe: indexPath.row] else { return cell }
 
 //		if let thumbnailURL = tour?.thumbnailURL {
 //			cell.imageView?.downloadedFrom(url: thumbnailURL, finished: {
 //				cell.setNeedsLayout()
 //			})
 //		}
-		cell.textLabel?.text = tour?.title
+		cell.textLabel?.text = tour.title
 
 		var detailTexts = [String]()
 
-		if let price = tour?.price {
+		if let price = tour.price {
 			detailTexts.append(String(format: "$%.0f", price.floatValue))
 		}
 
-		if let rating = tour?.rating {
+		if let rating = tour.rating {
 			detailTexts.append(String(format: "%.0f★", rating.floatValue))
 		}
 
-		if let duration = tour?.duration { detailTexts.append(duration) }
+		if let duration = tour.duration { detailTexts.append(duration) }
 
-		if let perex = tour?.perex { detailTexts.append(perex) }
+		if let perex = tour.perex { detailTexts.append(perex) }
 
 		cell.detailTextLabel?.text = detailTexts.joined(separator: " • ")
 		cell.detailTextLabel?.numberOfLines = 3

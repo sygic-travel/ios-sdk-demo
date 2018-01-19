@@ -9,3 +9,4 @@
 #import "TKPlaceDetailViewController.h"
 #import "TKToursListViewController.h"
 #import "TKBrowserViewController.h"
+#import "PlaygroundViewController.h"

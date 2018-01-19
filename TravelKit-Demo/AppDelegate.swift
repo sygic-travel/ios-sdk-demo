@@ -19,7 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		UIView.appearance().tintColor = UIColor.fromRGB(0xFD7049)
 
-		TravelKit.shared().apiKey = "<YOUR_API_KEY_GOES_HERE>"
+		TravelKit.shared.apiKey = "<YOUR_API_KEY_GOES_HERE>"
+
+		TravelKit.shared._events.syncCompletionHandler = { (result) in
+			print("Success:", result.success, "Trips:", result.changedTripIDs, "Favs:", result.changedFavoritePlaceIDs)
+		}
+
+		TravelKit.shared._events.sessionUpdateHandler = { (session) in
+			print("Updated session:", session ?? "")
+		}
 
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.window?.rootViewController = UINavigationController(rootViewController: MainViewController())

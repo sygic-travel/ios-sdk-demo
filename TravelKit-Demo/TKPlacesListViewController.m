@@ -237,7 +237,7 @@
 {
 	__weak typeof(self) wself = self;
 
-	[[TravelKit sharedKit] placesForQuery:_query completion:^(NSArray<TKPlace *> *places, NSError *error) {
+	[[TravelKit sharedKit].places placesForQuery:_query completion:^(NSArray<TKPlace *> *places, NSError *error) {
 
 		if (error) return;
 

@@ -111,7 +111,7 @@
 
 	[lock lock];
 
-	NSArray *annotations = [[TravelKit sharedKit]
+	NSArray *annotations = [TKMapWorker
 		spreadAnnotationsForPlaces:_placesToDisplay
 			mapRegion:_mapView.region mapViewSize:_mapView.bounds.size];
 
@@ -119,7 +119,7 @@
 	NSMutableArray *toKeep = [NSMutableArray array];
 	NSMutableArray *toRemove = [NSMutableArray array];
 
-	[[TravelKit sharedKit] interpolateNewAnnotations:annotations oldAnnotations:
+	[TKMapWorker interpolateNewAnnotations:annotations oldAnnotations:
 		_mapView.annotations toAdd:toAdd toKeep:toKeep toRemove:toRemove];
 
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -145,7 +145,7 @@
 {
 	static uint32_t i = 0;
 
-	NSArray *currentQuadKeys = [[TravelKit sharedKit] quadKeysForMapRegion:_mapView.region];
+	NSArray *currentQuadKeys = [TKMapWorker quadKeysForRegion:_mapView.region];
 
 	if ([currentQuadKeys isEqual:_displayedQuadKeys])
 		return;
@@ -175,7 +175,7 @@
 		query.searchTerm = nil;
 	}
 
-	[[TravelKit sharedKit] placesForQuery:query completion:^(NSArray<TKPlace *> *places, NSError *error) {
+	[[TravelKit sharedKit].places placesForQuery:query completion:^(NSArray<TKPlace *> *places, NSError *error) {
 
 		if (current != i) return;
 

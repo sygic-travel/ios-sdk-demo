@@ -21,6 +21,7 @@
 		D608D0DB1E7819CE00A1CA41 /* TKPlaceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DA1E7819CE00A1CA41 /* TKPlaceDetailViewController.m */; };
 		D608D0DF1E78266700A1CA41 /* UIKit+TravelKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D608D0DE1E78266700A1CA41 /* UIKit+TravelKit.m */; };
 		D61B62C51E9E40530040594D /* TKGalleryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D61B62BE1E9E40530040594D /* TKGalleryCollectionViewController.m */; };
+		D64B61092004C3CE0098ADDF /* PlaygroundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D64B61082004C3CE0098ADDF /* PlaygroundViewController.m */; };
 		D65086D71E811C34001DF298 /* TKBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D65086D61E811C34001DF298 /* TKBrowserViewController.m */; };
 		D66172721E9619C70088CEEE /* TKPlacesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172711E9619C70088CEEE /* TKPlacesListViewController.m */; };
 		D66172771E9644C30088CEEE /* TKPlaceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D66172761E9644C30088CEEE /* TKPlaceImageView.m */; };
@@ -112,6 +113,8 @@
 		D61B62C41E9E40530040594D /* TKGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKGalleryViewController.m; sourceTree = "<group>"; };
 		D61B62CB1E9E414A0040594D /* TKVR360VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKVR360VideoController.h; sourceTree = "<group>"; };
 		D61B62CC1E9E414A0040594D /* TKVR360VideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKVR360VideoController.m; sourceTree = "<group>"; };
+		D64B61072004C3CE0098ADDF /* PlaygroundViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlaygroundViewController.h; sourceTree = "<group>"; };
+		D64B61082004C3CE0098ADDF /* PlaygroundViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaygroundViewController.m; sourceTree = "<group>"; };
 		D65086D51E811C34001DF298 /* TKBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKBrowserViewController.h; sourceTree = "<group>"; };
 		D65086D61E811C34001DF298 /* TKBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKBrowserViewController.m; sourceTree = "<group>"; };
 		D66172701E9619C70088CEEE /* TKPlacesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKPlacesListViewController.h; sourceTree = "<group>"; };
@@ -122,7 +125,7 @@
 		D689DBF81EBB0A3F00708599 /* TKPlace+TravelKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TKPlace+TravelKit.m"; sourceTree = "<group>"; };
 		D68E946E1F0144C6009E2C9C /* TKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKGradientView.h; sourceTree = "<group>"; };
 		D68E946F1F0144C6009E2C9C /* TKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKGradientView.m; sourceTree = "<group>"; };
-		D698318C1EF3D3C6002776BE /* TravelKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = TravelKit.playground; path = SDK/TravelKit.playground; sourceTree = "<group>"; };
+		D698318C1EF3D3C6002776BE /* TravelKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = TravelKit.playground; path = SDK/TravelKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHUIImageViewContentViewAnimation.h; sourceTree = "<group>"; };
 		D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHUIImageViewContentViewAnimation.m; sourceTree = "<group>"; };
 		D6C4DF371E82B4AC0076BEDD /* TKReferenceListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKReferenceListViewController.h; sourceTree = "<group>"; };
@@ -196,6 +199,8 @@
 				075C63F21E40DF6500E8B6CA /* MainViewController.swift */,
 				D6B6DB1A1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.h */,
 				D6B6DB1B1E9E4CFE00104C8C /* MHUIImageViewContentViewAnimation.m */,
+				D64B61072004C3CE0098ADDF /* PlaygroundViewController.h */,
+				D64B61082004C3CE0098ADDF /* PlaygroundViewController.m */,
 				D65086D51E811C34001DF298 /* TKBrowserViewController.h */,
 				D65086D61E811C34001DF298 /* TKBrowserViewController.m */,
 				D61B62BD1E9E40530040594D /* TKGalleryCollectionViewController.h */,
@@ -289,7 +294,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Tripomatic;
 				TargetAttributes = {
 					075C63EC1E40DF6500E8B6CA = {
@@ -372,6 +377,7 @@
 				07F7650E1E433CFD00727090 /* DevGalleryViewController.swift in Sources */,
 				D6E3F6621EFD1D42005578F4 /* TKToursListViewController.m in Sources */,
 				D68E94701F0144C6009E2C9C /* TKGradientView.m in Sources */,
+				D64B61092004C3CE0098ADDF /* PlaygroundViewController.m in Sources */,
 				075C640A1E41D31A00E8B6CA /* DevPlacesListViewController.swift in Sources */,
 				D6E3F6581EF7FCFB005578F4 /* DevToursListViewController.swift in Sources */,
 				075C64431E41E08B00E8B6CA /* DevPlaceDetailViewController.swift in Sources */,
@@ -409,9 +415,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -433,10 +436,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -451,6 +454,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -461,9 +466,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -488,7 +490,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -520,7 +521,7 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					USE_FOUNDATION_TRAVELKIT,
+					USE_TRAVELKIT_FOUNDATION,
 					USE_NSOBJECT_PARSING,
 				);
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
@@ -529,7 +530,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tripomatic.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(TARGET_NAME)/Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -550,7 +550,7 @@
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					USE_FOUNDATION_TRAVELKIT,
+					USE_TRAVELKIT_FOUNDATION,
 					USE_NSOBJECT_PARSING,
 				);
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";

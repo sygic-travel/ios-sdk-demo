@@ -10,7 +10,10 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-	let options = ["Map", "Places List", "Tours List", "Places List - Dev", "Tours List - Dev", "Full Text Search"]
+	let options = ["Map", "Places List", "Tours List",
+				   "Places List - Dev", "Tours List - Dev",
+				   "Full Text Search", "Synchronize", "Playground",
+				   "Sign in", "Sign out"]
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -23,34 +26,47 @@ class MainViewController: UITableViewController {
 		self.tableView.tableFooterView = UIView()
 	}
 
-	override func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
-	}
-
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return 64
 	}
 
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	override func numberOfSections(in tableView: UITableView) -> Int {
 		return options.count
+	}
+
+	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+		let opt = options[section]
+
+		if opt == "Synchronize" { return TravelKit.shared.session.session != nil ? 1 : 0 }
+		if opt == "Sign in" { return TravelKit.shared.session.session == nil ? 1 : 0 }
+		if opt == "Sign out" { return TravelKit.shared.session.session != nil ? 1 : 0 }
+
+		return 1
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-		cell.textLabel?.text = options[indexPath.row]
+		cell.textLabel?.text = options[indexPath.section]
 		cell.accessoryType = .disclosureIndicator
 		return cell
 	}
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+		tableView.deselectRow(at: indexPath, animated: true)
+
 		var vc: UIViewController!
 
-		switch indexPath.row {
-		case 0:
+		let opt = options[indexPath.section]
+
+		switch opt {
+
+		case "Map":
 			vc = TKMapViewController()
 			break
-		case 1:
+
+		case "Places List":
 			let query = TKPlacesQuery()
 			query.parentIDs = ["city:1"]
 			query.levels = .POI
@@ -58,26 +74,93 @@ class MainViewController: UITableViewController {
 			let controller = TKPlacesListViewController(query: query)
 			vc = controller
 			break
-		case 2:
+
+		case "Tours List":
 			vc = TKToursListViewController()
 			break
-		case 3:
+
+		case "Places List - Dev":
 			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = true
 			vc = controller
 			break
-		case 4:
+
+		case "Tours List - Dev":
 			let controller = DevToursListViewController()
 			vc = controller
 			break
-		case 5:
+
+		case "Full Text Search":
 			let controller = DevPlacesListViewController()
 			controller.searchBarHidden = false
 			vc = controller
 			break
+
+		case "Sign in":
+
+			let alert = UIAlertController(title: "Sign in with credentials", message: nil, preferredStyle: .alert)
+
+			alert.addTextField(configurationHandler: { (textfield) in
+				textfield.placeholder = "Username"
+				textfield.tag = 1
+			})
+
+			alert.addTextField(configurationHandler: { (textfield) in
+				textfield.placeholder = "Password"
+				textfield.tag = 2
+			})
+
+			alert.addAction(UIAlertAction(title: "Sign in", style: .default, handler: { (action) in
+
+				let usernameField = alert.textFields?.first(where: { (tf) -> Bool in
+					return tf.tag == 1
+				})
+
+				let passwordField = alert.textFields?.first(where: { (tf) -> Bool in
+					return tf.tag == 2
+				})
+
+				let username = usernameField?.text ?? ""
+				let password = passwordField?.text ?? ""
+
+				TravelKit.shared.session.performUserCredentialsAuth(withEmail: username, password: password, success: { (session) in
+					OperationQueue.main.addOperation {
+						print(session)
+						tableView.reloadData()
+					}
+				}, failure: { (error) in
+					OperationQueue.main.addOperation {
+						print(error)
+					}
+				})
+			}))
+
+			alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+			self.present(alert, animated: true, completion: nil)
+			break
+
+		case "Sign out":
+			TravelKit.shared.session.performSignOut {
+				print("Signed out")
+				tableView.reloadData()
+			}
+			break
+
+		case "Playground":
+			vc = PlaygroundViewController()
+			break
+
+		case "Synchronize":
+			TravelKit.shared.sync.synchronize()
+			break
+
 		default:
 			return
+
 		}
+
+		if (vc == nil) { return }
 
 		self.navigationController?.pushViewController(vc, animated: true)
 	}

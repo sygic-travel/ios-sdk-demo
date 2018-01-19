@@ -58,7 +58,7 @@ class DevPlacesListViewController: UITableViewController {
 			query.limit = 10
 		}
 
-		TravelKit.shared().places(for: query) { (places, error) in
+		TravelKit.shared.places.places(for: query) { (places, error) in
 			DispatchQueue.main.async {
 				self.places = places ?? [ ]
 				self.tableView.reloadData()
@@ -72,7 +72,7 @@ class DevPlacesListViewController: UITableViewController {
 
 		let categoryArray: [TKPlaceCategory] = [
 			.sightseeing, .shopping, .eating, .discovering, .playing,
-			.traveling, .goingOut, .hiking, .sports, .relaxing, .sleeping
+			.traveling, .goingOut, .hiking, .doingSports, .relaxing, .sleeping
 		]
 
 		actionSheet.addAction(UIAlertAction(title: "All", style: .destructive,
@@ -108,16 +108,17 @@ extension DevPlacesListViewController /* UITableViewController delegates */ {
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-		let place = places[indexPath.row] as TKPlace!
 
-		if let thumbnailURL = place?.thumbnailURL {
+		let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+		guard let place = places[indexPath.row] as TKPlace? else { return cell }
+
+		if let thumbnailURL = place.thumbnailURL {
 			cell.imageView?.downloadedFrom(url: thumbnailURL, finished: {
 				cell.setNeedsLayout()
 			})
 		}
-		cell.textLabel?.text = place?.name
-		cell.detailTextLabel?.text = place?.perex
+		cell.textLabel?.text = place.name
+		cell.detailTextLabel?.text = place.perex
 		cell.detailTextLabel?.numberOfLines = 3
 		cell.detailTextLabel?.textColor = UIColor(white: 0.7, alpha: 1)
 		return cell

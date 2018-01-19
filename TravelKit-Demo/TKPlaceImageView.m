@@ -131,7 +131,7 @@
 //	}
 
 	else
-	[[TravelKit sharedKit] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
+	[[[TravelKit sharedKit] places] mediaForPlaceWithID:place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
 
 		if (!media.count) return;
 
@@ -154,7 +154,7 @@
 			@(TKPlaceCategoryHiking): @"\ue904",
 			@(TKPlaceCategoryPlaying): @"\ue905",
 			@(TKPlaceCategorySleeping): @"\ue906",
-			@(TKPlaceCategorySports): @"\ue907",
+			@(TKPlaceCategoryDoingSports): @"\ue907",
 //			@"other": @"\ue908",
 			@(TKPlaceCategoryRelaxing): @"\ue909",
 			@(TKPlaceCategoryShopping): @"\ue90a",

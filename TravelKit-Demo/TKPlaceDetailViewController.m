@@ -119,6 +119,9 @@ const CGFloat kDefaultLinksHeight = 54.0;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) TKPlaceDetailHeaderCell *cachedHeaderCell;
 
+// Helper
+@property (nonatomic, strong) TKDetailedPlace *detailedPlace;
+
 // View-related structures
 @property (nonatomic, strong) TKReference *wiki;
 @property (nonatomic, copy) NSArray<TKReference *> *passes;
@@ -203,7 +206,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	__weak typeof(self) wself = self;
 
 	// Fetch full detailed Place
-	[[TravelKit sharedKit] detailedPlaceWithID:_place.ID completion:^(TKPlace *place, NSError *error) {
+	[[TravelKit sharedKit].places detailedPlaceWithID:_place.ID completion:^(TKPlace *place, NSError *error) {
 
 		if (!place) return;
 
@@ -262,6 +265,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 - (void)setPlace:(TKPlace *)place
 {
 	_place = place;
+	_detailedPlace = [place isKindOfClass:[TKDetailedPlace class]] ? (id)place : nil;
 
 	TKReference *wiki = nil;
 	NSMutableArray<TKReference *> *basicLinks = [NSMutableArray arrayWithCapacity:6];
@@ -269,7 +273,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	NSMutableArray<TKReference *> *otherProducts = [NSMutableArray arrayWithCapacity:6];
 	NSMutableArray<TKPlaceDetailLink *> *contacts = [NSMutableArray arrayWithCapacity:6];
 
-	for (TKReference *ref in _place.detail.references)
+	for (TKReference *ref in _detailedPlace.detail.references)
 	{
 		if ([ref.type hasPrefix:@"guide"] || [ref.type hasPrefix:@"link:official"])
 			[basicLinks addObject:ref];
@@ -299,13 +303,13 @@ const CGFloat kDefaultLinksHeight = 54.0;
 			[otherProducts addObject:ref];
 	}
 
-	if (_place.detail.phone) {
-		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypePhone value:_place.detail.phone];
+	if (_detailedPlace.detail.phone) {
+		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypePhone value:_detailedPlace.detail.phone];
 		[contacts addObject:link];
 	}
 
-	if (_place.detail.email) {
-		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypeEmail value:_place.detail.email];
+	if (_detailedPlace.detail.email) {
+		TKPlaceDetailLink *link = [TKPlaceDetailLink linkWithType:TKPlaceDetailLinkTypeEmail value:_detailedPlace.detail.email];
 		[contacts addObject:link];
 	}
 
@@ -366,7 +370,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 - (IBAction)headerImageTapped
 {
-	[[TravelKit sharedKit] mediaForPlaceWithID:_place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
+	[[[TravelKit sharedKit] places] mediaForPlaceWithID:_place.ID completion:^(NSArray<TKMedium *> *media, NSError *error) {
 
 		if (!media.count) return;
 
@@ -479,10 +483,10 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 		case PlaceDetailSectionDescription:
 			return (_place.perex.length ||
-			        _place.detail.fullDescription.text.length) ? 1:0;
+			        _detailedPlace.detail.fullDescription.text.length) ? 1:0;
 
 		case PlaceDetailSectionTags:
-			return (_place.categories || _place.detail.tags.count) ? 1:0;
+			return (_place.categories || _detailedPlace.detail.tags.count) ? 1:0;
 
 		case PlaceDetailSectionOtherProductsSeparator:
 		case PlaceDetailSectionOtherProducts:
@@ -499,15 +503,15 @@ const CGFloat kDefaultLinksHeight = 54.0;
 
 		case PlaceDetailSectionAdmissionSeparator:
 		case PlaceDetailSectionAdmission:
-			return _place.detail.admission.length ? 1:0;
+			return _detailedPlace.detail.admission.length ? 1:0;
 
 		case PlaceDetailSectionOpeningHoursSeparator:
 		case PlaceDetailSectionOpeningHours:
-			return _place.detail.openingHours.length ? 1:0;
+			return _detailedPlace.detail.openingHours.length ? 1:0;
 
 		case PlaceDetailSectionAddressSeparator:
 		case PlaceDetailSectionAddress:
-			return (_place.location || _place.detail.address.length) ? 1:0;
+			return (_place.location || _detailedPlace.detail.address.length) ? 1:0;
 
 		case PlaceDetailSectionContactsSeparator:
 			return (_contacts.count) ? 1:0;
@@ -586,15 +590,15 @@ const CGFloat kDefaultLinksHeight = 54.0;
 			NSLocalizedString(@"Tours & Tickets", @"TravelKit UI Place Detail header") : nil;
 
 	if (section == PlaceDetailSectionOpeningHours)
-		return (_place.detail.openingHours.length) ?
+		return (_detailedPlace.detail.openingHours.length) ?
 			NSLocalizedString(@"Opening hours", @"TravelKit UI Place Detail header") : nil;
 
 	if (section == PlaceDetailSectionAdmission)
-		return (_place.detail.admission.length) ?
+		return (_detailedPlace.detail.admission.length) ?
 			NSLocalizedString(@"Admission", @"TravelKit UI Place Detail header") : nil;
 
 	if (section == PlaceDetailSectionAddress)
-		return (_place.detail.address.length) ?
+		return (_detailedPlace.detail.address.length) ?
 			NSLocalizedString(@"Address", @"TravelKit UI Place Detail header") :
 		(_place.location) ? NSLocalizedString(@"Location", @"TravelKit UI Place Detail header") : nil;
 
@@ -707,7 +711,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		TKPlaceDetailDescriptionCell *cell = [[TKPlaceDetailDescriptionCell alloc] initWithFrame:basicRect];
 		cell.headingDetectionEnabled = YES;
-		cell.displayedText = _place.detail.fullDescription.text ?: _place.perex;
+		cell.displayedText = _detailedPlace.detail.fullDescription.text ?: _place.perex;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -719,7 +723,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		TKPlaceDetailTagsCell *cell = [[TKPlaceDetailTagsCell alloc] initWithFrame:basicRect];
 		cell.overridingTopPadding = (_place.perex) ? -5 : 0;
 		cell.categories = _place.localisedCategories;
-		cell.tags = _place.detail.tags;
+		cell.tags = _detailedPlace.detail.tags;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -730,7 +734,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		TKPlaceDetailSingleLabelCell *cell = [[TKPlaceDetailSingleLabelCell alloc] initWithFrame:basicRect];
 		cell.headingDetectionEnabled = YES;
-		cell.displayedText = _place.detail.admission;
+		cell.displayedText = _detailedPlace.detail.admission;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -741,7 +745,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 	{
 		TKPlaceDetailSingleLabelCell *cell = [[TKPlaceDetailSingleLabelCell alloc] initWithFrame:basicRect];
 		cell.headingDetectionEnabled = YES;
-		cell.displayedText = _place.detail.openingHours;
+		cell.displayedText = _detailedPlace.detail.openingHours;
 
 		[_cellsCache setObject:cell forKey:cacheKey];
 
@@ -759,7 +763,7 @@ const CGFloat kDefaultLinksHeight = 54.0;
 		NSString *location = [NSString stringWithFormat:@"%.3f°%@ %.3f°%@",
 			ABS(loc.latitude), latSuffix, ABS(loc.longitude), lngSuffix];
 
-		NSString *address = _place.detail.address;
+		NSString *address = _detailedPlace.detail.address;
 
 		NSMutableArray *comps = [NSMutableArray arrayWithCapacity:2];
 		if (address) [comps addObject:address];
