@@ -31,7 +31,7 @@ class DevToursListViewController: UITableViewController {
 		query.parentID = "city:5"
 		query.sortingType = .topSellers
 
-		TravelKit.shared._tours.tours(for: query) { (tours, error) in
+		TravelKit.shared.tours.tours(for: query) { (tours, error) in
 			DispatchQueue.main.async {
 				self.tours = tours ?? [ ]
 				self.tableView.reloadData()

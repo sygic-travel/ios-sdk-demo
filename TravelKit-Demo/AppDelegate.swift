@@ -21,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		TravelKit.shared.apiKey = "<YOUR_API_KEY_GOES_HERE>"
 
-		TravelKit.shared._events.syncCompletionHandler = { (result) in
+		TravelKit.shared.events.syncCompletionHandler = { (result) in
 			print("Success:", result.success, "Trips:", result.changedTripIDs, "Favs:", result.changedFavoritePlaceIDs)
 		}
 
-		TravelKit.shared._events.sessionUpdateHandler = { (session) in
+		TravelKit.shared.events.sessionUpdateHandler = { (session) in
 			print("Updated session:", session ?? "")
 		}
 

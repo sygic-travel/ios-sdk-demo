@@ -32,7 +32,7 @@
 @property (atomic) BOOL shouldAutoRefresh;
 @property (nonatomic, strong) NSTimer *autoRefreshTimer;
 
-@property (nonatomic, copy) NSArray *displayedQuadKeys;
+@property (nonatomic, copy) NSArray<NSString *> *displayedQuadKeys;
 
 @end
 
@@ -145,7 +145,7 @@
 {
 	static uint32_t i = 0;
 
-	NSArray *currentQuadKeys = [TKMapWorker quadKeysForRegion:_mapView.region];
+	NSArray<NSString *> *currentQuadKeys = [TKMapWorker quadKeysForRegion:_mapView.region];
 
 	if ([currentQuadKeys isEqual:_displayedQuadKeys])
 		return;

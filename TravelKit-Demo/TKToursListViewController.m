@@ -429,7 +429,7 @@
 
 	// ...otherwise ask API for the data
 
-	[[TravelKit sharedKit]._tours toursForViatorQuery:query completion:^(NSArray<TKTour *> *tours, NSError *error) {
+	[[TravelKit sharedKit].tours toursForViatorQuery:query completion:^(NSArray<TKTour *> *tours, NSError *error) {
 
 		if (error || !tours.count)
 		{
