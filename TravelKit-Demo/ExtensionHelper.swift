@@ -21,10 +21,10 @@ extension UINavigationController {
 
 extension UIImageView {
 
-	func downloadedFrom(url: URL, contentMode mode: UIViewContentMode = .scaleAspectFit, finished: @escaping () -> Void) {
+	func downloadedFrom(url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit, finished: @escaping () -> Void) {
 
 		let iv = UIActivityIndicatorView(frame: self.bounds)
-		iv.activityIndicatorViewStyle = .gray
+		iv.style = .gray
 		iv.startAnimating()
 		self.addSubview(iv)
 

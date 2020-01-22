@@ -92,7 +92,9 @@ class DevPlaceDetailViewController : UIViewController {
 			if let medium = media?.first {
 
 				if let url = medium.displayableImageURL(for: CGSize(width: 640, height: 640)) {
-					self.imageView.downloadedFrom(url: url, finished: {})
+					DispatchQueue.main.async() { () -> Void in
+						self.imageView.downloadedFrom(url: url, finished: {})
+					}
 				}
 			}
 		}
@@ -106,18 +108,26 @@ class DevPlaceDetailViewController : UIViewController {
 
 	func pairInformation(forPlace place:TKPlace) -> [(String, String?)] {
 		var pairs = [(String,String?)]()
+
+		let detailedPlace = place as? TKDetailedPlace
+		let detail = detailedPlace?.detail
+
 		pairs.append(("Name", place.name))
+		if let kind = place.kind { pairs.append(("Kind", kind)) }
+		if let tzone = detail?.timezone { pairs.append(("Time zone", tzone)) }
+
+		if let name = detail?.localName { pairs.append(("Local name", name)) }
+		if let name = detail?.translatedName { pairs.append(("Translated name", name)) }
+		if let name = detail?.englishName { pairs.append(("English name", name)) }
+
 		pairs.append(("Suffix", place.suffix))
 		pairs.append(("Perex", place.perex))
 
-		let detailedPlace = place as? TKDetailedPlace
-
-		if let description = detailedPlace?.detail?.fullDescription?.text,
-		  description.lengthOfBytes(using: .utf8) > 0 {
+		if let description = detail?.fullDescription?.text {
 			pairs.append(("Description", description))
 		}
 
-		if let duration = detailedPlace?.detail?.duration {
+		if let duration = detail?.duration {
 			pairs.append(("Duration", self.timeFormatted(totalSeconds: duration.intValue)))
 		}
 		if let rating = place.rating {
@@ -127,26 +137,34 @@ class DevPlaceDetailViewController : UIViewController {
 		if cats.count > 0 {
 			pairs.append(("Categories", cats.joined(separator: " • ")))
 		}
-		if let tags = detailedPlace?.detail?.tags, tags.count > 0 {
+		if let tags = detail?.tags, tags.count > 0 {
 			let tags = tags.map({ (placeTag) -> String in
 				return placeTag.name ?? placeTag.key
 			})
 			pairs.append(("Tags", tags.joined(separator: " • ")))
 		}
 
-		if let address = detailedPlace?.detail?.address,
-		  address.lengthOfBytes(using: .utf8) > 0 {
+		if let address = detail?.address {
 			pairs.append(("Address", address))
 		}
 
-		if let hours = detailedPlace?.detail?.openingHours,
-		  hours.lengthOfBytes(using: .utf8) > 0 {
-			pairs.append(("Opening hours", hours))
+		if let hours = detail?.openingHours {
+			pairs.append(("OSM Opening hours", hours))
+		}
+
+		if let hours = detail?.openingHoursNote {
+			pairs.append(("Opening hours note", hours))
+		}
+
+		if let attributesString = detail?.attributes?.map({ (key: String, value: String) -> String in
+			"\(key) => \(value)"
+		}).joined(separator: "\n") {
+			pairs.append(("Attributes", attributesString))
 		}
 
 		var referencesString = ""
 
-		for reference in detailedPlace?.detail?.references ?? [ ] {
+		for reference in detail?.references ?? [ ] {
 
 			var pieces = [String]()
 

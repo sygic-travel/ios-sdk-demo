@@ -14,7 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
 
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions
+		launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 
 		UIView.appearance().tintColor = UIColor.fromRGB(0xFD7049)
@@ -22,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		TravelKit.shared.apiKey = "<YOUR_API_KEY_GOES_HERE>"
 
 		TravelKit.shared.events.syncCompletionHandler = { (result) in
-			print("Success:", result.success, "Trips:", result.changedTripIDs, "Favs:", result.changedFavoritePlaceIDs)
+			print("Success:", result.success, "Trips:",
+				  result.changedTripIDs, "Favs:", result.changedFavoritePlaceIDs)
 		}
 
 		TravelKit.shared.events.sessionUpdateHandler = { (session) in
